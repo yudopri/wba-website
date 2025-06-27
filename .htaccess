@@ -1,0 +1,13 @@
+<IfModule mod_rewrite.c>
+    Options +FollowSymLinks
+    RewriteEngine On
+
+    # Pastikan semua permintaan selain file atau folder diarahkan ke /public
+    RewriteCond %{REQUEST_URI} !^/public/ [NC]
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteRule ^(.*)$ /public/$1 [L]
+
+    # Pastikan root domain mengarah ke public/index.php
+    RewriteRule ^$ public/index.php [L]
+</IfModule>
