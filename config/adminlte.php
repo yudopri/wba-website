@@ -30,10 +30,8 @@ return [
     |
     */
 
-    'use_ico_only' => true,
-    'use_full_favicon' => false,  // Set this to true to use the full favicon
-
-    'favicon' => 'assets/image/logowba.ico',
+    'use_ico_only' => false,
+    'use_full_favicon' => false,
 
     /*
     |--------------------------------------------------------------------------
@@ -66,12 +64,11 @@ return [
     */
 
     'logo' => '<b>Admin</b>WBA',
-'logo_img' => 'assets/image/logowba.ico', // Pastikan path benar
-'logo_img_class' => 'brand-image img-circle elevation-3 bg-white p-1', // Tambahkan latar belakang putih dan padding
-'logo_img_xl' => null,
-'logo_img_xl_class' => 'brand-image-xs bg-white p-1', // Sama dengan logo kecil
-'logo_img_alt' => 'Admin Logo',
-
+    'logo_img' => 'assets/image/logowba.png',
+    'logo_img_class' => 'brand-image img-circle elevation-3',
+    'logo_img_xl' => null,
+    'logo_img_xl_class' => 'brand-image-xs',
+    'logo_img_alt' => 'Admin Logo',
 
     /*
     |--------------------------------------------------------------------------
@@ -113,21 +110,16 @@ return [
     */
 
     'preloader' => [
-    'enabled' => true,
-    'mode' => 'fullscreen', // Tetap fullscreen untuk pengalaman pengguna yang baik
-    'img' => [
-        'path' => 'assets/image/logowba.ico', // Pastikan path ikon sesuai
-        'alt' => 'AdminLTE Preloader Image',
-        'effect' => 'animation__shake', // Tetap gunakan efek sederhana
-        'width' => 60, // Ukuran standar
-        'height' => 60,
+        'enabled' => true,
+        'mode' => 'fullscreen',
+        'img' => [
+            'path' => 'assets/image/logowba.png',
+            'alt' => 'AdminLTE Preloader Image',
+            'effect' => 'animation__shake',
+            'width' => 60,
+            'height' => 60,
+        ],
     ],
-    'background' => 'bg-white', // Latar belakang putih
-    'overlay_opacity' => 1, // Opasitas penuh untuk tampil bersih
-],
-
-
-
     /*
     |--------------------------------------------------------------------------
     | User Menu
@@ -222,10 +214,10 @@ return [
     */
 
     'sidebar_mini' => 'lg',
-    'sidebar_collapse' => false,
+    'sidebar_collapse' => true,
     'sidebar_collapse_auto_size' => false,
     'sidebar_collapse_remember' => false,
-    'sidebar_collapse_remember_no_transition' => true,
+    'sidebar_collapse_remember_no_transition' => false,
     'sidebar_scrollbar_theme' => 'os-theme-light',
     'sidebar_scrollbar_auto_hide' => 'l',
     'sidebar_nav_accordion' => true,
@@ -306,6 +298,7 @@ return [
     */
 
    'menu' => [
+
     // Navbar items:
     [
         'type' => 'navbar-search',
@@ -313,9 +306,29 @@ return [
         'topnav_right' => true,
     ],
     [
+        'type' => 'navbar-notification',
+        'id' => 'my-notification',                // An ID attribute (required).
+        'icon' => 'fas fa-bell',                  // A font awesome icon (required).
+        'icon_color' => 'warning',                // The initial icon color (optional).
+        'label' => 0,                             // The initial label for the badge (optional).
+        'label_color' => 'danger',                // The initial badge color (optional).
+        'url' => 'notifications/show',            // The url to access all notifications/elements (required).
+        'topnav_right' => true,                   // Or "topnav => true" to place on the left (required).
+        'dropdown_mode' => true,                  // Enables the dropdown mode (optional).
+        'dropdown_flabel' => 'All notifications', // The label for the dropdown footer link (optional).
+        'update_cfg' => [
+            'url' => 'notifications/get',         // The url to periodically fetch new data (optional).
+            'period' => 30,                       // The update period for get new data (in seconds, optional).
+        ],
+    ],
+
+    [
         'type' => 'fullscreen-widget',
         'topnav_right' => true,
     ],
+    // Navbar Notification
+
+
 
     // Sidebar items:
     [
@@ -329,75 +342,173 @@ return [
     'url'  => 'admin/dashboard',
     'icon' => 'fas fa-home',
 ],
-// Master Data
-    [
-        'text'    => 'Master Data',
-        'icon'    => 'fas fa-database',
-        'submenu' => [
-            // Data Jasa
-            [
-                'text' => 'Data Service',
-                'url'  => 'admin/service',
-                'icon' => 'fas fa-briefcase',
-            ],
-            // Data Client
-            [
-                'text' => 'Data Partner',
-                'url'  => 'admin/partner',
-                'icon' => 'fas fa-handshake',
-            ],
-            // Data Article
-            [
-                'text' => 'Data Article',
-                'url'  => 'admin/article',
-                'icon' => 'fas fa-newspaper',
-            ],
-            // Data Gallery
-            [
-                'text' => 'Data Gallery',
-                'url'  => 'admin/gallery',
-                'icon' => 'fas fa-image',
-            ],
-        ],
-    ],
+[
+    'text' => 'Master Data',
+    'icon' => 'fas fa-database',
+    'submenu' => [
+// Data Jasa
+[
+    'text' => 'Data Service',
+    'url'  => 'admin/service',
+    'icon' => 'fas fa-briefcase',
+],
 
-    // Master Karyawan
-    [
-        'text'    => 'Master Karyawan',
-        'icon'    => 'fas fa-users',
-        'submenu' => [
-            // Data Karyawan
-            [
-                'text' => 'Data Karyawan',
-                'url'  => 'admin/employee',
-                'icon' => 'fas fa-user',
-            ],
-            // Data Departemen
-            [
-                'text' => 'Data Departemen',
-                'url'  => 'admin/departemen',
-                'icon' => 'fas fa-building',
-            ],
-            // Data Jabatan
-            [
-                'text' => 'Data Jabatan',
-                'url'  => 'admin/jabatan',
-                'icon' => 'fas fa-briefcase',
-            ],
-            // Data Gada
-            [
-                'text' => 'Data Sertifikasi',
-                'url'  => 'admin/sertifikasi',
-                'icon' => 'fas fa-database', // Ganti sesuai kebutuhan
-            ],
-             [
-                'text' => 'Data Lokasi Kerja',
-                'url'  => 'admin/work',
-                'icon' => 'fas fa-handshake',
-            ],
+// Data Partner
+[
+    'text' => 'Data Client',
+    'url'  => 'admin/partner',
+    'icon' => 'fas fa-handshake',
+],
+// Data Article
+[
+    'text' => 'Data Article',
+    'url'  => 'admin/article',
+    'icon' => 'fas fa-newspaper', // Icon artikel atau berita
+],
+// Data Gallery
+[
+    'text' => 'Data Gallery',
+    'url'  => 'admin/gallery',
+    'icon' => 'fas fa-image', // Icon for gallery or images
+],
+],
+],
+[
+    'text' => 'Master Karyawan',
+    'icon' => 'fas fa-users',
+    'submenu' => [
+        [
+            'text' => 'Data Karyawan',
+            'url'  => 'admin/employee',
+            'icon' => 'fas fa-user',
         ],
-    ],
+        [
+            'text' => 'Data Departemen',
+            'url'  => 'admin/departemen',
+            'icon' => 'fas fa-building',
+        ],
+        [
+            'text' => 'Data Jabatan',
+            'url'  => 'admin/jabatan',
+            'icon' => 'fas fa-briefcase',
+        ],
 
+        [
+            'text' => 'Data Gada',
+            'url'  => 'admin/gada',
+            'icon' => 'fas fa-database', // Ganti sesuai kebutuhan
+        ],
+
+
+    ],
+],
+
+[
+    'text' => 'Master Keuangan',
+    'icon' => 'fas fa-wallet',
+    'submenu' => [
+        [
+            'text' => 'Saldo Utama',
+            'url'  => 'admin/saldoutama',
+            'icon' => 'fas fa-money-bill-wave',
+        ],
+// Data Jasa
+[
+    'text' => 'Data Invoice',
+    'url'  => 'admin/invoice',
+    'icon' => 'fas fa-book',
+],
+
+// Data Partner
+[
+    'text' => 'Data Gaji',
+    'url'  => 'admin/gaji',
+    'icon' => 'fas fa-dollar-sign',
+],
+[
+    'text' => 'Master Kas',
+    'icon' => 'fas fa-money-bill-wave',
+    'submenu' => [
+// Data Jasa
+
+[
+    'text' => 'Data Kas Kecil Operasional',
+    'url'  => 'admin/kasoperasional',
+    'icon' => 'fas fa-dollar-sign',
+],
+
+// Data Partner
+[
+    'text' => 'Data Kas Kecil Lokasi',
+    'url'  => 'admin/kaslokasi',
+    'icon' => 'fas fa-dollar-sign',
+],
+],
+],
+// Data Gallery
+[
+    'text' => 'Data BPJS',
+    'url'  => 'admin/bpjs',
+    'icon' => 'fas fa-hospital', // Icon for gallery or images
+],
+[
+    'text' => 'Data Pinjaman',
+    'url'  => 'admin/pinjaman',
+    'icon' => 'fas fa-hand-holding-usd', // Icon for gallery or images
+],
+[
+    'text' => 'Data Tagihan',
+    'url'  => 'admin/tagihan',
+    'icon' => 'fas fa-file-invoice', // Icon for gallery or images
+],
+[
+    'text' => 'Data Pajak',
+    'url'  => 'admin/pajak',
+    'icon' => 'fas fa-file-invoice-dollar', // Icon for gallery or images
+],
+],
+],
+
+[
+    'text' => 'Master Logistik',
+    'icon' => 'fas fa-truck',
+    'submenu' => [
+        [
+            'text' => 'Data Kas Logistik',
+            'url'  => 'admin/kaslogistik',
+            'icon' => 'fas fa-dollar-sign',
+        ],
+        [
+            'text' => 'Data Barang Gudang',
+            'url'  => 'admin/barang',
+            'icon' => 'fas fa-box',
+        ],
+        [
+            'text' => 'Data Distribusi',
+            'url'  => 'admin/distribusi',
+            'icon' => 'fas fa-truck',
+        ],
+        [
+            'text' => 'Data Inventory',
+            'url'  => 'admin/inventaris',
+            'icon' => 'fas fa-toolbox',
+        ],
+],
+],
+
+[
+    'text' => 'Master Laporan',
+    'icon' => 'fas fa-clipboard-list',
+    'submenu' => [
+// Data Jasa
+[
+    'text' => 'Data Laporan Pengaduan',
+    'url'  => 'admin/laporanmasalah',
+    'icon' => 'fas fa-exclamation-triangle',
+],
+
+],
+],
 // Setting header
 ['header' => 'Setting'],
 
@@ -433,6 +544,8 @@ return [
         JeroenNoten\LaravelAdminLte\Menu\Filters\LangFilter::class,
         JeroenNoten\LaravelAdminLte\Menu\Filters\DataFilter::class,
     ],
+
+
 
     /*
     |--------------------------------------------------------------------------
@@ -566,3 +679,4 @@ return [
 
     'livewire' => false,
 ];
+

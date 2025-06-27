@@ -7,7 +7,6 @@ use App\Http\Controllers\VisitorController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\PartnerController;
-use App\Http\Controllers\WorkController;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Auth\VerificationController;
 use App\Http\Controllers\ArticleController;
@@ -21,11 +20,16 @@ use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Mail\ResetPasswordMail;
 use Illuminate\Support\Facades\Mail;
 use App\Http\Controllers\SendGridEmailController;
+use App\Http\Controllers\ChartController;
+use App\Http\Controllers\NotificationController;
 
 
 // Authentication routes with email verification enabled
 
 // Homepage route
+
+
+
 Route::get('/', [PartnerController::class, 'showUserHome'])->name('home');
 // Authentication routes
 Route::get('admin/', [AuthController::class, 'showLoginForm'])->name('login');
@@ -37,11 +41,21 @@ Route::get('password/reset/{token}/{email}', [AuthController::class, 'showResetP
 
 // Handle password reset (POST request)
 Route::post('/reset-password', [AuthController::class, 'resetPassword'])->name('reset.password');
+Route::get('/notifications', [NotificationController::class, 'fetchNotifications']);
+Route::get('/notifications/read/{id}', [NotificationController::class, 'markAsRead'])
+    ->name('notifications.markAsRead');
 
-
+Route::get('/chart-data-invoice', [ChartController::class, 'getDataInvoice'])->name('chart.invoice');
+Route::get('/chart-data-laporan', [ChartController::class, 'getDataLaporan'])->name('chart.laporan');
+Route::get('/chart-garis-invoice', [ChartController::class, 'getInvoiceGaris']);
+Route::get('/chart-garis-laporan', [ChartController::class, 'getLaporanGaris']);
 Route::get('/send-email-form', [SendGridEmailController::class, 'showSendEmailForm'])->name('send.email.form');
 Route::get('/send-email', [SendGridEmailController::class, 'sendEmailWithContent'])->name('send.email');
 Route::get('/send-test-email', [SendGridEmailController::class, 'sendTestEmail'])->name('send.test.email');
+Route::get(
+    '/notifications/get',
+    [App\Http\Controllers\NotificationController::class, 'getNotificationsData']
+)->name('notifications.get');
 Auth::routes();
 
 // Static page routes
@@ -65,6 +79,9 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
     // Dashboard route - only accessible to verified users
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
 
+    Route::get('/saldoutama', function () {
+        return view('admin.saldo.index');
+    });
     // Jasa management routes
     Route::resource('service', ServiceController::class);
 Route::get('/service', [ServiceController::class, 'index'])->name('admin.service.index');
@@ -85,10 +102,77 @@ Route::get('storage/{file}', function ($file) {
 
     abort(404);
 })->name('storage.file');
+Route::get('/laporanmasalah', function () {
+    return view('admin.report.index');
+});
 
+Route::get('/laporanmasalah/detail', function () {
+    return view('admin.report.detail');
+})->name('laporanmasalah.detail');
+Route::get('/invoice', function () {
+    return view('admin.invoice.index');
+});
+Route::get('/invoice/detail', function () {
+    return view('admin.invoice.detail');
+})->name('invoice.detail');
+Route::get('/gaji', function () {
+    return view('admin.gaji.index');
+});
+Route::get('/gaji/detail', function () {
+    return view('admin.gaji.detail');
+})->name('gaji.detail');
+Route::get('/kasoperasional', function () {
+    return view('admin.kasoperasional.index');
+});
+Route::get('/kasoperasional/detail', function () {
+    return view('admin.kasoperasional.detail');
+})->name('kasoperasional.detail');
 
-
-
+Route::get('/kasoperasional/tambahsaldo', function () {
+    return view('admin.kasoperasional.tambah');
+})->name('kasoperasional.tambah');
+Route::get('/kaslokasi', function () {
+    return view('admin.kaslokasi.index');
+});
+Route::get('/kaslokasi/tambahsaldo', function () {
+    return view('admin.kaslokasi.tambah');
+})->name('kaslokasi.tambah');
+Route::get('/kaslogistik', function () {
+    return view('admin.kaslogistik.index');
+});
+Route::get('/kaslogistik/tambahsaldo', function () {
+    return view('admin.kaslogistik.tambah');
+})->name('kaslogistik.tambah');
+Route::get('/kaslogistik/detail', function () {
+    return view('admin.kaslogistik.detail');
+})->name('kaslogistik.detail');
+Route::get('/barang', function () {
+    return view('admin.stockbarang.index');
+});
+Route::get('/barang/tambahsaldo', function () {
+    return view('admin.stockbarang.tambah');
+})->name('stockbarang.tambah');
+Route::get('/barang/detail', function () {
+    return view('admin.stockbarang.detail');
+})->name('stockbarang.detail');
+Route::get('/distribusi', function () {
+    return view('admin.distribusi.index');
+});
+Route::get('/distribusi/tambahsaldo', function () {
+    return view('admin.distribusi.tambah');
+})->name('distribusi.tambah');
+Route::get('/distribusi/detail', function () {
+    return view('admin.distribusi.detail');
+})->name('distribusi.detail');
+Route::get('/inventaris', function () {
+    return view('admin.inventaris.index');
+});
+Route::get('/inventaris/tambahsaldo', function () {
+    return view('admin.inventaris.tambah');
+})->name('inventaris.tambah');
+Route::get('/inventaris/detail', function () {
+    return view('admin.inventaris.detail');
+})->name('inventaris.detail');
     // Partner management routes
     Route::resource('partner', PartnerController::class);
 
@@ -99,7 +183,7 @@ Route::get('/partner/edit/{id}', [PartnerController::class, 'edit'])->name('admi
 Route::post('/partner/store', [PartnerController::class, 'store'])->name('admin.partner.store');
 Route::delete('/partners/{partner}', [PartnerController::class, 'destroy'])->name('admin.partner.destroy');
 Route::get('/partners/{id}', [PartnerController::class, 'show'])->name('admin.partner.show');
-Route::get('/partner/{id}/employees', [PartnerController::class, 'showEmployees'])->name('admin.partner.showemployee');
+Route::get('/partner/{id}/employees', [PartnerController::class, 'getEmployees']);
 
 
     // Email verification routes (handled by Auth::routes(['verify' => true]))
@@ -141,20 +225,8 @@ Route::delete('/user/{id}', [UserController::class, 'show'])->name('admin.user.s
 Route::post('/employee/import', [EmployeeController::class, 'import'])->name('admin.employee.import');
 Route::get('/employee/export', [EmployeeController::class, 'export'])->name('admin.employee.export');
 
-Route::get('/employee/{id}/pictdiri', [EmployeeController::class, 'exportFotodiri'])->name('admin.employee.diri');
-Route::get('/employee/{id}/certificate', [EmployeeController::class, 'exportCertificate'])->name('admin.employee.sertifikat');
-Route::get('/employee/{id}/certificate1', [EmployeeController::class, 'exportCertificate1'])->name('admin.employee.sertifikat1');
-Route::get('/employee/{id}/certificate2', [EmployeeController::class, 'exportCertificate2'])->name('admin.employee.sertifikat2');
-Route::get('/employee/{id}/certificate3', [EmployeeController::class, 'exportCertificate3'])->name('admin.employee.sertifikat3');
-Route::get('/employee/{id}/pictktp', [EmployeeController::class, 'exportKTPPhoto'])->name('admin.employee.ktp');
-Route::get('/employee/{id}/pictkk', [EmployeeController::class, 'exportFotoKk'])->name('admin.employee.kk');
-Route::get('/employee/{id}/pictkta', [EmployeeController::class, 'exportFotoKTA'])->name('admin.employee.kta');
-Route::get('/employee/{id}/pictijasah', [EmployeeController::class, 'exportFotoIjasah'])->name('admin.employee.ijasah');
-Route::get('/employee/{id}/pictbpjsket', [EmployeeController::class, 'exportFotoBpjsket'])->name('admin.employee.bpjsket');
-Route::get('/employee/{id}/pictbpjskes', [EmployeeController::class, 'exportFotoBpjskes'])->name('admin.employee.bpjskes');
-Route::get('/employee/{id}/pictnpwp', [EmployeeController::class, 'exportFotoNpwp'])->name('admin.employee.npwp');
-Route::get('/employee/{id}/jobapp', [EmployeeController::class, 'exportLamaran'])->name('admin.employee.jobapp');
-Route::delete('admin/employee/{employeeId}/delete-document/{documentKey}', [EmployeeController::class, 'deleteDocument'])->name('admin.employee.deleteDocument');
+Route::get('/employee/{id}/certificate', [EmployeeController::class, 'exportCertificate'])->name('admin.employee.certificate');
+Route::get('/employee/{id}/pictktp', [EmployeeController::class, 'exportPictKTP'])->name('admin.employee.pictktp');
 
 Route::resource('employee', EmployeeController::class);
 Route::get('/employee', [EmployeeController::class, 'index'])->name('admin.employee.index');
@@ -167,7 +239,7 @@ Route::put('/admin/employee/{id}/aktif', [EmployeeController::class, 'aktif'])->
 Route::put('/admin/employee/{id}/nonaktif', [EmployeeController::class, 'nonaktif'])->name('admin.employee.nonaktif');
 Route::put('/admin/employee/{id}/blacklist', [EmployeeController::class, 'blacklist'])->name('admin.employee.blacklist');
 Route::get('/employee/{id}', [EmployeeController::class, 'show'])->name('admin.employee.show');
-Route::delete('/employee/{employeeId}/delete-certification/{gadaDetailId}', [EmployeeController::class, 'deleteCertification'])->name('employee.deleteCertification');
+
 
 
 Route::resource('departemen', DepartemenController::class);
@@ -176,7 +248,7 @@ Route::get('/departemen/create', [DepartemenController::class, 'create'])->name(
 Route::put('/departemen/edit/{departemen}', [DepartemenController::class, 'update'])->name('admin.departemen.update');
 Route::get('/departemen/edit/{id}', [DepartemenController::class, 'edit'])->name('admin.departemen.edit');
 Route::post('/departemen/store', [DepartemenController::class, 'store'])->name('admin.departemen.store');
-Route::delete('/departemen/{id}', [DepartemenController::class, 'destroy'])->name('admin.departemen.destroy');
+Route::delete('/departemen/{departemen}', [DepartemenController::class, 'destroy'])->name('admin.departemen.destroy');
 Route::get('/departemen/{id}', [DepartemenController::class, 'show'])->name('admin.departemen.show');
 
 Route::resource('jabatan', JabatanController::class);
@@ -189,22 +261,13 @@ Route::delete('/jabatan/{jabatan}', [JabatanController::class, 'destroy'])->name
 Route::get('/jabatan/{id}', [JabatanController::class, 'show'])->name('admin.jabatan.show');
 
 Route::resource('gada', GadaController::class);
-Route::get('/sertifikasi', [GadaController::class, 'index'])->name('admin.gada.index');
-Route::get('/sertifikasi/create', [GadaController::class, 'create'])->name('admin.gada.create');
-Route::put('/sertifikasi/edit/{gada}', [GadaController::class, 'update'])->name('admin.gada.update');
-Route::get('/sertifikasi/edit/{id}', [GadaController::class, 'edit'])->name('admin.gada.edit');
-Route::post('/sertifikasi/store', [GadaController::class, 'store'])->name('admin.gada.store');
-Route::delete('/sertifikasi/{gada}', [GadaController::class, 'destroy'])->name('admin.gada.destroy');
-Route::get('/sertifikasi/{id}', [GadaController::class, 'show'])->name('admin.gada.show');
-
-Route::resource('work', WorkController::class);
-Route::get('/work', [WorkController::class, 'index'])->name('admin.work.index');
-Route::get('/work/create', [WorkController::class, 'create'])->name('admin.work.create');
-Route::put('/work/edit/{work}', [WorkController::class, 'update'])->name('admin.work.update');
-Route::get('/work/edit/{id}', [WorkController::class, 'edit'])->name('admin.work.edit');
-Route::post('/work/store', [WorkController::class, 'store'])->name('admin.work.store');
-Route::delete('/work/{work}', [WorkController::class, 'destroy'])->name('admin.work.destroy');
-Route::get('/work/{id}', [WorkController::class, 'show'])->name('admin.work.show');
+Route::get('/gada', [GadaController::class, 'index'])->name('admin.gada.index');
+Route::get('/gada/create', [GadaController::class, 'create'])->name('admin.gada.create');
+Route::put('/gada/edit/{gada}', [GadaController::class, 'update'])->name('admin.gada.update');
+Route::get('/gada/edit/{id}', [GadaController::class, 'edit'])->name('admin.gada.edit');
+Route::post('/gada/store', [GadaController::class, 'store'])->name('admin.gada.store');
+Route::delete('/gada/{gada}', [GadaController::class, 'destroy'])->name('admin.gada.destroy');
+Route::get('/gada/{id}', [GadaController::class, 'show'])->name('admin.gada.show');
 });
 
 // Visitor cookie route
