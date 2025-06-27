@@ -445,27 +445,6 @@ return [
 ],
 ],
 ],
-// Data Gallery
-[
-    'text' => 'Data BPJS',
-    'url'  => 'admin/bpjs',
-    'icon' => 'fas fa-hospital', // Icon for gallery or images
-],
-[
-    'text' => 'Data Pinjaman',
-    'url'  => 'admin/pinjaman',
-    'icon' => 'fas fa-hand-holding-usd', // Icon for gallery or images
-],
-[
-    'text' => 'Data Tagihan',
-    'url'  => 'admin/tagihan',
-    'icon' => 'fas fa-file-invoice', // Icon for gallery or images
-],
-[
-    'text' => 'Data Pajak',
-    'url'  => 'admin/pajak',
-    'icon' => 'fas fa-file-invoice-dollar', // Icon for gallery or images
-],
 ],
 ],
 
