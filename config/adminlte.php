@@ -399,6 +399,14 @@ return [
             'icon' => 'fas fa-database', // Ganti sesuai kebutuhan
         ],
 
+         [
+            'text' => 'Dokumen Lokasi Kerja',
+            'url'  => 'admin/dokumenlokasi',
+            'icon' => 'fas fa-map', // Ganti sesuai kebutuhan
+        ],
+
+
+
 
     ],
 ],

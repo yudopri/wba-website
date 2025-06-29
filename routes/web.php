@@ -22,6 +22,12 @@ use Illuminate\Support\Facades\Mail;
 use App\Http\Controllers\SendGridEmailController;
 use App\Http\Controllers\ChartController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\KasLogistikController;
+use App\Http\Controllers\KasLokasiController;
+use App\Http\Controllers\KasOperasionalController;
+use App\Http\Controllers\PengaduanController;
+use App\Http\Controllers\GajiController;
+use App\Http\Controllers\DokumenController;
 
 
 // Authentication routes with email verification enabled
@@ -275,3 +281,58 @@ Route::get('/set-visitor-cookie', [VisitorController::class, 'setVisitorCookie']
 
 // Default home route, only used if needed
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+//kaslogistik
+
+Route::get('/', [KasLogistikController::class, 'index']);
+Route::post('/kas-logistik/tambah', [KasLogistikController::class, 'store'])->name('kaslogistik.store');
+Route::post('/kas-logistik/kredit', [KasLogistikController::class, 'kredit'])->name('kaslogistik.kredit');
+Route::get('/admin/kaslogistik', [KasLogistikController::class, 'index'])->name('kaslogistik.index');
+
+//kaslokasi
+Route::get('/admin/kaslokasi', [KasLokasiController::class, 'index']);
+Route::post('/admin/kaslokasi/store', [KasLokasiController::class, 'store'])->name('kaslokasi.store');
+Route::post('/admin/kaslokasi/kredit', [KasLokasiController::class, 'kredit'])->name('kaslokasi.kredit');
+
+//kasoperasional
+Route::get('/admin/kasoperasional', [KasOperasionalController::class, 'index']);
+Route::post('/admin/kasoperasional/store', [KasOperasionalController::class, 'store'])->name('kasoperasional.store');
+Route::post('/admin/kasoperasional/kredit', [KasOperasionalController::class, 'kredit'])->name('kasoperasional.kredit');
+
+
+
+//pengaduan
+
+    Route::get('/admin/laporanmasalah', [PengaduanController::class, 'index'])->name('pengaduan.index');
+    Route::get('/laporanmasalah/create', [PengaduanController::class, 'create'])->name('pengaduan.create');
+    Route::post('/laporanmasalah', [PengaduanController::class, 'store'])->name('pengaduan.store');
+    Route::get('/laporanmasalah/{id}', [PengaduanController::class, 'show'])->name('laporanmasalah.detail');
+Route::get('/laporanmasalah/{id}/validasi', [PengaduanController::class, 'validasi'])->name('pengaduan.validasi');
+Route::get('/laporanmasalah/{id}/approve', [PengaduanController::class, 'approve'])->name('pengaduan.approve');
+Route::get('/laporanmasalah/{id}/logs', [PengaduanController::class, 'showLogs'])->name('pengaduan.logs');
+Route::post('/laporanmasalah/{id}/logs', [PengaduanController::class, 'storeLog'])->name('pengaduan.storeLog');
+Route::get('/laporanmasalah/{id}/logs/create', [PengaduanController::class, 'createLog'])->name('pengaduan.createLog');
+Route::get('/laporanmasalah/{id}/logs/{logId}/edit', [PengaduanController::class, 'editLog'])->name('pengaduan.editLog');
+
+
+// gaji
+Route::get('/admin/gaji', [GajiController::class, 'index'])->name('gaji.index');
+Route::get('/admin/gaji/create', [GajiController::class, 'create'])->name('gaji.create');
+Route::post('/admin/gaji', [GajiController::class, 'store'])->name('gaji.store');
+Route::get('/admin/gaji/{id}', [GajiController::class, 'show'])->name('gaji.detail');
+Route::get('/admin/gaji/{id}/konfirmasi', [GajiController::class, 'konfirmasi'])->name('gaji.konfirmasi');
+Route::get('/gaji/{id}', [GajiController::class, 'show'])->name('gaji.detail');
+Route::get('/admin/gaji/{id}/logs', [GajiController::class, 'showLogs'])->name('gaji.logs');
+
+
+
+    //dokumenlokasi
+        Route::get('/admin/dokumenlokasi', [DokumenController::class, 'index'])->name('dokumenlokasi.index');
+        Route::get('/admindokumenlokasi/create', [DokumenController::class, 'create'])->name('dokumenlokasi.create');
+        Route::post('/admindokumenlokasi', [DokumenController::class, 'store'])->name('dokumenlokasi.store');
+        Route::delete('/admindokumenlokasi/{id}', [DokumenController::class, 'destroy'])->name('dokumenlokasi.destroy');
+        Route::get('/dokumenlokasi/{id}/edit', [DokumenController::class, 'edit'])->name('dokumenlokasi.edit');
+        Route::put('/dokumenlokasi/{id}', [DokumenController::class, 'update'])->name('dokumenlokasi.update');
+        Route::delete('/dokumenlokasi/{id}', [DokumenController::class, 'destroy'])->name('dokumenlokasi.destroy');
+        Route::get('/', function () { return redirect()->route('dokumenlokasi.index');});
+        Route::resource('dokumenlokasi', DokumenController::class);
