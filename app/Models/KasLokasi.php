@@ -8,12 +8,13 @@ use Illuminate\Database\Eloquent\Model;
 class KasLokasi extends Model
 {
     use HasFactory;
-
+protected $table = 'location_petty_cash';
     protected $fillable = [
         'keterangan',
         'debit',
         'kredit',
-        'saldo_setelah',
-        'lokasi',
+        'saldo',
+        'lokasi_kerja','id_user',
     ];
+     // benerno sesuai iki
 }

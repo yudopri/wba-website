@@ -398,15 +398,11 @@ return [
             'url'  => 'admin/gada',
             'icon' => 'fas fa-database', // Ganti sesuai kebutuhan
         ],
-
-         [
-            'text' => 'Dokumen Lokasi Kerja',
-            'url'  => 'admin/dokumenlokasi',
-            'icon' => 'fas fa-map', // Ganti sesuai kebutuhan
-        ],
-
-
-
+[
+                'text' => 'Data Lokasi Kerja',
+                'url'  => 'admin/work',
+                'icon' => 'fas fa-handshake',
+            ],
 
     ],
 ],
@@ -467,17 +463,17 @@ return [
         ],
         [
             'text' => 'Data Barang Gudang',
-            'url'  => 'admin/barang',
+            'url'  => 'admin/baranggudang',
             'icon' => 'fas fa-box',
         ],
         [
             'text' => 'Data Distribusi',
-            'url'  => 'admin/distribusi',
+            'url'  => 'admin/distributions',
             'icon' => 'fas fa-truck',
         ],
         [
             'text' => 'Data Inventory',
-            'url'  => 'admin/inventaris',
+            'url'  => 'admin/inventories',
             'icon' => 'fas fa-toolbox',
         ],
 ],

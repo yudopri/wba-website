@@ -7,21 +7,22 @@ use Illuminate\Database\Eloquent\Model;
 class PengaduanLog extends Model
 {
     use HasFactory;
-
+protected $table = 'complaint_approvals';
     protected $fillable = [
-        'pengaduan_id',
+        'id_complaint',
+        'id_user',
+        'status',
+        'approved_at',
         'keterangan',
-        'deskripsi',
-        'person',
     ];
 
     public function pengaduan()
     {
         return $this->belongsTo(Pengaduan::class);
     }
-    public function logs()
-{
-    return $this->hasMany(PengaduanLog::class);
-}
+//     public function logs()
+// {
+//     return $this->hasMany(PengaduanLog::class);
+// } iki ga guna
 
 }

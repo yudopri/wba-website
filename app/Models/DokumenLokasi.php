@@ -12,4 +12,5 @@ class DokumenLokasi extends Model
         'nama_file',
         'file_path',
     ];
+    // iki gausah, melu model work
 }
