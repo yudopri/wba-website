@@ -1,15 +1,15 @@
 @extends('adminlte::page')
 @section('content')
-<h1>Data Distribusi</h1>
+<h1>Data Barang Perusahaan</h1>
 <div class="mb-4">
-        <form action="{{ route('admin.employee.index') }}" method="GET" class="form-inline">
+        <form action="{{ route('admin.inventory.index') }}" method="GET" class="form-inline">
             <!-- Pencarian Nama atau NIK -->
             <div class="form-group mb-2 mr-2">
                 <input
                     type="text"
                     name="search"
                     class="form-control"
-                    placeholder="Cari nama karyawan atau barang"
+                    placeholder="Cari nama barang"
                     value="{{ request('search') }}">
             </div>
 
@@ -29,34 +29,36 @@
 
             <!-- Tombol Filter -->
             <button type="submit" class="btn btn-primary mb-2">Filter</button>
-            <a href="{{ route('admin.employee.index') }}" class="btn btn-secondary mb-2 ml-2">Reset</a>
+            <a href="{{ route('admin.inventory.index') }}" class="btn btn-secondary mb-2 ml-2">Reset</a>
         </form>
     </div>
-<a href="/pengaduan/form" class="btn btn-primary mt-3">Tambah Data</a>
+<a href="{{ route('admin.inventory.create') }}" class="btn btn-primary mt-3">Tambah Barang</a>
 <table class="table table-bordered mt-4">
     <tr>
         <th>No</th>
-        <th>Nama Karyawan</th>
         <th>Nama Barang</th>
         <th>Quantity</th>
         <th>Jenis Barang</th>
-        <th>Keterangan</th>
+        <th>Stock</th>
         <th>Harga</th>
+        <th>Status</th>
         <th>Aksi</th>
     </tr>
+    @foreach ($inventoryItems as $item)
     <tr>
-        <td>1</td>
-        <td>Fajar</td>
-        <td>Baju</td>
-        <td>1</td>
-        <td>Baju</td>
-        <td>uk : L</td>
-        <td>80.000</td>
+        <td>{{ $loop->iteration }}</td>
+        <td>{{ $item->nama_barang }}</td>
+        <td>{{ $item->quantity }}</td>
+        <td>{{ $item->jenis_barang }}</td>
+        <td>{{ $item->stock }}</td>
+        <td>{{ number_format($item->price, 0, ',', '.') }}</td>
+        <td>{{ $item->status }}</td>
         <td>
-            <a href="{{ route('stockbarang.detail') }}" class="btn btn-info">Detail</a>
-            <a href="/pengaduan/validasi" class="btn btn-warning">Edit</a>
+            <a href="{{ route('admin.inventory.show', 1) }}" class="btn btn-info">Detail</a>
+            <a href="{{ route('admin.inventory.edit', $item->id) }}" class="btn btn-warning">Edit</a>
         </td>
     </tr>
+    @endforeach
 </table>
 
 <!-- Script untuk menampilkan/menghilangkan form -->

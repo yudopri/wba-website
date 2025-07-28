@@ -22,7 +22,10 @@ use Illuminate\Support\Facades\Mail;
 use App\Http\Controllers\SendGridEmailController;
 use App\Http\Controllers\ChartController;
 use App\Http\Controllers\NotificationController;
-
+use App\Http\Controllers\InvoiceController;
+use App\Http\Controllers\InventoryItemController;
+use App\Http\Controllers\InventoriesController;
+use App\Http\Controllers\DistributionController;
 
 // Authentication routes with email verification enabled
 
@@ -109,12 +112,8 @@ Route::get('/laporanmasalah', function () {
 Route::get('/laporanmasalah/detail', function () {
     return view('admin.report.detail');
 })->name('laporanmasalah.detail');
-Route::get('/invoice', function () {
-    return view('admin.invoice.index');
-});
-Route::get('/invoice/detail', function () {
-    return view('admin.invoice.detail');
-})->name('invoice.detail');
+
+
 Route::get('/gaji', function () {
     return view('admin.gaji.index');
 });
@@ -268,6 +267,38 @@ Route::get('/gada/edit/{id}', [GadaController::class, 'edit'])->name('admin.gada
 Route::post('/gada/store', [GadaController::class, 'store'])->name('admin.gada.store');
 Route::delete('/gada/{gada}', [GadaController::class, 'destroy'])->name('admin.gada.destroy');
 Route::get('/gada/{id}', [GadaController::class, 'show'])->name('admin.gada.show');
+
+Route::get('/invoice', [InvoiceController::class, 'index'])->name('admin.invoice.index');
+    Route::get('/invoice/create', [InvoiceController::class, 'create'])->name('admin.invoice.create');
+    Route::post('/invoice', [InvoiceController::class, 'store'])->name('admin.invoice.store');
+    Route::get('/invoice/{invoice}', [InvoiceController::class, 'show'])->name('admin.invoice.show');
+    Route::get('/invoice/{invoice}/edit', [InvoiceController::class, 'edit'])->name('admin.invoice.edit');
+    Route::put('/invoice/{invoice}', [InvoiceController::class, 'update'])->name('admin.invoice.update');
+    Route::delete('/invoice/{invoice}', [InvoiceController::class, 'destroy'])->name('admin.invoice.destroy');
+
+Route::get('/baranggudang', [InventoryItemController::class, 'index'])->name('admin.inventory.index');
+    Route::get('/baranggudang/create', [InventoryItemController::class, 'create'])->name('admin.inventory.create');
+    Route::post('/baranggudang', [InventoryItemController::class, 'store'])->name('admin.inventory.store');
+    Route::get('/baranggudang/{inventoryItem}', [InventoryItemController::class, 'show'])->name('admin.inventory.show');
+    Route::get('/baranggudang/{inventoryItem}/edit', [InventoryItemController::class, 'edit'])->name('admin.inventory.edit');
+    Route::put('/baranggudang/{inventoryItem}', [InventoryItemController::class, 'update'])->name('admin.inventory.update');
+    Route::delete('/baranggudang/{inventoryItem}', [InventoryItemController::class, 'destroy'])->name('admin.inventory.destroy');
+
+    Route::get('/inventories', [InventoriesController::class, 'index'])->name('admin.inventaris.index');
+    Route::get('/inventories/create', [InventoriesController::class, 'create'])->name('admin.inventaris.create');
+    Route::post('/inventories', [InventoriesController::class, 'store'])->name('admin.inventaris.store');
+    Route::get('/inventories/{inventories}', [InventoriesController::class, 'show'])->name('admin.inventaris.show');
+    Route::get('/inventories/{inventories}/edit', [InventoriesController::class, 'edit'])->name('admin.inventaris.edit');
+    Route::put('/inventories/{inventories}', [InventoriesController::class, 'update'])->name('admin.inventaris.update');
+    Route::delete('/inventories/{inventories}', [InventoriesController::class, 'destroy'])->name('admin.inventaris.destroy');
+
+    Route::get('/distributions', [DistributionController::class, 'index'])->name('admin.distributions.index');
+    Route::get('/distributions/create', [DistributionController::class, 'create'])->name('admin.distributions.create');
+    Route::post('/distributions', [DistributionController::class, 'store'])->name('admin.distributions.store');
+    Route::get('/distributions/{distribution}', [DistributionController::class, 'show'])->name('admin.distributions.show');
+    Route::get('/distributions/{distribution}/edit', [DistributionController::class, 'edit'])->name('admin.distributions.edit');
+    Route::put('/distributions/{distribution}', [DistributionController::class, 'update'])->name('admin.distributions.update');
+    Route::delete('/distributions/{distribution}', [DistributionController::class, 'destroy'])->name('admin.distributions.destroy');
 });
 
 // Visitor cookie route
