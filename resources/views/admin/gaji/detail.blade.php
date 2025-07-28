@@ -6,15 +6,16 @@
     <h1 class="mb-4">Detail Gaji</h1>
 
     <div class="card mb-4">
-        <div class="card-header">
-            <strong>{{ $gaji->nama_pt }}</strong>
-        </div>
-        <div class="card-body">
-            <p><strong>Nominal:</strong> Rp {{ number_format($gaji->nominal, 0, ',', '.') }}</p>
-            <p><strong>Bulan:</strong> {{ $gaji->bulan }}</p>
-            <p><strong>Status:</strong> {{ $gaji->status }}</p>
-        </div>
+    <div class="card-header">
+        <strong>Nama Karyawan: {{ $gaji->karyawan->nama ?? 'Tidak ditemukan' }}</strong>
     </div>
+    <div class="card-body">
+        <p><strong>Nama User:</strong> {{ $gaji->user->name ?? 'Tidak ditemukan' }}</p>
+        <p><strong>Nominal:</strong> Rp {{ number_format($gaji->nominal, 0, ',', '.') }}</p>
+        <p><strong>Bulan:</strong> {{ $gaji->bulan }}</p>
+    </div>
+</div>
+
 
     <h4>Riwayat Tindakan</h4>
     <ul class="list-group mb-4">

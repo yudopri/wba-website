@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Gaji;
 use App\Models\GajiLog;
+use Illuminate\Support\Facades\Auth;
 
 class GajiController extends Controller
 {
@@ -12,11 +13,6 @@ class GajiController extends Controller
     public function index(Request $request)
     {
         $query = Gaji::query();
-
-        // Filter berdasarkan nama perusahaan
-        if ($request->has('search') && $request->search != '') {
-            $query->where('nama_pt', 'like', '%' . $request->search . '%');
-        }
 
         // Filter berdasarkan bulan
         if ($request->has('gada') && $request->gada != '') {
@@ -35,51 +31,56 @@ class GajiController extends Controller
     }
 
     // Simpan data gaji baru dan buat log
-    public function store(Request $request)
-    {
-        $request->validate([
-            'nama_pt' => 'required|string|max:255',
-            'nominal' => 'required|numeric',
-            'bulan' => 'required|string|max:20',
-        ]);
+   public function store(Request $request)
+{
+    $request->validate([
+        'id_karyawan' => 'required|numeric',
+        'nominal'     => 'required|numeric',
+        'bulan'       => 'required|integer|min:1|max:12', // karena kamu pakai angka 1-12 di form
+    ]);
 
-        $gaji = Gaji::create([
-            'nama_pt' => $request->nama_pt,
-            'nominal' => $request->nominal,
-            'bulan' => $request->bulan,
-            'status' => 'Menunggu',
-        ]);
+    $gaji = Gaji::create([
+        'id_karyawan' => $request->id_karyawan,
+        'id_user'     => Auth::id(), // diisi otomatis dari user yang login
+        'nominal'     => $request->nominal,
+        'bulan'       => $request->bulan,
+    ]);
 
-        // Tambahkan log otomatis
-        $gaji->logs()->create([
-            'keterangan' => 'Data dibuat',
-            'person' => auth()->user()->name ?? 'System',
-            'deskripsi' => 'Data penggajian berhasil ditambahkan.',
-        ]);
+    $gaji->logs()->create([
+        'keterangan' => 'Data dibuat',
+        'person'     => Auth::user()->name ?? 'System',
+        'deskripsi'  => 'Data penggajian berhasil ditambahkan.',
+    ]);
 
-        return redirect()->route('gaji.index')->with('success', 'Data gaji berhasil ditambahkan.');
-    }
+    return redirect()->route('gaji.index')->with('success', 'Data gaji berhasil ditambahkan.');
+}
+
 
     // Tampilkan detail gaji
     public function show($id)
     {
         $gaji = Gaji::with('logs')->findOrFail($id);
         return view('admin.gaji.detail', compact('gaji'));
+       $gaji = Gaji::with(['karyawan', 'user', 'logs'])->findOrFail($id);
+
+
     }
 
-    // Konfirmasi gaji
+    // Konfirmasi gaji (jika Anda ingin tetap punya status, harus tambahkan kolom status di tabel salaries)
     public function konfirmasi($id)
     {
         $gaji = Gaji::findOrFail($id);
-        $gaji->update(['status' => 'Dikonfirmasi']);
 
-        // Tambahkan log konfirmasi
+        // Jika kolom `status` sudah dihapus, bagian ini akan error. Bisa dihapus atau dibiarkan jika Anda ingin menambahkan kembali kolom `status`.
+        // $gaji->update(['status' => 'Dikonfirmasi']);
+
         $gaji->logs()->create([
             'keterangan' => 'Dikonfirmasi',
-            'person' => auth()->user()->name ?? 'System',
-            'deskripsi' => 'Data penggajian telah dikonfirmasi.',
+            'person'     => Auth::user()->name ?? 'System',
+            'deskripsi'  => 'Data penggajian telah dikonfirmasi.',
         ]);
 
         return back()->with('success', 'Data gaji berhasil dikonfirmasi.');
     }
+    
 }
