@@ -16,13 +16,14 @@ protected $table = 'complaint_approvals';
         'keterangan',
     ];
 
-    public function pengaduan()
-    {
-        return $this->belongsTo(Pengaduan::class);
-    }
-//     public function logs()
-// {
-//     return $this->hasMany(PengaduanLog::class);
-// } iki ga guna
+   public function pengaduan()
+{
+    return $this->belongsTo(Pengaduan::class, 'id_complaint');
+}
+
+    public function logs()
+{
+    return $this->hasMany(PengaduanLog::class);
+}
 
 }

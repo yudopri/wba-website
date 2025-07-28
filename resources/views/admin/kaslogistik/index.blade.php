@@ -1,7 +1,9 @@
 @extends('adminlte::page')
+
 @section('content')
 <h1>Data Kas Logistik</h1>
 
+{{-- Notifikasi --}}
 @if(session('success'))
     <div class="alert alert-success">{{ session('success') }}</div>
 @endif
@@ -25,30 +27,28 @@
     </div>
 
     <!-- TOTAL PENGELUARAN -->
-  <div class="col-md-6 position-relative">
-    <form method="GET" action="{{ url('/admin/kaslogistik') }}">
-        <div class="card shadow-lg border-0 rounded-xl position-relative" style="background: linear-gradient(135deg, #C0392B, #E74C3C);">
-            <div class="card-header bg-transparent border-0 text-white">
-                <h3 class="card-title"><i class="fas fa-money-bill-wave mr-2"></i> Total Pengeluaran</h3>
-
-                <!-- Dropdown Filter Range -->
-                <div style="position: absolute; top: 10px; right: 15px;">
-                    <select name="range" class="form-select form-select-sm bg-light text-dark" onchange="this.form.submit()" style="width: 130px;">
-                        <option value="7hari" {{ $range == '7hari' ? 'selected' : '' }}>7 Hari</option>
-                        <option value="1bulan" {{ $range == '1bulan' ? 'selected' : '' }}>1 Bulan</option>
-                        <option value="3bulan" {{ $range == '3bulan' ? 'selected' : '' }}>3 Bulan</option>
-                        <option value="1tahun" {{ $range == '1tahun' ? 'selected' : '' }}>1 Tahun</option>
-                    </select>
+    <div class="col-md-6 position-relative">
+        <form method="GET" action="{{ url('/admin/kaslogistik') }}">
+            <div class="card shadow-lg border-0 rounded-xl position-relative" style="background: linear-gradient(135deg, #C0392B, #E74C3C);">
+                <div class="card-header bg-transparent border-0 text-white">
+                    <h3 class="card-title"><i class="fas fa-money-bill-wave mr-2"></i> Total Pengeluaran</h3>
+                    <!-- Dropdown Filter Range -->
+                    <div style="position: absolute; top: 10px; right: 15px;">
+                        <select name="range" class="form-select form-select-sm bg-light text-dark" onchange="this.form.submit()" style="width: 130px;">
+                            <option value="7hari" {{ $range == '7hari' ? 'selected' : '' }}>7 Hari</option>
+                            <option value="1bulan" {{ $range == '1bulan' ? 'selected' : '' }}>1 Bulan</option>
+                            <option value="3bulan" {{ $range == '3bulan' ? 'selected' : '' }}>3 Bulan</option>
+                            <option value="1tahun" {{ $range == '1tahun' ? 'selected' : '' }}>1 Tahun</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="card-body text-center">
+                    <h1 class="display-4 text-white">Rp. {{ number_format($totalPengeluaran, 0, ',', '.') }}</h1>
+                    <p class="lead text-white mb-0">Total Kredit</p>
                 </div>
             </div>
-            <div class="card-body text-center">
-                <h1 class="display-4 text-white">Rp. {{ number_format($totalPengeluaran, 0, ',', '.') }}</h1>
-                <p class="lead text-white mb-0">Total Kredit</p>
-            </div>
-        </div>
-    </form>
-</div>
-
+        </form>
+    </div>
 </div>
 
 <!-- FORM -->
@@ -84,30 +84,41 @@
 </div>
 
 <!-- TABEL TRANSAKSI -->
-<table class="table table-bordered table-striped">
-    <thead class="thead-dark">
-        <tr>
-            <th>No</th>
-            <th>Keterangan</th>
-            <th>Debit</th>
-            <th>Kredit</th>
-            <th>Saldo Setelah</th>
-            <th>Tanggal</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach($transaksi as $key => $item)
-        <tr>
-            <td>{{ $key+1 }}</td>
-            <td>{{ $item->keterangan }}</td>
-            <td>Rp. {{ number_format($item->debit, 0, ',', '.') }}</td>
-            <td>Rp. {{ number_format($item->kredit, 0, ',', '.') }}</td>
-            <td>Rp. {{ number_format($item->saldo_setelah, 0, ',', '.') }}</td>
-            <td>{{ $item->created_at->format('d-m-Y H:i') }}</td>
-        </tr>
-        @endforeach
-    </tbody>
-</table>
+<div class="card">
+    <div class="card-header bg-dark text-white">
+        <h4 class="mb-0"><i class="fas fa-history mr-2"></i> Riwayat Transaksi</h4>
+    </div>
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped mb-0">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>No</th>
+                        <th>Keterangan</th>
+                        <th>Debit</th>
+                        <th>Kredit</th>
+                        <th>Saldo Setelah</th>
+                        <th>User</th>
+                        <th>Tanggal</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($transaksi as $key => $item)
+                    <tr>
+                        <td>{{ $key+1 }}</td>
+                        <td>{{ $item->keterangan }}</td>
+                        <td>Rp. {{ number_format($item->debit, 0, ',', '.') }}</td>
+                        <td>Rp. {{ number_format($item->kredit, 0, ',', '.') }}</td>
+                        <td>Rp. {{ number_format($item->saldo_setelah, 0, ',', '.') }}</td>
+                        <td>{{ $item->user->name ?? '-' }}</td>
+                        <td>{{ $item->created_at->format('d-m-Y H:i') }}</td>
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
 
 <!-- SCRIPT -->
 <script>

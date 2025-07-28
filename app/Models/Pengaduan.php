@@ -17,9 +17,10 @@ protected $table = 'complaint_reports';
     {
         return $this->belongsTo(User::class);
     }
-//     public function logs()
-// {
-//     return $this->hasMany(\App\Models\PengaduanLog::class, 'pengaduan_id');
-// } ga guna
+   public function logs()
+{
+    return $this->hasMany(PengaduanLog::class, 'id_complaint');
+}
+
 
 }
