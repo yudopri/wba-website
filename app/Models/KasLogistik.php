@@ -5,9 +5,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class KasLogistik extends Model
 {
-    protected $table = 'kas_logistik'; // <- ini penting!
-    
+    protected $table = 'logistics_cash'; // <- ini penting!
+
     protected $fillable = [
-        'keterangan', 'debit', 'kredit', 'saldo_setelah'
+        'keterangan', 'debit', 'kredit', 'saldo', 'id_user',
     ];
+     // benerno sesuai iki
 }

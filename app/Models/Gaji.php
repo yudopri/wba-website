@@ -10,11 +10,7 @@ class Gaji extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['nama_pt', 'nominal', 'bulan', 'status'];
-
-    // Relasi ke logs
-    public function logs()
-    {
-        return $this->hasMany(GajiLog::class, 'penggajian_id');
-    }
+    protected $table = 'salaries';
+    protected $fillable = ['id_karyawan','id_user', 'nominal', 'bulan', 'status'];
+  // benerno sesuai iki
 }

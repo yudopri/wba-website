@@ -8,11 +8,13 @@ use Illuminate\Database\Eloquent\Model;
 class KasOperasional extends Model
 {
     use HasFactory;
-protected $table = 'kas_operasional'; // ⬅️ tambahkan ini
+protected $table = 'operational_petty_cash'; // ⬅️ tambahkan ini
     protected $fillable = [
         'keterangan',
         'debit',
         'kredit',
-        'saldo_setelah',
+        'saldo',
+        'id_user',
     ];
+    // benerno sesuai iki
 }

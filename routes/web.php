@@ -26,6 +26,13 @@ use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\InventoryItemController;
 use App\Http\Controllers\InventoriesController;
 use App\Http\Controllers\DistributionController;
+use App\Http\Controllers\KasLogistikController;
+use App\Http\Controllers\KasLokasiController;
+use App\Http\Controllers\KasOperasionalController;
+use App\Http\Controllers\PengaduanController;
+use App\Http\Controllers\GajiController;
+use App\Http\Controllers\DokumenController;
+
 
 // Authentication routes with email verification enabled
 
