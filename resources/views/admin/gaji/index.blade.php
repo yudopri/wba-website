@@ -58,7 +58,7 @@
                     <th>ID User</th>
                     <th>Nominal</th>
                     <th>Bulan</th>
-                    <th style="width: 130px" class="text-center">Aksi</th>
+                    <!-- <th style="width: 130px" class="text-center">Aksi</th> -->
                 </tr>
             </thead>
             <tbody>
@@ -69,13 +69,13 @@
                         <td>{{ $gaji->id_user }}</td>
                         <td>Rp {{ number_format($gaji->nominal, 0, ',', '.') }}</td>
                         <td>{{ $gaji->bulan }}</td>
-                        <td class="text-center">
+                        <!-- <td class="text-center">
                             <div class="btn-group">
                                 <a href="{{ route('gaji.detail', $gaji->id) }}" class="btn btn-sm btn-info" title="Lihat Detail">
                                     <i class="fas fa-eye"></i>
                                 </a>
                             </div>
-                        </td>
+                        </td> -->
                     </tr>
                 @empty
                     <tr>

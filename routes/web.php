@@ -308,7 +308,8 @@ Route::get('/baranggudang', [InventoryItemController::class, 'index'])->name('ad
     Route::delete('/distributions/{distribution}', [DistributionController::class, 'destroy'])->name('admin.distributions.destroy');
 });
 
-// Visitor cookie route
+Route::prefix('admin')->middleware(['auth'])->group(function () {
+   // Visitor cookie route
 Route::get('/set-visitor-cookie', [VisitorController::class, 'setVisitorCookie']);
 
 // Default home route, only used if needed
@@ -368,3 +369,6 @@ Route::get('/admin/gaji/{id}/logs', [GajiController::class, 'showLogs'])->name('
         Route::delete('/dokumenlokasi/{id}', [DokumenController::class, 'destroy'])->name('dokumenlokasi.destroy');
         Route::get('/', function () { return redirect()->route('dokumenlokasi.index');});
         Route::resource('dokumenlokasi', DokumenController::class);
+
+});
+
