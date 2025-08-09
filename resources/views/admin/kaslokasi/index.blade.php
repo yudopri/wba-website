@@ -25,28 +25,39 @@
         </div>
     </div>
 
-    <!-- Total Pengeluaran -->
-    <div class="col-md-6 position-relative">
-        <form method="GET" action="{{ url('/admin/kaslokasi') }}">
-            <div class="card shadow-lg border-0 rounded-xl" style="background: linear-gradient(135deg, #C0392B, #E74C3C);">
-                <div class="card-header bg-transparent border-0 text-white">
-                    <h3 class="card-title"><i class="fas fa-money-bill-wave mr-2"></i> Total Pengeluaran</h3>
-                    <div style="position: absolute; top: 10px; right: 15px;">
-                        <select name="range" class="form-select form-select-sm bg-light text-dark" onchange="this.form.submit()" style="width: 130px;">
-                            <option value="7hari" {{ $range == '7hari' ? 'selected' : '' }}>7 Hari</option>
-                            <option value="1bulan" {{ $range == '1bulan' ? 'selected' : '' }}>1 Bulan</option>
-                            <option value="3bulan" {{ $range == '3bulan' ? 'selected' : '' }}>3 Bulan</option>
-                            <option value="1tahun" {{ $range == '1tahun' ? 'selected' : '' }}>1 Tahun</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="card-body text-center">
-                    <h1 class="display-4 text-white">Rp. {{ number_format($totalPengeluaran ?? 0, 0, ',', '.') }}</h1>
-                    <p class="lead text-white mb-0">Total Kredit</p>
-                </div>
-            </div>
+  <!-- Total Pengeluaran -->
+<div class="col-md-6 position-relative">
+    <div class="card shadow-lg border-0 rounded-xl" style="background: linear-gradient(135deg, #C0392B, #E74C3C); position: relative;">
+        
+        <!-- Filter Tanggal -->
+        <form method="GET" action="{{ url('/admin/kaslokasi') }}"
+              class="position-absolute d-flex align-items-center"
+              style="top: 10px; right: 10px; z-index: 10; padding: 5px 10px; border-radius: 8px;">
+            
+            <input type="date" name="tanggal_awal" value="{{ request('tanggal_awal') }}"
+                   class="form-control form-control-sm bg-white text-dark border-0 me-1"
+                   style="width: 130px;" title="Dari Tanggal">
+            
+            <input type="date" name="tanggal_akhir" value="{{ request('tanggal_akhir') }}"
+                   class="form-control form-control-sm bg-white text-dark border-0 me-1"
+                   style="width: 130px;" title="Sampai Tanggal">
+            
+            <button type="submit" class="btn btn-sm btn-primary me-1">OK</button>
+
+            <!-- Tombol Reset -->
+            <a href="{{ url('/admin/kaslokasi') }}" class="btn btn-sm btn-secondary">Reset</a>
         </form>
+
+        <div class="card-header bg-transparent border-0 text-white">
+            <h3 class="card-title"><i class="fas fa-money-bill-wave mr-2"></i> Total Pengeluaran</h3>
+        </div>
+        <div class="card-body text-center">
+            <h1 class="display-4 text-white">Rp. {{ number_format($totalPengeluaran ?? 0, 0, ',', '.') }}</h1>
+            <p class="lead text-white mb-0">Total Kredit</p>
+        </div>
     </div>
+</div>
+
 </div>
 
 <!-- Tombol Form -->

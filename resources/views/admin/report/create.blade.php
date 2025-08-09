@@ -29,6 +29,10 @@
             <label for="deskripsi">Deskripsi Masalah</label>
             <textarea class="form-control" name="deskripsi" rows="5" required></textarea>
         </div>
+        <div class="mb-3">
+            <label for="kronologi">Kronologi</label>
+            <textarea class="form-control" name="kronologi" rows="5" required></textarea>
+        </div>
 
         <div class="mb-3">
             <label for="pelapor">Nama Pelapor</label>

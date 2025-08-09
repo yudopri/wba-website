@@ -308,6 +308,7 @@ Route::get('/baranggudang', [InventoryItemController::class, 'index'])->name('ad
     Route::delete('/distributions/{distribution}', [DistributionController::class, 'destroy'])->name('admin.distributions.destroy');
 });
 
+
 // Visitor cookie route
 Route::get('/set-visitor-cookie', [VisitorController::class, 'setVisitorCookie']);
 
@@ -346,6 +347,12 @@ Route::post('/laporanmasalah/{id}/logs', [PengaduanController::class, 'storeLog'
 Route::get('/laporanmasalah/{id}/logs/create', [PengaduanController::class, 'createLog'])->name('pengaduan.createLog');
 Route::get('/laporanmasalah/{id}/logs/{logId}/edit', [PengaduanController::class, 'editLog'])->name('pengaduan.editLog');
 
+Route::get('/pengaduan/{id}/upload-bukti', [PengaduanController::class, 'formUploadBukti'])->name('pengaduan.uploadBukti');
+Route::post('/pengaduan/{id}/upload-bukti', [PengaduanController::class, 'uploadBukti'])->name('pengaduan.uploadBuktiPost');
+Route::get('/pengaduan/{id}/print', [PengaduanController::class, 'printPDF'])->name('pengaduan.print');
+Route::get('/pengaduan/{id}/cetak-pdf', [PengaduanController::class, 'printPDF'])->name('pengaduan.print-pdf');
+
+
 
 // gaji
 Route::get('/admin/gaji', [GajiController::class, 'index'])->name('gaji.index');
@@ -368,3 +375,13 @@ Route::get('/admin/gaji/{id}/logs', [GajiController::class, 'showLogs'])->name('
         Route::delete('/dokumenlokasi/{id}', [DokumenController::class, 'destroy'])->name('dokumenlokasi.destroy');
         Route::get('/', function () { return redirect()->route('dokumenlokasi.index');});
         Route::resource('dokumenlokasi', DokumenController::class);
+
+//notif
+
+Route::get('/notifikasi', [NotificationController::class, 'index'])->name('notif.index');
+Route::post('/notifikasi/baca/{id}', [NotificationController::class, 'markAsRead'])->name('notif.markAsRead');
+Route::post('/notifikasi/baca/{id}', [NotificationController::class, 'markAsRead'])->name('notif.markAsRead');
+Route::post('/notifikasi/baca/{id}', [\App\Http\Controllers\NotifikasiController::class, 'markAsRead'])->name('notif.markAsRead');
+
+Route::get('/notifications/show', [App\Http\Controllers\NotificationController::class, 'show'])->name('notifications.show');
+Route::get('/notifications/get', [App\Http\Controllers\NotificationController::class, 'get'])->name('notifications.get');

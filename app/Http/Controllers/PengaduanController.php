@@ -1,18 +1,19 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use Barryvdh\DomPDF\Facade\Pdf;
 use App\Models\Pengaduan;
 use App\Models\PengaduanLog;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Models\NotificationUser;
 
 class PengaduanController extends Controller
 {
     // Tampilkan semua pengaduan
     public function index()
     {
-        $pengaduan = Pengaduan::latest()->get();
+        $pengaduan = Pengaduan::with('user')->orderBy('created_at', 'desc')->get();
         return view('admin.report.index', compact('pengaduan'));
     }
 
@@ -26,25 +27,37 @@ class PengaduanController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'judul' => 'required|max:255',
+            'judul'     => 'required|max:255',
             'deskripsi' => 'required',
-            'pelapor' => 'required|max:255',
+            'kronologi' => 'required',
+            'pelapor'   => 'required|max:255',
         ]);
 
         $pengaduan = Pengaduan::create([
-            'judul' => $request->judul,
+            'judul'     => $request->judul,
             'deskripsi' => $request->deskripsi,
-            'pelapor' => $request->pelapor,
-            'user_id' => Auth::id(),
-            'status' => 'Diajukan',
+            'pelapor'   => $request->pelapor,
+            'kronologi' => $request->kronologi,
+            'id_user'   => Auth::id(),
+            'status'    => 'Diajukan',
         ]);
 
         PengaduanLog::create([
-            'pengaduan_id' => $pengaduan->id,
-            'keterangan' => 'Diajukan',
-            'person' => $request->pelapor,
-            'deskripsi' => 'Pengaduan baru dibuat',
+            'id_complaint' => $pengaduan->id,
+            'id_user'      => Auth::id(),
+            'status'       => 'Diajukan',
+            'keterangan'   => 'Pengaduan diajukan oleh pelapor',
+            'approved_at'  => now(),
         ]);
+
+NotificationUser::create([
+   'user_id' => Auth::id(),
+    'tipe' => 'success',
+    'judul' => 'Pengaduan Terkirim',
+    'pesan' => 'Pengaduan "' . $pengaduan->judul . '" berhasil dikirim.',
+    'sudah_dibaca' => 0,
+]);
+
 
         return redirect()->route('pengaduan.index')->with('success', 'Pengaduan berhasil dikirim.');
     }
@@ -56,78 +69,118 @@ class PengaduanController extends Controller
         return view('admin.report.detail', compact('pengaduan'));
     }
 
-    // Validasi oleh kepala
+    // Validasi oleh Kepala
     public function validasi($id)
     {
         $pengaduan = Pengaduan::findOrFail($id);
         $pengaduan->update(['status' => 'Diproses']);
 
         PengaduanLog::create([
-            'pengaduan_id' => $pengaduan->id,
-            'keterangan' => 'Divalidasi',
-            'person' => Auth::user()->name,
-            'deskripsi' => 'Pengaduan divalidasi oleh Kepala Departemen',
+            'id_complaint' => $pengaduan->id,
+            'id_user'      => Auth::id(),
+            'status'       => 'Diproses',
+            'keterangan'   => 'Pengaduan divalidasi oleh Kepala Departemen',
+            'approved_at'  => now(),
         ]);
 
         return back()->with('success', 'Pengaduan berhasil divalidasi.');
     }
 
-    // Approve oleh GM
+    // Approve oleh Manager
     public function approve($id)
     {
         $pengaduan = Pengaduan::findOrFail($id);
         $pengaduan->update(['status' => 'Disetujui']);
 
         PengaduanLog::create([
-            'pengaduan_id' => $pengaduan->id,
-            'keterangan' => 'Disetujui',
-            'person' => Auth::user()->name,
-            'deskripsi' => 'Pengaduan disetujui oleh Manager',
+            'id_complaint' => $pengaduan->id,
+            'id_user'      => Auth::id(),
+            'status'       => 'Disetujui',
+            'keterangan'   => 'Pengaduan disetujui oleh Manager',
+            'approved_at'  => now(),
         ]);
 
-        return back()->with('success', 'Pengaduan berhasil disetujui.');
+        return redirect()->back()->with('success', 'Pengaduan berhasil disetujui.');
     }
 
-    // Tampilkan semua log
+    // Semua log dari pengaduan
     public function showLogs($id)
     {
         $pengaduan = Pengaduan::with('logs')->findOrFail($id);
         return view('admin.report.logs.index', compact('pengaduan'));
     }
 
-    // Tampilkan form tambah log
+    // Form tambah log
     public function createLog($id)
     {
         $pengaduan = Pengaduan::findOrFail($id);
         return view('admin.report.logs.create', compact('pengaduan'));
     }
 
-    // Simpan log
+    // Simpan log tambahan
     public function storeLog(Request $request, $id)
     {
         $request->validate([
             'keterangan' => 'required|string',
-            'deskripsi' => 'required|string',
+            'deskripsi'  => 'required|string',
+            'kronologi'  => 'required|string',
         ]);
 
         $pengaduan = Pengaduan::findOrFail($id);
 
         PengaduanLog::create([
-            'pengaduan_id' => $pengaduan->id,
-            'keterangan' => $request->keterangan,
-            'person' => Auth::user()->name,
-            'deskripsi' => $request->deskripsi,
+            'id_complaint' => $pengaduan->id,
+            'id_user'      => Auth::id(),
+            'status'       => $pengaduan->status,
+            'keterangan'   => $request->keterangan,
+            'approved_at'  => now(),
         ]);
 
         return redirect()->route('pengaduan.logs', $id)->with('success', 'Log berhasil ditambahkan.');
     }
 
-    // Form edit log
+    // Edit log
     public function editLog($id, $logId)
     {
         $pengaduan = Pengaduan::findOrFail($id);
-        $log = PengaduanLog::where('pengaduan_id', $id)->findOrFail($logId);
+        $log = PengaduanLog::where('id_complaint', $id)->findOrFail($logId);
 
         return view('admin.report.logs.edit', compact('pengaduan', 'log'));
     }
+    // Form upload bukti
+public function formUploadBukti($id)
+{
+    $pengaduan = Pengaduan::findOrFail($id);
+    return view('admin.report.upload_bukti', compact('pengaduan'));
+}
+
+// Simpan bukti ke storage
+public function uploadBukti(Request $request, $id)
+{
+    $request->validate([
+        'bukti' => 'required|image|mimes:jpg,png,jpeg|max:2048',
+    ]);
+
+    $pengaduan = Pengaduan::findOrFail($id);
+
+    if ($request->hasFile('bukti')) {
+        $path = $request->file('bukti')->store('bukti_penyelesaian', 'public');
+        $pengaduan->bukti_penyelesaian = $path;
+        $pengaduan->save();
+    }
+
+    return redirect()->route('pengaduan.index')->with('success', 'Bukti berhasil diupload.');
+}
+
+
+public function printPDF($id)
+{
+    $pengaduan = Pengaduan::with('logs')->findOrFail($id);
+
+    $pdf = Pdf::loadView('admin.report.laporan', compact('pengaduan'));
+
+    return $pdf->stream('laporan_pengaduan_'.$pengaduan->id.'.pdf');
+}
+
+
 }

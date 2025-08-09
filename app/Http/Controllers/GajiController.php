@@ -5,22 +5,18 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Gaji;
 use App\Models\GajiLog;
+use App\Models\Partner;
+use Illuminate\Support\Facades\Auth;
 
 class GajiController extends Controller
 {
-    // Tampilkan semua data gaji
     public function index(Request $request)
     {
-        $query = Gaji::query();
+        $query = Gaji::with(['partner', 'user']);
 
-        // Filter berdasarkan nama perusahaan
-        if ($request->has('search') && $request->search != '') {
-            $query->where('nama_pt', 'like', '%' . $request->search . '%');
-        }
-
-        // Filter berdasarkan bulan
         if ($request->has('gada') && $request->gada != '') {
-            $query->where('bulan', $request->gada);
+            $bulan = date('m', strtotime("1 " . $request->gada));
+            $query->whereMonth('bulan', $bulan);
         }
 
         $dataGaji = $query->latest()->get();
@@ -28,56 +24,50 @@ class GajiController extends Controller
         return view('admin.gaji.index', compact('dataGaji'));
     }
 
-    // Tampilkan form tambah gaji
     public function create()
     {
-        return view('admin.gaji.create');
+        $partners = Partner::all();
+        return view('admin.gaji.create', compact('partners'));
     }
 
-    // Simpan data gaji baru dan buat log
     public function store(Request $request)
     {
         $request->validate([
-            'nama_pt' => 'required|string|max:255',
-            'nominal' => 'required|numeric',
-            'bulan' => 'required|string|max:20',
+            'partner_id' => 'required|exists:partners,id',
+            'nominal'    => 'required|numeric',
+            'bulan'      => 'required|date_format:Y-m',
         ]);
 
         $gaji = Gaji::create([
-            'nama_pt' => $request->nama_pt,
-            'nominal' => $request->nominal,
-            'bulan' => $request->bulan,
-            'status' => 'Menunggu',
+            'partner_id' => $request->partner_id,
+            'id_user'    => Auth::id(),
+            'nominal'    => $request->nominal,
+            'bulan'      => $request->bulan . '-01',
         ]);
 
-        // Tambahkan log otomatis
         $gaji->logs()->create([
             'keterangan' => 'Data dibuat',
-            'person' => auth()->user()->name ?? 'System',
-            'deskripsi' => 'Data penggajian berhasil ditambahkan.',
+            'person'     => Auth::user()->name ?? 'System',
+            'deskripsi'  => 'Data penggajian berhasil ditambahkan.',
         ]);
 
         return redirect()->route('gaji.index')->with('success', 'Data gaji berhasil ditambahkan.');
     }
 
-    // Tampilkan detail gaji
     public function show($id)
     {
-        $gaji = Gaji::with('logs')->findOrFail($id);
+        $gaji = Gaji::with(['partner', 'user', 'logs'])->findOrFail($id);
         return view('admin.gaji.detail', compact('gaji'));
     }
 
-    // Konfirmasi gaji
     public function konfirmasi($id)
     {
         $gaji = Gaji::findOrFail($id);
-        $gaji->update(['status' => 'Dikonfirmasi']);
 
-        // Tambahkan log konfirmasi
         $gaji->logs()->create([
             'keterangan' => 'Dikonfirmasi',
-            'person' => auth()->user()->name ?? 'System',
-            'deskripsi' => 'Data penggajian telah dikonfirmasi.',
+            'person'     => Auth::user()->name ?? 'System',
+            'deskripsi'  => 'Data penggajian telah dikonfirmasi.',
         ]);
 
         return back()->with('success', 'Data gaji berhasil dikonfirmasi.');

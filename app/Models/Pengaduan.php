@@ -10,16 +10,17 @@ class Pengaduan extends Model
     use HasFactory;
 protected $table = 'complaint_reports';
     protected $fillable = [
-        'judul', 'deskripsi', 'status', 'id_user',
+        'judul', 'deskripsi', 'status', 'id_user','kronologi', 'pelapor','bukti_penyelesaian'
     ];
 
     public function user()
     {
         return $this->belongsTo(User::class);
     }
-//     public function logs()
-// {
-//     return $this->hasMany(\App\Models\PengaduanLog::class, 'pengaduan_id');
-// } ga guna
+   public function logs()
+{
+    return $this->hasMany(PengaduanLog::class, 'id_complaint');
+}
+
 
 }
