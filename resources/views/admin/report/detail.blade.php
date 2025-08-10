@@ -11,6 +11,7 @@
         </div>
         <div class="card-body">
             <p><strong>Deskripsi:</strong> {{ $pengaduan->deskripsi }}</p>
+            <p><strong>Kronologi:</strong> {{ $pengaduan->kronologi }}</p>
             <p><strong>Status:</strong> {{ $pengaduan->status }}</p>
             <p><strong>Pelapor:</strong> {{ $pengaduan->pelapor }}</p>
         </div>
@@ -30,6 +31,8 @@
     </ul>
 
     <a href="{{ route('pengaduan.index') }}" class="btn btn-secondary">Kembali</a>
+<a href="{{ route('pengaduan.print-pdf', $pengaduan->id) }}" class="btn btn-danger">Cetak PDF</a>
+
 </div>
 
 @endsection

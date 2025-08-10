@@ -13,6 +13,7 @@
     <form action="{{ route('gaji.store') }}" method="POST">
         @csrf
 
+<<<<<<< HEAD
         <!-- ID Karyawan dari User Login -->
       <!-- ID Karyawan dari User Login -->
 <div class="mb-3">
@@ -37,6 +38,28 @@
                     </option>
                 @endfor
             </select>
+=======
+        <div class="mb-3">
+            <label for="partner_id">Nama PT</label>
+            <select name="partner_id" class="form-control" required>
+                <option value="">-- Pilih PT --</option>
+                @foreach($partners as $partner)
+                    <option value="{{ $partner->id }}" {{ old('partner_id') == $partner->id ? 'selected' : '' }}>
+                        {{ $partner->name_partner }}
+                    </option>
+                @endforeach
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label for="nominal">Nominal</label>
+            <input type="number" name="nominal" class="form-control" required value="{{ old('nominal') }}">
+        </div>
+
+        <div class="mb-3">
+            <label for="bulan">Bulan dan Tahun</label>
+            <input type="month" name="bulan" class="form-control" required value="{{ old('bulan') }}">
+>>>>>>> 0dc353bdb7868fa53612faccfcb2922d594ecb60
         </div>
 
         <button type="submit" class="btn btn-primary">Simpan</button>

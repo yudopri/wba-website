@@ -1,11 +1,12 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use Barryvdh\DomPDF\Facade\Pdf;
 use App\Models\Pengaduan;
 use App\Models\PengaduanLog;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Models\NotificationUser;
 
 class PengaduanController extends Controller
 {
@@ -28,6 +29,10 @@ class PengaduanController extends Controller
         $request->validate([
             'judul'     => 'required|max:255',
             'deskripsi' => 'required',
+<<<<<<< HEAD
+=======
+            'kronologi' => 'required',
+>>>>>>> 0dc353bdb7868fa53612faccfcb2922d594ecb60
             'pelapor'   => 'required|max:255',
         ]);
 
@@ -35,6 +40,10 @@ class PengaduanController extends Controller
             'judul'     => $request->judul,
             'deskripsi' => $request->deskripsi,
             'pelapor'   => $request->pelapor,
+<<<<<<< HEAD
+=======
+            'kronologi' => $request->kronologi,
+>>>>>>> 0dc353bdb7868fa53612faccfcb2922d594ecb60
             'id_user'   => Auth::id(),
             'status'    => 'Diajukan',
         ]);
@@ -46,6 +55,15 @@ class PengaduanController extends Controller
             'keterangan'   => 'Pengaduan diajukan oleh pelapor',
             'approved_at'  => now(),
         ]);
+
+NotificationUser::create([
+   'user_id' => Auth::id(),
+    'tipe' => 'success',
+    'judul' => 'Pengaduan Terkirim',
+    'pesan' => 'Pengaduan "' . $pengaduan->judul . '" berhasil dikirim.',
+    'sudah_dibaca' => 0,
+]);
+
 
         return redirect()->route('pengaduan.index')->with('success', 'Pengaduan berhasil dikirim.');
     }
@@ -111,6 +129,10 @@ class PengaduanController extends Controller
         $request->validate([
             'keterangan' => 'required|string',
             'deskripsi'  => 'required|string',
+<<<<<<< HEAD
+=======
+            'kronologi'  => 'required|string',
+>>>>>>> 0dc353bdb7868fa53612faccfcb2922d594ecb60
         ]);
 
         $pengaduan = Pengaduan::findOrFail($id);
@@ -134,4 +156,40 @@ class PengaduanController extends Controller
 
         return view('admin.report.logs.edit', compact('pengaduan', 'log'));
     }
+    // Form upload bukti
+public function formUploadBukti($id)
+{
+    $pengaduan = Pengaduan::findOrFail($id);
+    return view('admin.report.upload_bukti', compact('pengaduan'));
+}
+
+// Simpan bukti ke storage
+public function uploadBukti(Request $request, $id)
+{
+    $request->validate([
+        'bukti' => 'required|image|mimes:jpg,png,jpeg|max:2048',
+    ]);
+
+    $pengaduan = Pengaduan::findOrFail($id);
+
+    if ($request->hasFile('bukti')) {
+        $path = $request->file('bukti')->store('bukti_penyelesaian', 'public');
+        $pengaduan->bukti_penyelesaian = $path;
+        $pengaduan->save();
+    }
+
+    return redirect()->route('pengaduan.index')->with('success', 'Bukti berhasil diupload.');
+}
+
+
+public function printPDF($id)
+{
+    $pengaduan = Pengaduan::with('logs')->findOrFail($id);
+
+    $pdf = Pdf::loadView('admin.report.laporan', compact('pengaduan'));
+
+    return $pdf->stream('laporan_pengaduan_'.$pengaduan->id.'.pdf');
+}
+
+
 }

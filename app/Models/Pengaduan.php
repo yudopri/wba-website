@@ -10,7 +10,7 @@ class Pengaduan extends Model
     use HasFactory;
 protected $table = 'complaint_reports';
     protected $fillable = [
-        'judul', 'deskripsi', 'status', 'id_user',
+        'judul', 'deskripsi', 'status', 'id_user','kronologi', 'pelapor','bukti_penyelesaian'
     ];
 
     public function user()

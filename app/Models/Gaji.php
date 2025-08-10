@@ -4,11 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\GajiLog;
 
 class Gaji extends Model
 {
     use HasFactory;
+<<<<<<< HEAD
 
     protected $table = 'salaries'; // Nama tabel diubah
 
@@ -32,4 +32,24 @@ public function user()
 }
 
 
+=======
+    protected $table = 'salaries';
+    protected $fillable = ['partner_id', 'id_user', 'nominal', 'bulan'];
+
+    public function partner()
+    {
+        return $this->belongsTo(Partner::class, 'partner_id');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'id_user');
+    }
+
+    public function logs()
+    {
+        return $this->hasMany(GajiLog::class);
+    }
+>>>>>>> 0dc353bdb7868fa53612faccfcb2922d594ecb60
 }
+
