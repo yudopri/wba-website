@@ -10,12 +10,6 @@ use Carbon\Carbon;
 class KasLogistikController extends Controller
 {
     public function index(Request $request)
-<<<<<<< HEAD
-    {
-        $range = $request->get('range', '7hari');
-
-        // Filter waktu berdasarkan range
-=======
 {
     // Default: preset range
     $range = $request->get('range', '7hari');
@@ -28,31 +22,13 @@ class KasLogistikController extends Controller
         $tanggalAkhir = Carbon::parse($request->tanggal_akhir)->endOfDay();
     } else {
         // Jika tidak, pakai preset range
->>>>>>> 0dc353bdb7868fa53612faccfcb2922d594ecb60
         $tanggalAwal = match ($range) {
             '1bulan' => now()->subMonth(),
             '3bulan' => now()->subMonths(3),
             '1tahun' => now()->subYear(),
             default => now()->subDays(7),
         };
-<<<<<<< HEAD
-
-        // Ambil data transaksi
-        $transaksi = LogisticsCash::with('user')
-            ->where('created_at', '>=', $tanggalAwal)
-            ->orderBy('created_at', 'desc')
-            ->get();
-
-        // Hitung saldo akhir
-        $saldo = LogisticsCash::sum('debit') - LogisticsCash::sum('kredit');
-
-        // Hitung total pengeluaran (kredit) sesuai range
-        $totalPengeluaran = LogisticsCash::where('created_at', '>=', $tanggalAwal)->sum('kredit');
-
-        return view('admin.kaslogistik.index', compact('transaksi', 'saldo', 'totalPengeluaran', 'range'));
-=======
         $tanggalAkhir = now();
->>>>>>> 0dc353bdb7868fa53612faccfcb2922d594ecb60
     }
 
     // Ambil data transaksi
