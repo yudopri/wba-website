@@ -7,189 +7,177 @@
 @endsection
 
 @section('content')
-<div class="row">
-    <div class="col-lg-4 col-md-6 col-sm-12">
-        <div class="card shadow-lg border-0 rounded-xl" style="background: linear-gradient(135deg, #4E2603, #D68F3D);">
-            <div class="card-header bg-transparent border-0 text-white">
-                <h3 class="card-title d-flex align-items-center">
-                    <i class="fas fa-wallet mr-2"></i> Saldo Utama
-                </h3>
-            </div>
-            <div class="card-body text-center">
-                <h1 class="display-3 text-white">Rp. 5.000.000</h1>
-                <p class="lead text-white mb-4">Total Saldo Utama saat ini</p>
-            </div>
-            <div class="card-footer bg-transparent text-white text-center">
-                <small>Data Saldo Utama terbaru</small>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-lg-4 col-md-6 col-sm-12">
-        <div class="card shadow-lg border-0 rounded-xl" style="background: linear-gradient(135deg, #8E44AD, #D2B4DE);">
-            <div class="card-header bg-transparent border-0 text-white">
-                <h3 class="card-title d-flex align-items-center">
-                    <i class="fas fa-boxes mr-2"></i> Saldo Kas Logistik
-                </h3>
-            </div>
-            <div class="card-body text-center">
-                <h1 class="display-3 text-white">Rp. 500.000</h1>
-                <p class="lead text-white mb-4">Total Saldo Kas Logistik saat ini</p>
-            </div>
-            <div class="card-footer bg-transparent text-white text-center">
-                <small>Data Saldo Kas Logistik terbaru</small>
+<div class="container">
+    <!-- Baris Saldo Utama: full-width dan center -->
+    <div class="row justify-content-center mb-4">
+        <div class="col-12 col-md-8">
+            <div class="card shadow-lg border-0 rounded-xl" style="background: linear-gradient(135deg, #4E2603, #D68F3D);">
+                <div class="card-header bg-transparent border-0 text-white">
+                    <h3 class="card-title d-flex align-items-center justify-content-center">
+                        <i class="fas fa-wallet mr-2"></i> Saldo Utama
+                    </h3>
+                </div>
+                <div class="card-body text-center">
+                    <h1 class="display-3 text-white">Rp. 5.000.000</h1>
+                    <p class="lead text-white mb-4">Total Saldo Utama saat ini</p>
+                </div>
+                <div class="card-footer bg-transparent text-white text-center">
+                    <small>Data Saldo Utama terbaru</small>
+                </div>
             </div>
         </div>
     </div>
 
-    <div class="col-lg-4 col-md-6 col-sm-12">
-        <div class="card shadow-lg border-0 rounded-xl" style="background: linear-gradient(135deg, #2F6B2C, #7ED957);">
-            <div class="card-header bg-transparent border-0 text-white">
-                <h3 class="card-title d-flex align-items-center">
-                    <i class="fas fa-briefcase mr-2"></i> Saldo Kas Kecil Operasional
-                </h3>
-            </div>
-            <div class="card-body text-center">
-                <h1 class="display-3 text-white">Rp. 500.000</h1>
-                <p class="lead text-white mb-4">Total Saldo Kas Kecil Operasional saat ini</p>
-            </div>
-            <div class="card-footer bg-transparent text-white text-center">
-                <small>Data Saldo Kas Kecil Operasional terbaru</small>
+    <!-- Baris saldo lain: 4 kolom per baris -->
+    <div class="row">
+        <!-- Contoh 1 saldo -->
+        <div class="col-lg-3 col-md-6 col-sm-12 mb-4">
+            <div class="card shadow-lg border-0 rounded-xl" style="background: linear-gradient(135deg, #8E44AD, #D2B4DE);">
+                <div class="card-header bg-transparent border-0 text-white">
+                    <h3 class="card-title d-flex align-items-center">
+                        <i class="fas fa-boxes mr-2"></i> Kas Logistik
+                    </h3>
+                </div>
+                <div class="card-body text-center">
+                    <h1 class="display-4 text-white">Rp. 500.000</h1>
+                    <p class="lead text-white mb-4">Total Kas Logistik saat ini</p>
+                </div>
+                <div class="card-footer bg-transparent text-white text-center">
+                    <small>Data Kas Logistik terbaru</small>
+                </div>
             </div>
         </div>
-    </div>
 
-    <div class="col-lg-4 col-md-6 col-sm-12">
-        <div class="card shadow-lg border-0 rounded-xl" style="background: linear-gradient(135deg, #16A085, #48C9B0);">
-            <div class="card-header bg-transparent border-0 text-white">
-                <h3 class="card-title d-flex align-items-center">
-                    <i class="fas fa-map-marker-alt mr-2"></i> Saldo Kas Kecil Lokasi
-                </h3>
-            </div>
-            <div class="card-body text-center">
-                <h1 class="display-3 text-white">Rp. 500.000</h1>
-                <p class="lead text-white mb-4">Total Saldo Kas Kecil Lokasi saat ini</p>
-            </div>
-            <div class="card-footer bg-transparent text-white text-center">
-                <small>Data Saldo Kas Kecil Lokasi terbaru</small>
+        <!-- lain-lain... -->
+        <!-- Ganti semua col-lg-4 menjadi col-lg-3 seperti di atas -->
+        <!-- Kas Kecil Operasional -->
+        <div class="col-lg-3 col-md-6 col-sm-12 mb-4">
+            <div class="card shadow-lg border-0 rounded-xl" style="background: linear-gradient(135deg, #2F6B2C, #7ED957);">
+                <div class="card-header bg-transparent border-0 text-white">
+                    <h3 class="card-title d-flex align-items-center">
+                        <i class="fas fa-briefcase mr-2"></i> Kas Kecil Operasional
+                    </h3>
+                </div>
+                <div class="card-body text-center">
+                    <h1 class="display-4 text-white">Rp. 500.000</h1>
+                    <p class="lead text-white mb-4">Total Kas Kecil Operasional saat ini</p>
+                </div>
+                <div class="card-footer bg-transparent text-white text-center">
+                    <small>Data Kas Kecil Operasional terbaru</small>
+                </div>
             </div>
         </div>
-    </div>
 
-    <div class="col-lg-4 col-md-6 col-sm-12">
-        <div class="card shadow-lg border-0 rounded-xl" style="background: linear-gradient(135deg, #E67E22, #F5B041);">
-            <div class="card-header bg-transparent border-0 text-white">
-                <h3 class="card-title d-flex align-items-center">
-                    <i class="fas fa-money-bill-wave mr-2"></i> Saldo Kas Gaji
-                </h3>
-            </div>
-            <div class="card-body text-center">
-                <h1 class="display-3 text-white">Rp. 500.000</h1>
-                <p class="lead text-white mb-4">Total Saldo Kas Gaji saat ini</p>
-            </div>
-            <div class="card-footer bg-transparent text-white text-center">
-                <small>Data Saldo Kas Gaji terbaru</small>
+        <!-- Kas Kecil Lokasi -->
+        <div class="col-lg-3 col-md-6 col-sm-12 mb-4">
+            <div class="card shadow-lg border-0 rounded-xl" style="background: linear-gradient(135deg, #16A085, #48C9B0);">
+                <div class="card-header bg-transparent border-0 text-white">
+                    <h3 class="card-title d-flex align-items-center">
+                        <i class="fas fa-map-marker-alt mr-2"></i> Kas Kecil Lokasi
+                    </h3>
+                </div>
+                <div class="card-body text-center">
+                    <h1 class="display-4 text-white">Rp. 500.000</h1>
+                    <p class="lead text-white mb-4">Total Kas Kecil Lokasi saat ini</p>
+                </div>
+                <div class="card-footer bg-transparent text-white text-center">
+                    <small>Data Kas Kecil Lokasi terbaru</small>
+                </div>
             </div>
         </div>
-    </div>
 
-    <div class="col-lg-4 col-md-6 col-sm-12">
-        <div class="card shadow-lg border-0 rounded-xl" style="background: linear-gradient(135deg, #C0392B, #EC7063);">
-            <div class="card-header bg-transparent border-0 text-white">
-                <h3 class="card-title d-flex align-items-center">
-                    <i class="fas fa-file-invoice-dollar mr-2"></i> Saldo Pajak
-                </h3>
-            </div>
-            <div class="card-body text-center">
-                <h1 class="display-3 text-white">Rp. 500.000</h1>
-                <p class="lead text-white mb-4">Total Saldo Pajak saat ini</p>
-            </div>
-            <div class="card-footer bg-transparent text-white text-center">
-                <small>Data Saldo Pajak terbaru</small>
+        <!-- Kas Gaji -->
+        <div class="col-lg-3 col-md-6 col-sm-12 mb-4">
+            <div class="card shadow-lg border-0 rounded-xl" style="background: linear-gradient(135deg, #E67E22, #F5B041);">
+                <div class="card-header bg-transparent border-0 text-white">
+                    <h3 class="card-title d-flex align-items-center">
+                        <i class="fas fa-money-bill-wave mr-2"></i> Kas Gaji
+                    </h3>
+                </div>
+                <div class="card-body text-center">
+                    <h1 class="display-4 text-white">Rp. 500.000</h1>
+                    <p class="lead text-white mb-4">Total Kas Gaji saat ini</p>
+                </div>
+                <div class="card-footer bg-transparent text-white text-center">
+                    <small>Data Kas Gaji terbaru</small>
+                </div>
             </div>
         </div>
-    </div>
+<div class="col-lg-3 col-md-6 col-sm-12 mb-4">
+            <div class="card shadow-lg border-0 rounded-xl" style="background: linear-gradient(135deg, #f05f05ff, #d92d16ff);">
+               <div class="card-header bg-transparent border-0 text-white">
+                    <h3 class="card-title d-flex align-items-center">
+                        <i class="fas fa-file-invoice-dollar mr-2"></i> Pajak
+                    </h3>
+                </div>
+                <div class="card-body text-center">
+                    <h1 class="display-4 text-white">Rp. 500.000</h1>
+                    <p class="lead text-white mb-4">Total Pajak saat ini</p>
+                </div>
+                <div class="card-footer bg-transparent text-white text-center">
+                    <small>Data Pajak terbaru</small>
+                </div>
+            </div>
+        </div>
 
-    <div class="col-lg-4 col-md-6 col-sm-12">
-        <div class="card shadow-lg border-0 rounded-xl" style="background: linear-gradient(135deg, #2980B9, #5DADE2);">
-            <div class="card-header bg-transparent border-0 text-white">
-                <h3 class="card-title d-flex align-items-center">
-                    <i class="fas fa-hand-holding-usd mr-2"></i> Saldo Pinjaman
-                </h3>
-            </div>
-            <div class="card-body text-center">
-                <h1 class="display-3 text-white">Rp. 500.000</h1>
-                <p class="lead text-white mb-4">Total Saldo Pinjaman saat ini</p>
-            </div>
-            <div class="card-footer bg-transparent text-white text-center">
-                <small>Data Saldo Pinjaman terbaru</small>
+        <!-- Pinjaman -->
+         <div class="col-lg-3 col-md-6 col-sm-12 mb-4">
+            <div class="card shadow-lg border-0 rounded-xl" style="background: linear-gradient(135deg, #1f0063ff, #2f09a2ff);">
+                <div class="card-header bg-transparent border-0 text-white">
+                    <h3 class="card-title d-flex align-items-center">
+                        <i class="fas fa-hand-holding-usd mr-2"></i> Pinjaman
+                    </h3>
+                </div>
+                <div class="card-body text-center">
+                    <h1 class="display-4 text-white">Rp. 500.000</h1>
+                    <p class="lead text-white mb-4">Total Pinjaman saat ini</p>
+                </div>
+                <div class="card-footer bg-transparent text-white text-center">
+                    <small>Data Pinjaman terbaru</small>
+                </div>
             </div>
         </div>
-    </div>
 
-    <div class="col-lg-4 col-md-6 col-sm-12">
-        <div class="card shadow-lg border-0 rounded-xl" style="background: linear-gradient(135deg, #9B59B6, #AF7AC5);">
-            <div class="card-header bg-transparent border-0 text-white">
-                <h3 class="card-title d-flex align-items-center">
-                    <i class="fas fa-file-invoice mr-2"></i> Saldo Tagihan
-                </h3>
-            </div>
-            <div class="card-body text-center">
-                <h1 class="display-3 text-white">Rp. 500.000</h1>
-                <p class="lead text-white mb-4">Total Saldo Tagihan saat ini</p>
-            </div>
-            <div class="card-footer bg-transparent text-white text-center">
-                <small>Data Saldo Tagihan terbaru</small>
-            </div>
-        </div>
-    </div>
-    <div class="col-lg-4 col-md-6 col-sm-12">
-        <div class="card shadow-lg border-0 rounded-xl" style="background: linear-gradient(135deg, #1E3A5F, #4A90E2);">
-            <div class="card-header bg-transparent border-0 text-white">
-                <h3 class="card-title d-flex align-items-center">
-                    <i class="fas fa-file-invoice mr-2"></i> Saldo BPJS
-                </h3>
-            </div>
-            <div class="card-body text-center">
-                <h1 class="display-3 text-white">Rp. 500.000</h1>
-                <p class="lead text-white mb-4">Total Saldo BPJS saat ini</p>
-            </div>
-            <div class="card-footer bg-transparent text-white text-center">
-                <small>Data Saldo BPJS terbaru</small>
+        <!-- Tagihan -->
+         <div class="col-lg-3 col-md-6 col-sm-12 mb-4">
+            <div class="card shadow-lg border-0 rounded-xl" style="background: linear-gradient(135deg, #0b833bff, #0d7c66ff);">
+                <div class="card-header bg-transparent border-0 text-white">
+                    <h3 class="card-title d-flex align-items-center">
+                        <i class="fas fa-file-invoice mr-2"></i> Invoice
+                    </h3>
+                </div>
+                <div class="card-body text-center">
+                    <h1 class="display-4 text-white">Rp. 500.000</h1>
+                    <p class="lead text-white mb-4">Total Invoice saat ini</p>
+                </div>
+                <div class="card-footer bg-transparent text-white text-center">
+                    <small>Data Invoice terbaru</small>
+                </div>
             </div>
         </div>
+
+        <!-- BPJS -->
+         <div class="col-lg-3 col-md-6 col-sm-12 mb-4">
+            <div class="card shadow-lg border-0 rounded-xl" style="background: linear-gradient(135deg, #0d7627ff, #F5B041);">
+                <div class="card-header bg-transparent border-0 text-white">
+                    <h3 class="card-title d-flex align-items-center">
+                        <i class="fas fa-file-invoice mr-2"></i> BPJS
+                    </h3>
+                </div>
+                <div class="card-body text-center">
+                    <h1 class="display-4 text-white">Rp. 500.000</h1>
+                    <p class="lead text-white mb-4">Total BPJS saat ini</p>
+                </div>
+                <div class="card-footer bg-transparent text-white text-center">
+                    <small>Data BPJS terbaru</small>
+                </div>
+            </div>
+        </div>
+
+        <!-- dan seterusnya... semua col-lg-4 jadi col-lg-3 -->
     </div>
 </div>
 
-    <!-- Grafik Pie Chart -->
-    <div class="row mt-4">
-        <div class="col-md-6">
-            <div class="card shadow">
-                <div class="card-header bg-primary text-white">
-                    <h3 class="card-title"><i class="fas fa-chart-pie mr-2"></i> Statistik Invoice</h3>
-                </div>
-                <div class="card-body">
-                    <canvas id="chartInvoice" style="max-height: 300px;"></canvas>
-                </div>
-                <div class="card-footer text-center">
-                    <small><i class="fas fa-info-circle"></i> Data diambil secara real-time</small>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-6">
-            <div class="card shadow">
-                <div class="card-header bg-primary text-white">
-                    <h3 class="card-title"><i class="fas fa-chart-pie mr-2"></i> Statistik Tagihan</h3>
-                </div>
-                <div class="card-body">
-                    <canvas id="chartLaporan" style="max-height: 300px;"></canvas>
-                </div>
-                <div class="card-footer text-center">
-                    <small><i class="fas fa-info-circle"></i> Data diambil secara real-time</small>
-                </div>
-            </div>
-        </div>
-    </div>
 @endsection
 
 @section('js')

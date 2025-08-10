@@ -9,7 +9,7 @@ class Distribution extends Model
 {
      use HasFactory;
 protected $table = 'distributions';
-    protected $fillable = ['id_user', 'id_karyawan', 'id_inventori', 'quantity', 'keterangan', 'status'];
+    protected $fillable = ['id_user', 'id_karyawan', 'id_inventori', 'quantity', 'keterangan', 'status','foto_bukti'];
     public function user()
     {
         return $this->belongsTo(User::class, 'id_user');

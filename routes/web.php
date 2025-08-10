@@ -16,6 +16,7 @@ use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\DepartemenController;
 use App\Http\Controllers\JabatanController;
 use App\Http\Controllers\GadaController;
+use App\Http\Controllers\WorkController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Mail\ResetPasswordMail;
 use Illuminate\Support\Facades\Mail;
@@ -112,73 +113,6 @@ Route::get('storage/{file}', function ($file) {
 
     abort(404);
 })->name('storage.file');
-Route::get('/laporanmasalah', function () {
-    return view('admin.report.index');
-});
-
-Route::get('/laporanmasalah/detail', function () {
-    return view('admin.report.detail');
-})->name('laporanmasalah.detail');
-
-
-Route::get('/gaji', function () {
-    return view('admin.gaji.index');
-});
-Route::get('/gaji/detail', function () {
-    return view('admin.gaji.detail');
-})->name('gaji.detail');
-Route::get('/kasoperasional', function () {
-    return view('admin.kasoperasional.index');
-});
-Route::get('/kasoperasional/detail', function () {
-    return view('admin.kasoperasional.detail');
-})->name('kasoperasional.detail');
-
-Route::get('/kasoperasional/tambahsaldo', function () {
-    return view('admin.kasoperasional.tambah');
-})->name('kasoperasional.tambah');
-Route::get('/kaslokasi', function () {
-    return view('admin.kaslokasi.index');
-});
-Route::get('/kaslokasi/tambahsaldo', function () {
-    return view('admin.kaslokasi.tambah');
-})->name('kaslokasi.tambah');
-Route::get('/kaslogistik', function () {
-    return view('admin.kaslogistik.index');
-});
-Route::get('/kaslogistik/tambahsaldo', function () {
-    return view('admin.kaslogistik.tambah');
-})->name('kaslogistik.tambah');
-Route::get('/kaslogistik/detail', function () {
-    return view('admin.kaslogistik.detail');
-})->name('kaslogistik.detail');
-Route::get('/barang', function () {
-    return view('admin.stockbarang.index');
-});
-Route::get('/barang/tambahsaldo', function () {
-    return view('admin.stockbarang.tambah');
-})->name('stockbarang.tambah');
-Route::get('/barang/detail', function () {
-    return view('admin.stockbarang.detail');
-})->name('stockbarang.detail');
-Route::get('/distribusi', function () {
-    return view('admin.distribusi.index');
-});
-Route::get('/distribusi/tambahsaldo', function () {
-    return view('admin.distribusi.tambah');
-})->name('distribusi.tambah');
-Route::get('/distribusi/detail', function () {
-    return view('admin.distribusi.detail');
-})->name('distribusi.detail');
-Route::get('/inventaris', function () {
-    return view('admin.inventaris.index');
-});
-Route::get('/inventaris/tambahsaldo', function () {
-    return view('admin.inventaris.tambah');
-})->name('inventaris.tambah');
-Route::get('/inventaris/detail', function () {
-    return view('admin.inventaris.detail');
-})->name('inventaris.detail');
     // Partner management routes
     Route::resource('partner', PartnerController::class);
 
@@ -231,8 +165,20 @@ Route::delete('/user/{id}', [UserController::class, 'show'])->name('admin.user.s
 Route::post('/employee/import', [EmployeeController::class, 'import'])->name('admin.employee.import');
 Route::get('/employee/export', [EmployeeController::class, 'export'])->name('admin.employee.export');
 
-Route::get('/employee/{id}/certificate', [EmployeeController::class, 'exportCertificate'])->name('admin.employee.certificate');
-Route::get('/employee/{id}/pictktp', [EmployeeController::class, 'exportPictKTP'])->name('admin.employee.pictktp');
+Route::get('/employee/{id}/pictdiri', [EmployeeController::class, 'exportFotodiri'])->name('admin.employee.diri');
+Route::get('/employee/{id}/certificate', [EmployeeController::class, 'exportCertificate'])->name('admin.employee.sertifikat');
+Route::get('/employee/{id}/certificate1', [EmployeeController::class, 'exportCertificate1'])->name('admin.employee.sertifikat1');
+Route::get('/employee/{id}/certificate2', [EmployeeController::class, 'exportCertificate2'])->name('admin.employee.sertifikat2');
+Route::get('/employee/{id}/certificate3', [EmployeeController::class, 'exportCertificate3'])->name('admin.employee.sertifikat3');
+Route::get('/employee/{id}/pictktp', [EmployeeController::class, 'exportKTPPhoto'])->name('admin.employee.ktp');
+Route::get('/employee/{id}/pictkk', [EmployeeController::class, 'exportFotoKk'])->name('admin.employee.kk');
+Route::get('/employee/{id}/pictkta', [EmployeeController::class, 'exportFotoKTA'])->name('admin.employee.kta');
+Route::get('/employee/{id}/pictijasah', [EmployeeController::class, 'exportFotoIjasah'])->name('admin.employee.ijasah');
+Route::get('/employee/{id}/pictbpjsket', [EmployeeController::class, 'exportFotoBpjsket'])->name('admin.employee.bpjsket');
+Route::get('/employee/{id}/pictbpjskes', [EmployeeController::class, 'exportFotoBpjskes'])->name('admin.employee.bpjskes');
+Route::get('/employee/{id}/pictnpwp', [EmployeeController::class, 'exportFotoNpwp'])->name('admin.employee.npwp');
+Route::get('/employee/{id}/jobapp', [EmployeeController::class, 'exportLamaran'])->name('admin.employee.jobapp');
+Route::delete('admin/employee/{employeeId}/delete-document/{documentKey}', [EmployeeController::class, 'deleteDocument'])->name('admin.employee.deleteDocument');
 
 Route::resource('employee', EmployeeController::class);
 Route::get('/employee', [EmployeeController::class, 'index'])->name('admin.employee.index');
@@ -241,10 +187,11 @@ Route::put('/employee/edit/{employee}', [EmployeeController::class, 'update'])->
 Route::get('/employee/{id}/edit', [EmployeeController::class, 'edit'])->name('admin.employee.edit');
 Route::post('/employee/store', [EmployeeController::class, 'store'])->name('admin.employee.store');
 Route::delete('/employee/{employee}', [EmployeeController::class, 'destroy'])->name('admin.employee.destroy');
-Route::put('/admin/employee/{id}/aktif', [EmployeeController::class, 'aktif'])->name('admin.employee.aktif');
-Route::put('/admin/employee/{id}/nonaktif', [EmployeeController::class, 'nonaktif'])->name('admin.employee.nonaktif');
-Route::put('/admin/employee/{id}/blacklist', [EmployeeController::class, 'blacklist'])->name('admin.employee.blacklist');
+Route::put('/employee/{id}/aktif', [EmployeeController::class, 'aktif'])->name('admin.employee.aktif');
+Route::put('/employee/{id}/nonaktif', [EmployeeController::class, 'nonaktif'])->name('admin.employee.nonaktif');
+Route::put('/employee/{id}/blacklist', [EmployeeController::class, 'blacklist'])->name('admin.employee.blacklist');
 Route::get('/employee/{id}', [EmployeeController::class, 'show'])->name('admin.employee.show');
+Route::delete('/employee/{employeeId}/delete-certification/{gadaDetailId}', [EmployeeController::class, 'deleteCertification'])->name('employee.deleteCertification');
 
 
 
@@ -275,6 +222,15 @@ Route::post('/gada/store', [GadaController::class, 'store'])->name('admin.gada.s
 Route::delete('/gada/{gada}', [GadaController::class, 'destroy'])->name('admin.gada.destroy');
 Route::get('/gada/{id}', [GadaController::class, 'show'])->name('admin.gada.show');
 
+Route::resource('work', WorkController::class);
+Route::get('/work', [WorkController::class, 'index'])->name('admin.work.index');
+Route::get('/work/create', [WorkController::class, 'create'])->name('admin.work.create');
+Route::put('/work/edit/{work}', [WorkController::class, 'update'])->name('admin.work.update');
+Route::get('/work/edit/{id}', [WorkController::class, 'edit'])->name('admin.work.edit');
+Route::post('/work/store', [WorkController::class, 'store'])->name('admin.work.store');
+Route::delete('/work/{work}', [WorkController::class, 'destroy'])->name('admin.work.destroy');
+Route::get('/work/{id}', [WorkController::class, 'show'])->name('admin.work.show');
+
 Route::get('/invoice', [InvoiceController::class, 'index'])->name('admin.invoice.index');
     Route::get('/invoice/create', [InvoiceController::class, 'create'])->name('admin.invoice.create');
     Route::post('/invoice', [InvoiceController::class, 'store'])->name('admin.invoice.store');
@@ -297,6 +253,7 @@ Route::get('/baranggudang', [InventoryItemController::class, 'index'])->name('ad
     Route::get('/inventories/{inventories}', [InventoriesController::class, 'show'])->name('admin.inventaris.show');
     Route::get('/inventories/{inventories}/edit', [InventoriesController::class, 'edit'])->name('admin.inventaris.edit');
     Route::put('/inventories/{inventories}', [InventoriesController::class, 'update'])->name('admin.inventaris.update');
+    Route::post('/inventories/{id}/upload', [InventoriesController::class, 'upload'])->name('admin.inventaris.upload');
     Route::delete('/inventories/{inventories}', [InventoriesController::class, 'destroy'])->name('admin.inventaris.destroy');
 
     Route::get('/distributions', [DistributionController::class, 'index'])->name('admin.distributions.index');
@@ -305,38 +262,30 @@ Route::get('/baranggudang', [InventoryItemController::class, 'index'])->name('ad
     Route::get('/distributions/{distribution}', [DistributionController::class, 'show'])->name('admin.distributions.show');
     Route::get('/distributions/{distribution}/edit', [DistributionController::class, 'edit'])->name('admin.distributions.edit');
     Route::put('/distributions/{distribution}', [DistributionController::class, 'update'])->name('admin.distributions.update');
+    Route::post('/distributions/{id}/upload', [DistributionController::class, 'upload'])->name('admin.distributions.upload');
     Route::delete('/distributions/{distribution}', [DistributionController::class, 'destroy'])->name('admin.distributions.destroy');
-});
 
-Route::prefix('admin')->middleware(['auth'])->group(function () {
-   // Visitor cookie route
-Route::get('/set-visitor-cookie', [VisitorController::class, 'setVisitorCookie']);
+    //kaslogistik
 
-// Default home route, only used if needed
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-
-//kaslogistik
-
-Route::get('/', [KasLogistikController::class, 'index']);
 Route::post('/kas-logistik/tambah', [KasLogistikController::class, 'store'])->name('kaslogistik.store');
 Route::post('/kas-logistik/kredit', [KasLogistikController::class, 'kredit'])->name('kaslogistik.kredit');
-Route::get('/admin/kaslogistik', [KasLogistikController::class, 'index'])->name('kaslogistik.index');
+Route::get('/kaslogistik', [KasLogistikController::class, 'index'])->name('kaslogistik.index');
 
 //kaslokasi
-Route::get('/admin/kaslokasi', [KasLokasiController::class, 'index']);
-Route::post('/admin/kaslokasi/store', [KasLokasiController::class, 'store'])->name('kaslokasi.store');
-Route::post('/admin/kaslokasi/kredit', [KasLokasiController::class, 'kredit'])->name('kaslokasi.kredit');
+Route::get('/kaslokasi', [KasLokasiController::class, 'index']);
+Route::post('/kaslokasi/store', [KasLokasiController::class, 'store'])->name('kaslokasi.store');
+Route::post('/kaslokasi/kredit', [KasLokasiController::class, 'kredit'])->name('kaslokasi.kredit');
 
 //kasoperasional
-Route::get('/admin/kasoperasional', [KasOperasionalController::class, 'index']);
-Route::post('/admin/kasoperasional/store', [KasOperasionalController::class, 'store'])->name('kasoperasional.store');
-Route::post('/admin/kasoperasional/kredit', [KasOperasionalController::class, 'kredit'])->name('kasoperasional.kredit');
+Route::get('/kasoperasional', [KasOperasionalController::class, 'index']);
+Route::post('/kasoperasional/store', [KasOperasionalController::class, 'store'])->name('kasoperasional.store');
+Route::post('/kasoperasional/kredit', [KasOperasionalController::class, 'kredit'])->name('kasoperasional.kredit');
 
 
 
 //pengaduan
 
-    Route::get('/admin/laporanmasalah', [PengaduanController::class, 'index'])->name('pengaduan.index');
+    Route::get('/laporanmasalah', [PengaduanController::class, 'index'])->name('pengaduan.index');
     Route::get('/laporanmasalah/create', [PengaduanController::class, 'create'])->name('pengaduan.create');
     Route::post('/laporanmasalah', [PengaduanController::class, 'store'])->name('pengaduan.store');
     Route::get('/laporanmasalah/{id}', [PengaduanController::class, 'show'])->name('laporanmasalah.detail');
@@ -349,21 +298,21 @@ Route::get('/laporanmasalah/{id}/logs/{logId}/edit', [PengaduanController::class
 
 
 // gaji
-Route::get('/admin/gaji', [GajiController::class, 'index'])->name('gaji.index');
-Route::get('/admin/gaji/create', [GajiController::class, 'create'])->name('gaji.create');
-Route::post('/admin/gaji', [GajiController::class, 'store'])->name('gaji.store');
-Route::get('/admin/gaji/{id}', [GajiController::class, 'show'])->name('gaji.detail');
-Route::get('/admin/gaji/{id}/konfirmasi', [GajiController::class, 'konfirmasi'])->name('gaji.konfirmasi');
+Route::get('/gaji', [GajiController::class, 'index'])->name('gaji.index');
+Route::get('/gaji/create', [GajiController::class, 'create'])->name('gaji.create');
+Route::post('/gaji', [GajiController::class, 'store'])->name('gaji.store');
 Route::get('/gaji/{id}', [GajiController::class, 'show'])->name('gaji.detail');
-Route::get('/admin/gaji/{id}/logs', [GajiController::class, 'showLogs'])->name('gaji.logs');
+Route::get('/gaji/{id}/konfirmasi', [GajiController::class, 'konfirmasi'])->name('gaji.konfirmasi');
+Route::get('/gaji/{id}', [GajiController::class, 'show'])->name('gaji.detail');
+Route::get('/gaji/{id}/logs', [GajiController::class, 'showLogs'])->name('gaji.logs');
 
 
 
     //dokumenlokasi
-        Route::get('/admin/dokumenlokasi', [DokumenController::class, 'index'])->name('dokumenlokasi.index');
-        Route::get('/admindokumenlokasi/create', [DokumenController::class, 'create'])->name('dokumenlokasi.create');
-        Route::post('/admindokumenlokasi', [DokumenController::class, 'store'])->name('dokumenlokasi.store');
-        Route::delete('/admindokumenlokasi/{id}', [DokumenController::class, 'destroy'])->name('dokumenlokasi.destroy');
+        Route::get('/dokumenlokasi', [DokumenController::class, 'index'])->name('dokumenlokasi.index');
+        Route::get('dokumenlokasi/create', [DokumenController::class, 'create'])->name('dokumenlokasi.create');
+        Route::post('dokumenlokasi', [DokumenController::class, 'store'])->name('dokumenlokasi.store');
+        Route::delete('dokumenlokasi/{id}', [DokumenController::class, 'destroy'])->name('dokumenlokasi.destroy');
         Route::get('/dokumenlokasi/{id}/edit', [DokumenController::class, 'edit'])->name('dokumenlokasi.edit');
         Route::put('/dokumenlokasi/{id}', [DokumenController::class, 'update'])->name('dokumenlokasi.update');
         Route::delete('/dokumenlokasi/{id}', [DokumenController::class, 'destroy'])->name('dokumenlokasi.destroy');
@@ -371,4 +320,11 @@ Route::get('/admin/gaji/{id}/logs', [GajiController::class, 'showLogs'])->name('
         Route::resource('dokumenlokasi', DokumenController::class);
 
 });
+   // Visitor cookie route
+Route::get('/set-visitor-cookie', [VisitorController::class, 'setVisitorCookie']);
+
+// Default home route, only used if needed
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+
 

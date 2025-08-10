@@ -16,6 +16,8 @@ class Work extends Model
     protected $fillable = [
         'name',
         'berlaku',
+        'pict_dokumen',
+        'status',
     ];
 
 }

@@ -57,6 +57,7 @@ class Employee extends Model
         'pict_bpjsket',
         'pict_bpjskes',
         'pict_npwp',
+        'pict_pkwt',
         'status_kerja',
         'pict_jobapp',
         'lokasikerja',
@@ -81,7 +82,7 @@ public function gadaDetail()
      return $this->hasMany(GadaDetail::class);
     // or
     return $this->belongsTo(GadaDetail::class);
-    
+
 }
 public function gadaDetails()
 {

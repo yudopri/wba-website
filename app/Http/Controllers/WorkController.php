@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Work;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
 
 class WorkController extends Controller
 {
@@ -20,15 +22,33 @@ class WorkController extends Controller
     }
 
     public function store(Request $request)
-    {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'berlaku' => 'nullable|date',
-        ]);
+{
+    $validated = $request->validate([
+        'name' => 'required|string|max:255',
+        'berlaku' => 'nullable|date',
+        'pict_dokumen' => 'required|file|mimes:pdf,jpg,jpeg,png|max:2048',
+        'status' => 'nullable|in:aktif,nonaktif',
+    ]);
 
-        Work::create($request->all());
-        return redirect()->route('admin.work.index')->with('success', 'Lokasi Kerja created successfully.');
+    if (!isset($validated['status'])) {
+        $validated['status'] = 'aktif';
     }
+
+    if ($request->hasFile('pict_dokumen')) {
+        $directory = public_path('assets/berkasdokumen');
+        if (!File::exists($directory)) {
+            File::makeDirectory($directory, 0755, true);
+        }
+        $fileName = time() . '_' . $request->file('pict_dokumen')->getClientOriginalName();
+        $request->file('pict_dokumen')->move($directory, $fileName);
+
+        $validated['pict_dokumen'] = 'assets/berkasdokumen/' . $fileName;
+    }
+
+    Work::create($validated);
+
+    return redirect()->route('admin.work.index')->with('success', 'Lokasi Kerja created successfully.');
+}
 
     public function show($id)
     {
@@ -43,15 +63,34 @@ class WorkController extends Controller
     }
 
     public function update(Request $request, Work $work)
-    {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'berlaku' => 'nullable|date',
-        ]);
+{
+    $validated = $request->validate([
+        'name' => 'required|string|max:255',
+        'berlaku' => 'nullable|date',
+        'pict_dokumen' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
+        'status' => 'nullable|in:aktif,nonaktif',
+    ]);
 
-        $work->update($request->all());
-        return redirect()->route('admin.work.index')->with('success', 'Lokasi Kerja updated successfully.');
+    if (!isset($validated['status'])) {
+        $validated['status'] = 'aktif';
     }
+
+    if ($request->hasFile('pict_dokumen')) {
+        $directory = public_path('assets/berkasdokumen');
+        if (!File::exists($directory)) {
+            File::makeDirectory($directory, 0755, true);
+        }
+        $fileName = time() . '_' . $request->file('pict_dokumen')->getClientOriginalName();
+        $request->file('pict_dokumen')->move($directory, $fileName);
+
+        $validated['pict_dokumen'] = 'assets/berkasdokumen/' . $fileName;
+    }
+
+    $work->update($validated);
+
+    return redirect()->route('admin.work.index')->with('success', 'Lokasi Kerja updated successfully.');
+}
+
 
     public function destroy(Work $work)
     {

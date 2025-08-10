@@ -8,6 +8,8 @@ use App\Models\Employee;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
 
 class InventoriesController extends Controller
 {
@@ -65,18 +67,19 @@ class InventoriesController extends Controller
     }
 
     // Menampilkan form untuk edit peminjaman
-    public function edit(Inventories $inventory)
-    {
-        $inventoryItems = InventoryItem::all(); // Semua barang di gudang
-        $employees = Employee::all(); // Semua karyawan
-        return view('admin.inventaris.form', compact('inventory', 'inventoryItems', 'employees'));
-    }
+   public function edit($id)
+{
+    $inventory = Inventories::findOrFail($id);
+     $employees = Employee::all();
+    $inventoryItems = InventoryItem::all();
+    return view('admin.inventaris.form', compact('inventory', 'employees', 'inventoryItems'));
+}
+
 
     // Update peminjaman
     public function update(Request $request, Inventories $inventory)
 {
     $request->validate([
-        // 'id_user' => 'required', // hapus ini
         'id_karyawan' => 'required',
         'id_inventori' => 'required',
         'quantity' => 'required|integer|min:1',
@@ -85,10 +88,10 @@ class InventoriesController extends Controller
 
     $inventoryItem = InventoryItem::findOrFail($request->id_inventori);
 
-    // Kembalikan jumlah lama ke stok
-    $inventoryItem->stock += $inventory->quantity;
+    // Hitung stok baru (kembalikan stok lama, kurangi stok baru)
+    $stokBaru = $inventoryItem->stock + $inventory->quantity - $request->quantity;
 
-    // Update data peminjaman dengan id_user otomatis dari user login
+    // Update data peminjaman
     $inventory->update([
         'id_user' => Auth::id(),
         'id_karyawan' => $request->id_karyawan,
@@ -98,12 +101,44 @@ class InventoriesController extends Controller
         'keterangan' => $request->keterangan ?? null,
     ]);
 
-    // Kurangi stok dengan jumlah baru
-    $inventoryItem->stock -= $request->quantity;
-    $inventoryItem->status = $inventoryItem->stock > 0 ? 'tersedia' : 'habis';
+    // Update stok item
+    $inventoryItem->stock = $stokBaru;
+    $inventoryItem->status = $stokBaru > 0 ? 'tersedia' : 'habis';
     $inventoryItem->save();
 
-    return redirect()->route('admin.inventaris.index');
+    return redirect()->route('admin.inventaris.index')
+        ->with('success', 'Data inventaris berhasil diperbarui');
+}
+
+public function upload(Request $request, $id)
+{
+    $inventory = Inventories::findOrFail($id);
+
+    $request->validate([
+        'foto_bukti' => 'required|image|max:2048', // maksimal 2MB
+    ]);
+
+    if ($request->hasFile('foto_bukti')) {
+        $file = $request->file('foto_bukti');
+
+        $filename = time() . '_' . $file->getClientOriginalName();
+
+        $destinationPath = public_path('assets/bukti_inventori');
+
+        if (!file_exists($destinationPath)) {
+            mkdir($destinationPath, 0755, true);
+        }
+
+        $file->move($destinationPath, $filename);
+
+        // Simpan path relatif untuk akses dengan asset()
+        $inventory->foto_bukti = 'assets/bukti_inventori/' . $filename;
+        $inventory->save();
+
+        return back()->with('success', 'Bukti berhasil diupload.');
+    }
+
+    return back()->withErrors(['foto_bukti' => 'File tidak valid atau tidak ditemukan.']);
 }
 
 

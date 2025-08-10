@@ -4,32 +4,32 @@
         <h3>Informasi Identitas</h3>
         <div class="form-group">
             <label for="name">Nama</label>
-            <input 
-                type="text" 
-                name="name" 
-                id="name" 
-                class="form-control" 
-                value="{{ old('name', isset($employee) ? $employee->name : '') }}" 
-                {{ auth()->user()->role === 'Karyawan' && isset($employee) && $employee->name ? 'readonly' : '' }} 
+            <input
+                type="text"
+                name="name"
+                id="name"
+                class="form-control"
+                value="{{ old('name', isset($employee) ? $employee->name : '') }}"
+                {{ auth()->user()->role === 'Karyawan' && isset($employee) && $employee->name ? 'readonly' : '' }}
                 required>
         </div>
 
         <div class="form-group">
     <label for="nik">NIK Karyawan</label>
-    <input type="text" name="nik" id="nik" class="form-control" 
-        value="{{ old('nik', isset($employee) && $employee->nik ? Crypt::decryptString($employee->nik) : '') }}" 
+    <input type="text" name="nik" id="nik" class="form-control"
+        value="{{ old('nik', isset($employee) && $employee->nik ? Crypt::decryptString($employee->nik) : '') }}"
         {{ auth()->user()->role === 'Karyawan' && isset($employee) && $employee->nik ? 'readonly' : '' }}>
     </div>
     <div class="form-group">
     <label for="nik_ktp">NIK KTP</label>
-    <input 
-        type="text" 
-        name="nik_ktp" 
-        id="nik_ktp" 
-        class="form-control" 
-        value="{{ old('nik_ktp', isset($employee) && $employee->nik_ktp ? Crypt::decryptString($employee->nik_ktp) : '') }}" 
+    <input
+        type="text"
+        name="nik_ktp"
+        id="nik_ktp"
+        class="form-control"
+        value="{{ old('nik_ktp', isset($employee) && $employee->nik_ktp ? Crypt::decryptString($employee->nik_ktp) : '') }}"
         {{ auth()->user()->role === 'Karyawan' && isset($employee) && $employee->nik_ktp ? 'readonly' : '' }}
-        pattern="\d+" 
+        pattern="\d+"
         inputmode="numeric"
         title="NIK KTP harus berupa angka."
         onkeypress="return event.charCode >= 48 && event.charCode <= 57">
@@ -45,26 +45,26 @@
 
     <div class="form-group">
         <label for="no_regkta">No REG KTA</label>
-        <input type="text" name="no_regkta" id="no_regkta" class="form-control" 
-            value="{{ old('no_regkta', isset($employee) && $employee->no_regkta ? Crypt::decryptString($employee->no_regkta) : '') }}" 
+        <input type="text" name="no_regkta" id="no_regkta" class="form-control"
+            value="{{ old('no_regkta', isset($employee) && $employee->no_regkta ? Crypt::decryptString($employee->no_regkta) : '') }}"
             {{ auth()->user()->role === 'Karyawan' && isset($employee) && $employee->no_regkta ? 'readonly' : '' }}>
     </div>
     <div class="form-group">
         <label for="no_npwp">No NPWP</label>
-        <input type="text" name="no_npwp" id="no_npwp" class="form-control" 
-            value="{{ old('no_npwp', isset($employee) && $employee->no_npwp ? Crypt::decryptString($employee->no_npwp) : '') }}" 
+        <input type="text" name="no_npwp" id="no_npwp" class="form-control"
+            value="{{ old('no_npwp', isset($employee) && $employee->no_npwp ? Crypt::decryptString($employee->no_npwp) : '') }}"
             {{ auth()->user()->role === 'Karyawan' && isset($employee) && $employee->no_npwp ? 'readonly' : '' }}>
     </div>
     <div class="form-group">
         <label for="bpjsket">No Kepesertaan BPJS Ketenagakerjaan</label>
-        <input type="text" name="bpjsket" id="bpjsket" class="form-control" 
-            value="{{ old('bpjsket', isset($employee) && $employee->bpjsket ? Crypt::decryptString($employee->bpjsket) : '') }}" 
+        <input type="text" name="bpjsket" id="bpjsket" class="form-control"
+            value="{{ old('bpjsket', isset($employee) && $employee->bpjsket ? Crypt::decryptString($employee->bpjsket) : '') }}"
             {{ auth()->user()->role === 'Karyawan' && isset($employee) && $employee->bpjsket ? 'readonly' : '' }}>
     </div>
     <div class="form-group">
         <label for="bpjskes">No Kepesertaan BPJS Kesehatan</label>
-        <input type="text" name="bpjskes" id="bpjskes" class="form-control" 
-            value="{{ old('bpjskes', isset($employee) && $employee->bpjskes ? Crypt::decryptString($employee->bpjskes) : '') }}" 
+        <input type="text" name="bpjskes" id="bpjskes" class="form-control"
+            value="{{ old('bpjskes', isset($employee) && $employee->bpjskes ? Crypt::decryptString($employee->bpjskes) : '') }}"
             {{ auth()->user()->role === 'Karyawan' && isset($employee) && $employee->bpjskes ? 'readonly' : '' }}>
     </div>
 
@@ -86,15 +86,15 @@
     <!-- Departemen -->
     <div class="form-group">
         <label for="departemen_id">Departemen</label>
-        <select 
-            name="departemen_id" 
-            id="departemen_id" 
-            class="form-control" 
-            {{ (auth()->user()->role === 'Karyawan' && isset($employee) && $employee->departemen_id) ? 'readonly' : '' }} 
+        <select
+            name="departemen_id"
+            id="departemen_id"
+            class="form-control"
+            {{ (auth()->user()->role === 'Karyawan' && isset($employee) && $employee->departemen_id) ? 'readonly' : '' }}
             required>
             <option value="">Pilih Departemen</option>
             @foreach($departemens as $departemen)
-                <option value="{{ $departemen->id }}" 
+                <option value="{{ $departemen->id }}"
                         {{ old('departemen_id', $employee->departemen_id ?? '') == $departemen->id ? 'selected' : '' }}>
                     {{ $departemen->name }}
                 </option>
@@ -105,15 +105,15 @@
     <!-- Jabatan -->
     <div class="form-group">
         <label for="jabatan_id">Jabatan</label>
-        <select 
-            name="jabatan_id" 
-            id="jabatan_id" 
-            class="form-control" 
-            {{ (auth()->user()->role === 'Karyawan' && isset($employee) && $employee->jabatan_id) ? 'readonly' : '' }} 
+        <select
+            name="jabatan_id"
+            id="jabatan_id"
+            class="form-control"
+            {{ (auth()->user()->role === 'Karyawan' && isset($employee) && $employee->jabatan_id) ? 'readonly' : '' }}
             required>
             <option value="">Pilih Jabatan</option>
             @foreach($jabatans as $jabatan)
-                <option value="{{ $jabatan->id }}" 
+                <option value="{{ $jabatan->id }}"
                         data-is-staff="{{ Str::contains(strtolower($jabatan->name), 'staff') ? 'true' : 'false' }}"
                         {{ old('jabatan_id', $employee->jabatan_id ?? '') == $jabatan->id ? 'selected' : '' }}>
                     {{ $jabatan->name }}
@@ -144,27 +144,27 @@
         <div class="row">
             @for($i = 1; $i <= 3; $i++)
                 <div class="col-md-4">
-                    <select 
-                        name="gada_id{{ $i }}" 
-                        id="gada_id{{ $i }}" 
-                        class="form-control" 
+                    <select
+                        name="gada_id{{ $i }}"
+                        id="gada_id{{ $i }}"
+                        class="form-control"
                         {{ (auth()->user()->role === 'Karyawan' && isset($employee->gadadetail[$i - 1])) ? 'readonly' : '' }}>
                         <option value="">Pilih Sertifikasi</option>
                         @foreach($gadas as $gada)
-                            <option value="{{ $gada->id }}" 
+                            <option value="{{ $gada->id }}"
                                     {{ old("gada_id{$i}", $employee->gadadetail[$i - 1]->gada_id ?? '') == $gada->id ? 'selected' : '' }}>
                                 {{ $gada->name }}
                             </option>
                         @endforeach
                         <option value="other" {{ old("gada_id{$i}") == 'other' ? 'selected' : '' }}>Lainnya</option>
                     </select>
-                    <input 
-                        type="text" 
-                        name="gada_id{{ $i }}_other_text" 
-                        id="gada_id{{ $i }}_other_text" 
-                        class="form-control mt-2" 
+                    <input
+                        type="text"
+                        name="gada_id{{ $i }}_other_text"
+                        id="gada_id{{ $i }}_other_text"
+                        class="form-control mt-2"
                         style="display: {{ old("gada_id{$i}") == 'other' ? 'block' : 'none' }};"
-                        placeholder="Masukkan keterampilan lainnya" 
+                        placeholder="Masukkan keterampilan lainnya"
                         value="{{ old("gada_id{$i}_other_text") }}">
                 </div>
             @endfor
@@ -174,14 +174,14 @@
     <!-- Lokasi Kerja -->
     <div class="form-group" id="lokasikerjaForm">
         <label for="lokasikerja">Lokasi Kerja</label>
-        <select 
-            name="lokasikerja" 
-            id="lokasikerja" 
-            class="form-control" 
+        <select
+            name="lokasikerja"
+            id="lokasikerja"
+            class="form-control"
             {{ (auth()->user()->role === 'Karyawan' && isset($employee) && $employee->lokasikerja) ? 'readonly' : '' }}>
             <option value="">Pilih Lokasi Kerja</option>
             @foreach($works as $work)
-                <option value="{{ $work->name }}" 
+                <option value="{{ $work->name }}"
                         {{ old('lokasikerja', $employee->lokasikerja ?? '') == $work->name ? 'selected' : '' }}>
                     {{ $work->name }}
                 </option>
@@ -197,7 +197,7 @@
             <label for="nama_ibu">Nama Ibu</label>
             <input type="text" name="nama_ibu" id="nama_ibu" class="form-control" value="{{ old('nama_ibu', isset($employee) ? Crypt::decryptString($employee->nama_ibu) : '') }}"   {{ (auth()->user()->role === 'Karyawan' && isset($employee) && $employee->nama_ibu) ? 'readonly' : '' }} required>
         </div>
-        
+
        <div class="form-group" id="status_group">
     <label for="status">Status</label>
     <select name="status" class="form-control"
@@ -222,21 +222,21 @@
 <!-- Pasangan -->
 <div class="form-group" id="nama_pasangan_group">
     <label for="nama_pasangan">Nama Istri/Suami</label>
-    <input type="text" name="nama_pasangan" id="nama_pasangan" class="form-control" 
+    <input type="text" name="nama_pasangan" id="nama_pasangan" class="form-control"
         value="{{ old('nama_pasangan', isset($employee) && $employee->nama_pasangan ? Crypt::decryptString($employee->nama_pasangan) : '') }}">
 </div>
 
 <div class="form-group" id="tempat_pasangan_group">
     <label for="tempatlahir_pasangan">Tempat Lahir Istri/Suami</label>
-    <input type="text" name="tempatlahir_pasangan" id="tempatlahir_pasangan" class="form-control" 
-        value="{{ old('tempatlahir_pasangan', isset($employee) ? $employee->tempatlahir_pasangan : '') }}" 
+    <input type="text" name="tempatlahir_pasangan" id="tempatlahir_pasangan" class="form-control"
+        value="{{ old('tempatlahir_pasangan', isset($employee) ? $employee->tempatlahir_pasangan : '') }}"
         {{ isReadonly('tempatlahir_pasangan', $employee) }} >
 </div>
 
 <div class="form-group" id="ttl_pasangan_group">
     <label for="ttl_pasangan">Tanggal Lahir Istri/Suami</label>
-    <input type="date" name="ttl_pasangan" id="ttl_pasangan" class="form-control" 
-        value="{{ old('ttl_pasangan', isset($employee) ? $employee->ttl_pasangan : '') }}" 
+    <input type="date" name="ttl_pasangan" id="ttl_pasangan" class="form-control"
+        value="{{ old('ttl_pasangan', isset($employee) ? $employee->ttl_pasangan : '') }}"
         {{ isReadonly('ttl_pasangan', $employee) }} >
 </div>
 
@@ -244,26 +244,26 @@
 @foreach (range(1, 3) as $i)
    <div class="form-group" id="nama_anak{{ $i }}_group">
     <label for="nama_anak{{ $i }}">Nama Anak {{ $i }}</label>
-    <input type="text" name="nama_anak{{ $i }}" id="nama_anak{{ $i }}" class="form-control" 
-        value="{{ old('nama_anak' . $i, isset($employee) && $employee->{'nama_anak' . $i} ? Crypt::decryptString(optional($employee)->{'nama_anak' . $i}) : '') }}" 
+    <input type="text" name="nama_anak{{ $i }}" id="nama_anak{{ $i }}" class="form-control"
+        value="{{ old('nama_anak' . $i, isset($employee) && $employee->{'nama_anak' . $i} ? Crypt::decryptString(optional($employee)->{'nama_anak' . $i}) : '') }}"
         {{ isReadonly('nama_anak' . $i, $employee) }} >
 </div>
 
     <div class="form-group" id="tempat_anak{{ $i }}_group">
         <label for="tempatlahir_anak{{ $i }}">Tempat Lahir Anak {{ $i }}</label>
-        <input type="text" name="tempatlahir_anak{{ $i }}" id="tempatlahir_anak{{ $i }}" class="form-control" 
-            value="{{ old('tempatlahir_anak' . $i, isset($employee) ? $employee->{'tempatlahir_anak' . $i} : '') }}" 
+        <input type="text" name="tempatlahir_anak{{ $i }}" id="tempatlahir_anak{{ $i }}" class="form-control"
+            value="{{ old('tempatlahir_anak' . $i, isset($employee) ? $employee->{'tempatlahir_anak' . $i} : '') }}"
             {{ isReadonly('tempatlahir_anak' . $i, $employee) }} >
     </div>
     <div class="form-group" id="ttl_anak{{ $i }}_group">
         <label for="ttl_anak{{ $i }}">Tanggal Lahir Anak {{ $i }}</label>
-        <input type="date" name="ttl_anak{{ $i }}" id="ttl_anak{{ $i }}" class="form-control" 
-            value="{{ old('ttl_anak' . $i, isset($employee) ? $employee->{'ttl_anak' . $i} : '') }}" 
+        <input type="date" name="ttl_anak{{ $i }}" id="ttl_anak{{ $i }}" class="form-control"
+            value="{{ old('ttl_anak' . $i, isset($employee) ? $employee->{'ttl_anak' . $i} : '') }}"
             {{ isReadonly('ttl_anak' . $i, $employee) }} >
     </div>
 @endforeach
-    
-       
+
+
     </div>
 
     <!-- 5. Informasi Kontak -->
@@ -350,7 +350,7 @@
             <p>Tidak ada foto BPJS.</p>
         @endif
     </div>
-    
+
     <div class="form-group">
         <label for="pict_bpjskes">Foto BPJS Kesehatan</label>
         <input type="file" name="pict_bpjskes" id="pict_bpjskes" class="form-control">
@@ -380,16 +380,16 @@
     <div class="row align-items-center">
         <!-- Elemen pertama tanpa nomor -->
         <div class="col-md-3">
-            <input 
-                type="file" 
-                name="pict_sertifikat" 
-                id="pict_sertifikat" 
+            <input
+                type="file"
+                name="pict_sertifikat"
+                id="pict_sertifikat"
                 class="form-control"
             >
             @if(isset($employee) && $employee->pict_sertifikat)
                 <small>
-                    <a 
-                        href="{{ asset($employee->pict_sertifikat) }}" 
+                    <a
+                        href="{{ asset($employee->pict_sertifikat) }}"
                         target="_blank"
                     >
                         Lihat Sertifikat
@@ -405,16 +405,16 @@
         <!-- Elemen berikutnya dengan nomor -->
         @for($i = 1; $i <= 3; $i++)
             <div class="col-md-3">
-                <input 
-                    type="file" 
-                    name="pict_sertifikat{{ $i }}" 
-                    id="pict_sertifikat{{ $i }}" 
+                <input
+                    type="file"
+                    name="pict_sertifikat{{ $i }}"
+                    id="pict_sertifikat{{ $i }}"
                     class="form-control"
                 >
                 @if(isset($employee) && $employee->{"pict_sertifikat$i"})
                     <small>
-                        <a 
-                            href="{{ asset($employee->{"pict_sertifikat$i"}) }}" 
+                        <a
+                            href="{{ asset($employee->{"pict_sertifikat$i"}) }}"
                             target="_blank"
                         >
                             Lihat Sertifikat {{ $i }}
@@ -461,7 +461,7 @@
                 <option value="Karyawan PKL" {{ old('status_kepegawaian', isset($employee) ? $employee->status_kepegawaian : '') === 'Karyawan PKL' ? 'selected' : '' }}>Karyawan PKL</option>
             </select>
         </div>
-        
+
         <div class="form-group" id="masa_pkwt_group" >
             <label for="berlaku">Masa Berlaku PKWT</label>
             <input type="date" name="berlaku" id="berlaku" class="form-control" value="{{ old('berlaku', isset($employee) ? $employee->berlaku : '') }}">
@@ -478,6 +478,18 @@
             <label for="tmt">TMT</label>
             <input type="date" name="tmt" id="tmt" class="form-control" value="{{ old('tmt', isset($employee) ? $employee->tmt : '') }}" >
         </div>
+        <div class="form-group">
+
+        <label for="pict_pkwt">Foto Dokumen PKWT</label>
+        <input type="file" name="pict_pkwt" id="pict_pkwt" class="form-control">
+        @if(isset($employee) && $employee->pict_pkwt)
+            <p><a href="{{ asset($employee->pict_pkwt) }}" target="_blank">Lihat Foto Dokumen PKWT</a></p>
+        @elseif(!isset($employee))
+            <p>Upload Foto Dokumen PKWT jika ada.</p>
+        @else
+            <p>Tidak ada foto Dokumen PKWT.</p>
+        @endif
+    </div>
     </div>
     @endif
 </div>
@@ -545,7 +557,7 @@ function updateFields() {
     tanggalMulaiGroup.style.display = "none";
     tanggalSelesaiGroup.style.display = "none";
     tmtGroup.style.display = "none";
-    
+
     berlakuInput.value = "";
     dateStartInput.value = "";
     dateEndInput.value = "";

@@ -7,6 +7,8 @@ use App\Models\InventoryItem;
 use App\Models\Employee;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
 
 class DistributionController extends Controller
 {
@@ -104,6 +106,28 @@ class DistributionController extends Controller
 
         return redirect()->route('admin.distributions.index')->with('success', 'Distribusi berhasil diperbarui.');
     }
+public function upload(Request $request, $id)
+{
+    $distribution = Distribution::findOrFail($id);
+
+    if ($request->hasFile('foto_bukti')) {
+        $file = $request->file('foto_bukti');
+        $filename = time() . '_' . $file->getClientOriginalName();
+
+        // Simpan langsung ke public/assets/
+        $file->move(public_path('assets/bukti_distribusi'), $filename);
+
+        // Simpan path relatif ke database (biar bisa diakses pakai asset())
+        $distribution->foto_bukti = 'assets/bukti_distribusi/' . $filename;
+        $distribution->save();
+    }
+
+    return back()->with('success', 'Bukti berhasil diupload.');
+}
+
+
+
+
 
     public function destroy(Distribution $distribution)
     {

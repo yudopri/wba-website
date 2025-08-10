@@ -7,17 +7,35 @@
 @stop
 
 @section('content')
-    <form action="{{ route('admin.work.store') }}" method="POST">
+    <form action="{{ route('admin.work.store') }}" method="POST" enctype="multipart/form-data"  >
         @csrf
         <div class="form-group">
             <label for="name">Nama Perusahaan</label>
             <input type="text" name="name" id="name" class="form-control" placeholder="Masukkan nama perusahaan" required>
         </div>
-        
+
  <div class="form-group">
             <label for="berlaku">Masa Berlaku Kontrak</label>
             <input type="date" name="berlaku" id="berlaku" class="form-control">
         </div>
+        <div class="form-group">
+        <label for="pict_dokumen">Foto Dokumen Kerja Sama</label>
+        <input type="file" name="pict_dokumen" id="pict_dokumen" class="form-control">
+    </div>
         <button type="submit" class="btn btn-primary">Simpan</button>
     </form>
+
+    @if(session('success'))
+    <div class="alert alert-success">{{ session('success') }}</div>
+@endif
+
+@if($errors->any())
+    <div class="alert alert-danger">
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
 @stop

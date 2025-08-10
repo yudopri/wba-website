@@ -11,18 +11,19 @@ class GajiController extends Controller
 {
     // Tampilkan semua data gaji
     public function index(Request $request)
-    {
-        $query = Gaji::query();
+{
+    $query = Gaji::query();
 
-        // Filter berdasarkan bulan
-        if ($request->has('gada') && $request->gada != '') {
-            $query->where('bulan', $request->gada);
-        }
-
-        $dataGaji = $query->latest()->get();
-
-        return view('admin.gaji.index', compact('dataGaji'));
+    // Filter berdasarkan bulan
+    if ($request->has('gada') && $request->gada != '') {
+        $query->where('bulan', $request->gada);
     }
+
+    $dataGaji = $query->latest()->get();
+
+    return view('admin.gaji.index', compact('dataGaji'));
+}
+
 
     // Tampilkan form tambah gaji
     public function create()
@@ -82,5 +83,5 @@ class GajiController extends Controller
 
         return back()->with('success', 'Data gaji berhasil dikonfirmasi.');
     }
-    
+
 }
