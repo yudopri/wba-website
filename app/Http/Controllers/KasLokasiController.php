@@ -10,25 +10,34 @@ use Carbon\Carbon;
 class KasLokasiController extends Controller
 {
     public function index(Request $request)
-<<<<<<< HEAD
     {
-        // Range filter
-        $range = $request->input('range', '7hari');
-        $tanggalMulai = match ($range) {
-            '1bulan' => now()->subMonth(),
-            '3bulan' => now()->subMonths(3),
-            '1tahun' => now()->subYear(),
-            default => now()->subDays(7),
-        };
+        // Ambil filter tanggal jika ada
+        if ($request->filled(['tanggal_awal', 'tanggal_akhir'])) {
+            $tanggalAwal = Carbon::parse($request->tanggal_awal)->startOfDay();
+            $tanggalAkhir = Carbon::parse($request->tanggal_akhir)->endOfDay();
+        } else {
+            // Default: 7 hari terakhir
+            $tanggalAwal = now()->subDays(7)->startOfDay();
+            $tanggalAkhir = now()->endOfDay();
+        }
 
-        $transaksi = KasLokasi::where('created_at', '>=', $tanggalMulai)
+        // Ambil data sesuai range tanggal
+        $transaksi = KasLokasi::whereBetween('created_at', [$tanggalAwal, $tanggalAkhir])
                         ->orderBy('created_at', 'desc')
                         ->get();
 
+        // Hitung saldo total (dari semua waktu)
         $saldo = KasLokasi::sum('debit') - KasLokasi::sum('kredit');
-        $totalPengeluaran = KasLokasi::where('created_at', '>=', $tanggalMulai)->sum('kredit');
 
-        return view('admin.kaslokasi.index', compact('transaksi', 'saldo', 'totalPengeluaran', 'range'));
+        // Total pengeluaran dari range yang difilter
+        $totalPengeluaran = KasLokasi::whereBetween('created_at', [$tanggalAwal, $tanggalAkhir])
+                            ->sum('kredit');
+
+        return view('admin.kaslokasi.index', compact('transaksi', 'saldo', 'totalPengeluaran'))
+            ->with([
+                'tanggal_awal' => $request->tanggal_awal,
+                'tanggal_akhir' => $request->tanggal_akhir,
+            ]);
     }
 
     public function store(Request $request)
@@ -46,60 +55,7 @@ class KasLokasiController extends Controller
             'debit' => $request->debit,
             'kredit' => 0,
             'saldo' => $saldoBaru,
-            'lokasi_kerja' => null, // tidak diinput dari form
-            'id_user' => Auth::id(),
-        ]);
-=======
-{
-    // Ambil filter tanggal jika ada
-    if ($request->filled(['tanggal_awal', 'tanggal_akhir'])) {
-        $tanggalAwal = Carbon::parse($request->tanggal_awal)->startOfDay();
-        $tanggalAkhir = Carbon::parse($request->tanggal_akhir)->endOfDay();
-    } else {
-        // Default: 7 hari terakhir
-        $tanggalAwal = now()->subDays(7)->startOfDay();
-        $tanggalAkhir = now()->endOfDay();
-    }
-
-    // Ambil data sesuai range tanggal
-    $transaksi = KasLokasi::whereBetween('created_at', [$tanggalAwal, $tanggalAkhir])
-                    ->orderBy('created_at', 'desc')
-                    ->get();
-
-    // Hitung saldo total (dari semua waktu)
-    $saldo = KasLokasi::sum('debit') - KasLokasi::sum('kredit');
-
-    // Total pengeluaran dari range yang difilter
-    $totalPengeluaran = KasLokasi::whereBetween('created_at', [$tanggalAwal, $tanggalAkhir])
-                        ->sum('kredit');
-
-    return view('admin.kaslokasi.index', compact('transaksi', 'saldo', 'totalPengeluaran'))
-        ->with([
-            'tanggal_awal' => $request->tanggal_awal,
-            'tanggal_akhir' => $request->tanggal_akhir,
-        ]);
-}
->>>>>>> 0dc353bdb7868fa53612faccfcb2922d594ecb60
-
-        return redirect()->back()->with('success', 'Saldo berhasil ditambahkan.');
-    }
-
-    public function store(Request $request)
-    {
-        $request->validate([
-            'keterangan' => 'required|string|max:255',
-            'debit' => 'required|numeric|min:0',
-        ]);
-
-        $lastSaldo = KasLokasi::latest()->first()?->saldo ?? 0;
-        $saldoBaru = $lastSaldo + $request->debit;
-
-        KasLokasi::create([
-            'keterangan' => $request->keterangan,
-            'debit' => $request->debit,
-            'kredit' => 0,
-            'saldo' => $saldoBaru,
-            'lokasi_kerja' => null, // tidak diinput dari form
+            'lokasi_kerja' => null,
             'id_user' => Auth::id(),
         ]);
 
