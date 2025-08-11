@@ -29,10 +29,7 @@ class PengaduanController extends Controller
         $request->validate([
             'judul'     => 'required|max:255',
             'deskripsi' => 'required',
-<<<<<<< HEAD
-=======
             'kronologi' => 'required',
->>>>>>> 0dc353bdb7868fa53612faccfcb2922d594ecb60
             'pelapor'   => 'required|max:255',
         ]);
 
@@ -40,10 +37,7 @@ class PengaduanController extends Controller
             'judul'     => $request->judul,
             'deskripsi' => $request->deskripsi,
             'pelapor'   => $request->pelapor,
-<<<<<<< HEAD
-=======
             'kronologi' => $request->kronologi,
->>>>>>> 0dc353bdb7868fa53612faccfcb2922d594ecb60
             'id_user'   => Auth::id(),
             'status'    => 'Diajukan',
         ]);
@@ -129,10 +123,7 @@ NotificationUser::create([
         $request->validate([
             'keterangan' => 'required|string',
             'deskripsi'  => 'required|string',
-<<<<<<< HEAD
-=======
             'kronologi'  => 'required|string',
->>>>>>> 0dc353bdb7868fa53612faccfcb2922d594ecb60
         ]);
 
         $pengaduan = Pengaduan::findOrFail($id);

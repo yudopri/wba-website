@@ -13,30 +13,26 @@
     <form action="{{ route('gaji.store') }}" method="POST">
         @csrf
 
-        <!-- ID Karyawan dari User Login -->
-      <!-- ID Karyawan dari User Login -->
-<div class="mb-3">
-    <label for="id_karyawan">ID Karyawan</label>
-    <input type="number" name="id_karyawan" class="form-control" required value="{{ old('id_karyawan') }}">
-</div>
+        <div class="mb-3">
+            <label for="partner_id">Nama PT</label>
+            <select name="partner_id" class="form-control" required>
+                <option value="">-- Pilih PT --</option>
+                @foreach($partners as $partner)
+                    <option value="{{ $partner->id }}" {{ old('partner_id') == $partner->id ? 'selected' : '' }}>
+                        {{ $partner->name_partner }}
+                    </option>
+                @endforeach
+            </select>
+        </div>
 
-
-        <!-- Nominal Gaji -->
         <div class="mb-3">
             <label for="nominal">Nominal</label>
             <input type="number" name="nominal" class="form-control" required value="{{ old('nominal') }}">
         </div>
 
-        <!-- Bulan -->
         <div class="mb-3">
-            <label for="bulan">Bulan</label>
-            <select name="bulan" class="form-control" required>
-                @for ($i = 1; $i <= 12; $i++)
-                    <option value="{{ $i }}" @if(old('bulan') == $i) selected @endif>
-                        {{ DateTime::createFromFormat('!m', $i)->format('F') }}
-                    </option>
-                @endfor
-            </select>
+            <label for="bulan">Bulan dan Tahun</label>
+            <input type="month" name="bulan" class="form-control" required value="{{ old('bulan') }}">
         </div>
 
         <button type="submit" class="btn btn-primary">Simpan</button>

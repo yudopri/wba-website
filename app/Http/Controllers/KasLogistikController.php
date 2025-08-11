@@ -10,73 +10,44 @@ use Carbon\Carbon;
 class KasLogistikController extends Controller
 {
     public function index(Request $request)
-<<<<<<< HEAD
     {
         $range = $request->get('range', '7hari');
 
-        // Filter waktu berdasarkan range
-=======
-{
-    // Default: preset range
-    $range = $request->get('range', '7hari');
-    $tanggalAwal = now()->subDays(7);
-    $tanggalAkhir = now();
+        // Default tanggal
+        $tanggalAwal = now()->subDays(7);
+        $tanggalAkhir = now();
 
-    // Jika manual tanggal diisi, gunakan itu
-    if ($request->filled(['tanggal_awal', 'tanggal_akhir'])) {
-        $tanggalAwal = Carbon::parse($request->tanggal_awal)->startOfDay();
-        $tanggalAkhir = Carbon::parse($request->tanggal_akhir)->endOfDay();
-    } else {
-        // Jika tidak, pakai preset range
->>>>>>> 0dc353bdb7868fa53612faccfcb2922d594ecb60
-        $tanggalAwal = match ($range) {
-            '1bulan' => now()->subMonth(),
-            '3bulan' => now()->subMonths(3),
-            '1tahun' => now()->subYear(),
-            default => now()->subDays(7),
-        };
-<<<<<<< HEAD
+        if ($request->filled(['tanggal_awal', 'tanggal_akhir'])) {
+            $tanggalAwal = Carbon::parse($request->tanggal_awal)->startOfDay();
+            $tanggalAkhir = Carbon::parse($request->tanggal_akhir)->endOfDay();
+        } else {
+            $tanggalAwal = match ($range) {
+                '1bulan' => now()->subMonth(),
+                '3bulan' => now()->subMonths(3),
+                '1tahun' => now()->subYear(),
+                default => now()->subDays(7),
+            };
+            $tanggalAkhir = now();
+        }
 
-        // Ambil data transaksi
         $transaksi = LogisticsCash::with('user')
-            ->where('created_at', '>=', $tanggalAwal)
+            ->whereBetween('created_at', [$tanggalAwal, $tanggalAkhir])
             ->orderBy('created_at', 'desc')
             ->get();
 
-        // Hitung saldo akhir
         $saldo = LogisticsCash::sum('debit') - LogisticsCash::sum('kredit');
+        $totalPengeluaran = LogisticsCash::whereBetween('created_at', [$tanggalAwal, $tanggalAkhir])->sum('kredit');
 
-        // Hitung total pengeluaran (kredit) sesuai range
-        $totalPengeluaran = LogisticsCash::where('created_at', '>=', $tanggalAwal)->sum('kredit');
-
-        return view('admin.kaslogistik.index', compact('transaksi', 'saldo', 'totalPengeluaran', 'range'));
-=======
-        $tanggalAkhir = now();
->>>>>>> 0dc353bdb7868fa53612faccfcb2922d594ecb60
-    }
-
-    // Ambil data transaksi
-    $transaksi = LogisticsCash::with('user')
-        ->whereBetween('created_at', [$tanggalAwal, $tanggalAkhir])
-        ->orderBy('created_at', 'desc')
-        ->get();
-
-    // Hitung saldo akhir
-    $saldo = LogisticsCash::sum('debit') - LogisticsCash::sum('kredit');
-
-    // Hitung total pengeluaran sesuai filter
-    $totalPengeluaran = LogisticsCash::whereBetween('created_at', [$tanggalAwal, $tanggalAkhir])->sum('kredit');
-
-    return view('admin.kaslogistik.index', compact('transaksi', 'saldo', 'totalPengeluaran', 'range'))
-        ->with([
+        return view('admin.kaslogistik.index', compact(
+            'transaksi',
+            'saldo',
+            'totalPengeluaran',
+            'range'
+        ))->with([
             'tanggal_awal' => $request->tanggal_awal,
             'tanggal_akhir' => $request->tanggal_akhir,
         ]);
-        $kaslogistik = $query->orderBy('tanggal', 'desc')->get();
-       
-
-}
-
+    }
 
     public function store(Request $request)
     {
@@ -87,7 +58,7 @@ class KasLogistikController extends Controller
 
         $lastSaldo = LogisticsCash::orderBy('created_at', 'desc')->value('saldo') ?? 0;
 
-        $log = LogisticsCash::create([
+        LogisticsCash::create([
             'id_user' => Auth::id(),
             'keterangan' => $request->keterangan,
             'debit' => $request->debit,
@@ -111,7 +82,7 @@ class KasLogistikController extends Controller
             return redirect()->back()->with('error', 'Saldo tidak mencukupi untuk pengeluaran.');
         }
 
-        $log = LogisticsCash::create([
+        LogisticsCash::create([
             'id_user' => Auth::id(),
             'keterangan' => $request->keterangan,
             'debit' => 0,

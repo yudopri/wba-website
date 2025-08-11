@@ -9,7 +9,7 @@ class GajiLog extends Model
     protected $table = 'gajis_logs'; // Sesuaikan dengan nama tabel sebenarnya
 
     protected $fillable = [
-        'penggajian_id',
+        'gaji_id',
         'keterangan',
         'nominal',
         'person',

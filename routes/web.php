@@ -267,6 +267,9 @@ Route::get('/baranggudang', [InventoryItemController::class, 'index'])->name('ad
 
     //kaslogistik
 
+// Visitor cookie route
+Route::get('/set-visitor-cookie', [VisitorController::class, 'setVisitorCookie']);
+
 Route::post('/kas-logistik/tambah', [KasLogistikController::class, 'store'])->name('kaslogistik.store');
 Route::post('/kas-logistik/kredit', [KasLogistikController::class, 'kredit'])->name('kaslogistik.kredit');
 Route::get('/kaslogistik', [KasLogistikController::class, 'index'])->name('kaslogistik.index');
@@ -334,3 +337,12 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 
 
 
+//notif
+
+Route::get('/notifikasi', [NotificationController::class, 'index'])->name('notif.index');
+Route::post('/notifikasi/baca/{id}', [NotificationController::class, 'markAsRead'])->name('notif.markAsRead');
+Route::post('/notifikasi/baca/{id}', [NotificationController::class, 'markAsRead'])->name('notif.markAsRead');
+Route::post('/notifikasi/baca/{id}', [\App\Http\Controllers\NotifikasiController::class, 'markAsRead'])->name('notif.markAsRead');
+
+Route::get('/notifications/show', [App\Http\Controllers\NotificationController::class, 'show'])->name('notifications.show');
+Route::get('/notifications/get', [App\Http\Controllers\NotificationController::class, 'get'])->name('notifications.get');
