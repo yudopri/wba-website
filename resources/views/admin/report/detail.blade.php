@@ -13,7 +13,8 @@
             <p><strong>Deskripsi:</strong> {{ $pengaduan->deskripsi }}</p>
             <p><strong>Kronologi:</strong> {{ $pengaduan->kronologi }}</p>
             <p><strong>Status:</strong> {{ $pengaduan->status }}</p>
-            <p><strong>Pelapor:</strong> {{ $pengaduan->pelapor }}</p>
+            <p><strong>Pelapor:</strong> {{ $pengaduan->user->name }}</p>
+
         </div>
     </div>
 
@@ -22,7 +23,7 @@
         @forelse ($pengaduan->logs as $log)
             <li class="list-group-item">
                 <strong>{{ $log->created_at->format('d M Y H:i') }}</strong><br>
-                <small>{{ $log->person }} - {{ $log->keterangan }}</small><br>
+                <small>{{ $log->user->name }} - {{ $log->keterangan }}</small><br>
                 {{ $log->deskripsi }}
             </li>
         @empty

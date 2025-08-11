@@ -11,6 +11,7 @@
     <div class="alert alert-danger">{{ session('error') }}</div>
 @endif
 
+ @if(auth()->user()->role === 'Keuangan' || auth()->user()->role === 'Manager')
 <div class="row mb-4">
     <!-- Saldo -->
     <div class="col-md-6">
@@ -28,20 +29,20 @@
     <!-- Total Pengeluaran -->
     <div class="col-md-6 position-relative">
         <div class="card shadow-lg border-0 rounded-xl" style="background: linear-gradient(135deg, #C0392B, #E74C3C); position: relative;">
-            
+
             <!-- Filter Tanggal -->
             <form method="GET" action="{{ route('kaslogistik.index') }}"
                   class="position-absolute d-flex align-items-center"
                   style="top: 10px; right: 10px; z-index: 10; padding: 5px 10px; border-radius: 8px;">
-                
+
                 <input type="date" name="tanggal_awal" value="{{ request('tanggal_awal') }}"
                        class="form-control form-control-sm bg-white text-dark border-0 me-1"
                        style="width: 130px;" title="Dari Tanggal">
-                
+
                 <input type="date" name="tanggal_akhir" value="{{ request('tanggal_akhir') }}"
                        class="form-control form-control-sm bg-white text-dark border-0 me-1"
                        style="width: 130px;" title="Sampai Tanggal">
-                
+
                 <button type="submit" class="btn btn-sm btn-primary me-1">OK</button>
 
                 <!-- Tombol Reset -->
@@ -130,4 +131,7 @@
         form.style.display = (form.style.display === 'none') ? 'block' : 'none';
     });
 </script>
+@else
+        <h3>Anda Tidak Memiliki Akses</h3>
+    @endif
 @endsection

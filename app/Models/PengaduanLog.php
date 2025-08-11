@@ -25,5 +25,9 @@ protected $table = 'complaint_approvals';
 {
     return $this->hasMany(PengaduanLog::class);
 }
+public function user()
+    {
+        return $this->belongsTo(User::class, 'id_user');
+    }
 
 }

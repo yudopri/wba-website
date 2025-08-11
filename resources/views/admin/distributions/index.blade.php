@@ -1,7 +1,7 @@
 @extends('adminlte::page')
 @section('content')
 <h1>Data Distribusi</h1>
-@if(auth()->user()->role === 'Admin' || auth()->user()->role === 'Manager')
+@if(auth()->user()->role === 'Logistik' || auth()->user()->role === 'Manager')
 <div class="mb-4">
         <form action="{{ route('admin.distributions.index') }}" method="GET" class="form-inline">
             <!-- Pencarian Nama atau NIK -->
@@ -56,10 +56,10 @@
         <td>{{ $distribution->keterangan ?? '-' }}</td>
         <td>{{ $distribution->status }}</td>
         <td>
-
+            @if(auth()->user()->role === 'Logistik' || auth()->user()->role === 'Manager')
             <a href="{{ route('admin.distributions.show', $distribution->id) }}" class="btn btn-info">Detail</a>
             <a href="{{ route('admin.distributions.edit', $distribution->id) }}" class="btn btn-warning">Edit</a>
-
+            @endif
 
         @if ($distribution->foto_bukti)
     <a href="{{ asset($distribution->foto_bukti) }}" target="_blank" class="btn btn-success">
@@ -124,5 +124,4 @@ document.getElementById('updateBuktiFoto').addEventListener('change', function(e
     });
 </script>
 @endif
-
 @endsection

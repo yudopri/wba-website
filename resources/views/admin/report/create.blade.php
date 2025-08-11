@@ -35,9 +35,11 @@
         </div>
 
         <div class="mb-3">
-            <label for="pelapor">Nama Pelapor</label>
-            <input type="text" class="form-control" name="pelapor" required>
-        </div>
+    <label for="id_user">Nama Pelapor</label>
+    <input type="text" class="form-control" name="id_user"
+           value="{{ Auth::user()->name }}" readonly>
+</div>
+
 
         <button type="submit" class="btn btn-primary">Kirim Pengaduan</button>
         <a href="{{ route('pengaduan.index') }}" class="btn btn-secondary">Kembali</a>

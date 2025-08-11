@@ -1,6 +1,7 @@
 @extends('adminlte::page')
 @section('content')
 <h1>Data Barang Perusahaan</h1>
+@if(auth()->user()->role === 'Logistik' || auth()->user()->role === 'Manager')
 <div class="mb-4">
         <form action="{{ route('admin.inventory.index') }}" method="GET" class="form-inline">
             <!-- Pencarian Nama atau NIK -->
@@ -33,6 +34,7 @@
         </form>
     </div>
 <a href="{{ route('admin.inventory.create') }}" class="btn btn-primary mt-3">Tambah Barang</a>
+@endif
 <table class="table table-bordered mt-4">
     <tr>
         <th>No</th>
@@ -42,7 +44,9 @@
         <th>Stock</th>
         <th>Harga</th>
         <th>Status</th>
+        @if(auth()->user()->role === 'Logistik' || auth()->user()->role === 'Manager')
         <th>Aksi</th>
+        @endif
     </tr>
     @foreach ($inventoryItems as $item)
     <tr>
@@ -53,10 +57,14 @@
         <td>{{ $item->stock }}</td>
         <td>{{ number_format($item->price, 0, ',', '.') }}</td>
         <td>{{ $item->status }}</td>
+         @if(auth()->user()->role === 'Logistik' || auth()->user()->role === 'Manager')
         <td>
+
             <a href="{{ route('admin.inventory.show', 1) }}" class="btn btn-info">Detail</a>
             <a href="{{ route('admin.inventory.edit', $item->id) }}" class="btn btn-warning">Edit</a>
+
         </td>
+         @endif
     </tr>
     @endforeach
 </table>

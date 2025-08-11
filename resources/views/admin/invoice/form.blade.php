@@ -91,25 +91,6 @@
     @enderror
 </div>
 
-
-                <div class="form-group">
-                    <label for="date_send">Tanggal Kirim</label>
-                    <input type="date" name="date_send" class="form-control @error('date_send') is-invalid @enderror"
-                        value="{{ old('date_send', isset($invoice->date_send) ? \Carbon\Carbon::parse($invoice->date_send)->format('Y-m-d') : '') }}">
-                    @error('date_send')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
-                </div>
-
-                <div class="form-group">
-                    <label for="date_pay">Tanggal Bayar</label>
-                    <input type="date" name="date_pay" class="form-control @error('date_pay') is-invalid @enderror"
-                        value="{{ old('date_pay', isset($invoice->date_pay) ? \Carbon\Carbon::parse($invoice->date_pay)->format('Y-m-d') : '') }}">
-                    @error('date_pay')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
-                </div>
-
                 <div class="form-group">
                     <label for="status">Status</label>
                     <select name="status" class="form-control @error('status') is-invalid @enderror" required>

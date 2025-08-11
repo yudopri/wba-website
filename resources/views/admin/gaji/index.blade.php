@@ -8,7 +8,7 @@
 @if(session('success'))
     <div class="alert alert-success">{{ session('success') }}</div>
 @endif
-
+@if(auth()->user()->role === 'Keuangan' || auth()->user()->role === 'Manager')
 <div class="card mb-4">
     <div class="card-body">
         <form action="{{ route('gaji.index') }}" method="GET" class="row align-items-end">
@@ -53,44 +53,21 @@
         <table class="table table-bordered table-hover mb-0">
             <thead class="thead-dark">
                 <tr>
-<<<<<<< HEAD
-                    <th style="width: 50px">No</th>
-                    <th>ID Karyawan</th>
-                    <th>ID User</th>
-                    <th>Nominal</th>
-                    <th>Bulan</th>
-                    <th style="width: 130px" class="text-center">Aksi</th>
-=======
                     <th>No</th>
                     <th>Nama PT</th>
                     <th>User</th>
                     <th>Nominal</th>
                     <th>Bulan</th>
->>>>>>> origin/jadid
                 </tr>
             </thead>
             <tbody>
                 @forelse ($dataGaji as $index => $gaji)
                     <tr>
                         <td>{{ $index + 1 }}</td>
-<<<<<<< HEAD
-                        <td>{{ $gaji->id_karyawan }}</td>
-                        <td>{{ $gaji->id_user }}</td>
-                        <td>Rp {{ number_format($gaji->nominal, 0, ',', '.') }}</td>
-                        <td>{{ $gaji->bulan }}</td>
-                        <td class="text-center">
-                            <div class="btn-group">
-                                <a href="{{ route('gaji.detail', $gaji->id) }}" class="btn btn-sm btn-info" title="Lihat Detail">
-                                    <i class="fas fa-eye"></i>
-                                </a>
-                            </div>
-                        </td>
-=======
                         <td>{{ $gaji->partner->name_partner ?? '-' }}</td>
                         <td>{{ $gaji->user->name ?? '-' }}</td>
                         <td>Rp {{ number_format($gaji->nominal, 0, ',', '.') }}</td>
                         <td>{{ \Carbon\Carbon::parse($gaji->bulan)->translatedFormat('F Y') }}</td>
->>>>>>> origin/jadid
                     </tr>
                 @empty
                     <tr>
@@ -103,4 +80,7 @@
         </table>
     </div>
 </div>
+@else
+        <h3>Anda Tidak Memiliki Akses</h3>
+    @endif
 @endsection

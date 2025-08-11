@@ -237,6 +237,7 @@ Route::get('/invoice', [InvoiceController::class, 'index'])->name('admin.invoice
     Route::get('/invoice/{invoice}', [InvoiceController::class, 'show'])->name('admin.invoice.show');
     Route::get('/invoice/{invoice}/edit', [InvoiceController::class, 'edit'])->name('admin.invoice.edit');
     Route::put('/invoice/{invoice}', [InvoiceController::class, 'update'])->name('admin.invoice.update');
+    Route::post('/invoice/{id}/upload', [InvoiceController::class, 'upload'])->name('admin.invoice.upload');
     Route::delete('/invoice/{invoice}', [InvoiceController::class, 'destroy'])->name('admin.invoice.destroy');
 
 Route::get('/baranggudang', [InventoryItemController::class, 'index'])->name('admin.inventory.index');

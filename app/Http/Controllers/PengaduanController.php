@@ -30,13 +30,11 @@ class PengaduanController extends Controller
             'judul'     => 'required|max:255',
             'deskripsi' => 'required',
             'kronologi' => 'required',
-            'pelapor'   => 'required|max:255',
         ]);
 
         $pengaduan = Pengaduan::create([
             'judul'     => $request->judul,
             'deskripsi' => $request->deskripsi,
-            'pelapor'   => $request->pelapor,
             'kronologi' => $request->kronologi,
             'id_user'   => Auth::id(),
             'status'    => 'Diajukan',

@@ -4,7 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\Invoice;
 use App\Models\User;
+use App\Models\SaldoUtama;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Date;
 
 class InvoiceController extends Controller
 {
@@ -22,24 +26,27 @@ class InvoiceController extends Controller
 
 
     public function store(Request $request)
-    {
-        $validated = $request->validate([
-    'lokasi_kerja' => 'required|string',
-    'jumlah_personil' => 'required|integer',
-    'nominal' => 'required|numeric',
-    'bulan' => 'required|string',
-    'date_send' => 'nullable|date',
-    'date_pay' => 'nullable|date',
-    'status' => 'required|string',
-]);
+{
+    $validated = $request->validate([
+        'lokasi_kerja' => 'required|string',
+        'jumlah_personil' => 'required|integer',
+        'nominal' => 'required|numeric',
+        'bulan' => 'required|string',
+        'date_send' => 'nullable|date',
+        'date_pay' => 'nullable|date',
+        'status' => 'required|string',
+    ]);
 
-$validated['id_user'] = auth()->id();
+    $validated['id_user'] = auth()->id();
 
-Invoice::create($validated);
+    // Override date_send dengan tanggal sekarang
+    $validated['date_send'] = now();
 
+    Invoice::create($validated);
 
-        return redirect()->route('admin.invoice.index')->with('success', 'Invoice berhasil ditambahkan.');
-    }
+    return redirect()->route('admin.invoice.index')->with('success', 'Invoice berhasil ditambahkan.');
+}
+
 
     public function show(Invoice $invoice)
     {
@@ -64,7 +71,8 @@ Invoice::create($validated);
     'date_pay' => 'nullable|date',
     'status' => 'required|string',
 ]);
-
+// Override date_send dengan tanggal sekarang
+    $validated['date_send'] = now();
 $invoice->update($validated);
 
 
@@ -77,4 +85,51 @@ $invoice->update($validated);
 
         return redirect()->route('admin.invoice.index')->with('success', 'Invoice berhasil dihapus.');
     }
+    public function upload(Request $request, $id)
+{
+    $Invoice = Invoice::findOrFail($id);
+
+    if ($request->hasFile('foto_bukti')) {
+        $file = $request->file('foto_bukti');
+        $filename = time() . '_' . $file->getClientOriginalName();
+
+        $file->move(public_path('assets/bukti_invoice'), $filename);
+
+        $Invoice->foto_bukti = 'assets/bukti_invoice/' . $filename;
+
+        if ($Invoice->status == 'pending') {
+            $Invoice->status = 'paid';
+            $Invoice->date_pay = now();
+            $Invoice->save();
+
+            // Hitung saldo terakhir untuk user ini
+            $lastBalance = SaldoUtama::where('id_user', $Invoice->id_user)
+                ->orderBy('created_at', 'desc')
+                ->first();
+
+            $saldoTerakhir = $lastBalance ? $lastBalance->saldo : 0;
+
+            // Hitung saldo baru
+            $saldoBaru = $saldoTerakhir + $Invoice->nominal;
+
+            // Keterangan transaksi
+            $keterangan = 'Pembayaran invoice PT ' . ($Invoice->lokasi_kerja ?? '-')
+                . ' pada tanggal ' . $Invoice->date_pay->format('d-m-Y');
+
+            // Simpan ke saldo utama dengan saldo baru
+            SaldoUtama::create([
+                'id_user' => $Invoice->id_user,
+                'debit' => 0,
+                'kredit' => $Invoice->nominal,
+                'saldo' => $saldoBaru,
+                'keterangan' => $keterangan,
+            ]);
+        } else {
+            $Invoice->save();
+        }
+    }
+
+    return redirect()->back()->with('success', 'Bukti pembayaran berhasil diupload dan status diupdate.');
+}
+
 }

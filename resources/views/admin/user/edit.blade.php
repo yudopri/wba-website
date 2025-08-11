@@ -54,8 +54,11 @@
                  @if(auth()->user()->role === 'Admin')
                 <option value="Admin" {{ old('role', $user->role) == 'Admin' ? 'selected' : '' }}>Admin</option>
                  @elseif(auth()->user()->role === 'Manager')
-                 <option value="Admin" {{ old('role', $user->role) == 'Admin' ? 'selected' : '' }}>Admin</option>
-                <option value="Manager" {{ old('role', $user->role) == 'Manager' ? 'selected' : '' }}>Manager</option>
+                 <option value="Admin" {{ old('role') == 'Admin' ? 'selected' : '' }}>Admin</option>
+                <option value="Keuangan" {{ old('role') == 'Keuangan' ? 'selected' : '' }}>Keuangan</option>
+                <option value="Lapangan" {{ old('role') == 'Lapangan' ? 'selected' : '' }}>Lapangan</option>
+                <option value="Logistik" {{ old('role') == 'Logistik' ? 'selected' : '' }}>Logistik</option>
+                <option value="Manager" {{ old('role') == 'Manager' ? 'selected' : '' }}>Manager</option>
                 @endif
             </select>
             @error('role')

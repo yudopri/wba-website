@@ -1,7 +1,7 @@
 @extends('adminlte::page')
 @section('content')
 <h1>Data Inventaris</h1>
-@if(auth()->user()->role === 'Admin' || auth()->user()->role === 'Manager')
+@if(auth()->user()->role === 'Logistik' || auth()->user()->role === 'Manager')
 <div class="mb-4">
     <form action="{{ route('admin.inventaris.index') }}" method="GET" class="form-inline">
         <!-- Pencarian Nama atau NIK -->
@@ -52,16 +52,15 @@
         <td>{{ $inventory->keterangan ?? '-' }}</td>
         <td>{{ $inventory->status }}</td>
         <td>
-            @if(auth()->user()->role === 'Admin' || auth()->user()->role === 'Manager')
+            @if(auth()->user()->role === 'Logistik' || auth()->user()->role === 'Manager')
             <a href="{{ route('admin.inventaris.show', $inventory->id) }}" class="btn btn-info">Detail</a>
             <a href="{{ route('admin.inventaris.edit', $inventory->id) }}" class="btn btn-warning">Edit</a>
-
+            @endif
 
             @if ($inventory->foto_bukti)
     <a href="{{ asset($inventory->foto_bukti) }}" target="_blank" class="btn btn-success">
         Lihat Bukti
     </a>
-    @endif
 @else
 <form action="{{ route('admin.inventaris.upload', $inventory->id) }}" method="POST" enctype="multipart/form-data" class="mt-3">
         @csrf

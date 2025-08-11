@@ -10,12 +10,12 @@ class Pengaduan extends Model
     use HasFactory;
 protected $table = 'complaint_reports';
     protected $fillable = [
-        'judul', 'deskripsi', 'status', 'id_user','kronologi', 'pelapor','bukti_penyelesaian'
+        'judul', 'deskripsi', 'status', 'id_user','kronologi','bukti_penyelesaian'
     ];
 
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'id_user');
     }
    public function logs()
 {

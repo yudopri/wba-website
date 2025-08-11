@@ -12,7 +12,7 @@
 @endif
 
 
-
+ @if(auth()->user()->role === 'Keuangan' || auth()->user()->role === 'Manager')
 <!-- ROW SALDO & TOTAL PENGELUARAN -->
 <div class="row mb-4">
     <!-- SALDO -->
@@ -34,15 +34,15 @@
         <form method="GET" action="{{ url('/admin/kaslogistik') }}"
               class="position-absolute d-flex align-items-center"
               style="top: 10px; right: 10px; z-index: 10; padding: 5px 10px; border-radius: 8px;">
-            
+
             <input type="date" name="tanggal_awal" value="{{ request('tanggal_awal') }}"
                    class="form-control form-control-sm bg-white text-dark border-0 me-1"
                    style="width: 130px;" title="Dari Tanggal">
-            
+
             <input type="date" name="tanggal_akhir" value="{{ request('tanggal_akhir') }}"
                    class="form-control form-control-sm bg-white text-dark border-0 me-1"
                    style="width: 130px;" title="Sampai Tanggal">
-            
+
             <button type="submit" class="btn btn-sm btn-primary me-1">OK</button>
 
             <!-- Tombol Reset -->
@@ -59,7 +59,7 @@
     </div>
 </div>
 
-    
+
 </div>
 
 <!-- FORM -->
@@ -142,4 +142,7 @@
         form.style.display = (form.style.display === 'none') ? 'block' : 'none';
     });
 </script>
+@else
+        <h3>Anda Tidak Memiliki Akses</h3>
+    @endif
 @endsection
