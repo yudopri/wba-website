@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Date;
+use Illuminate\Support\Facades\Auth;
 
 class InvoiceController extends Controller
 {
@@ -112,17 +113,13 @@ $invoice->update($validated);
             // Hitung saldo baru
             $saldoBaru = $saldoTerakhir + $Invoice->nominal;
 
-            // Keterangan transaksi
-            $keterangan = 'Pembayaran invoice PT ' . ($Invoice->lokasi_kerja ?? '-')
-                . ' pada tanggal ' . $Invoice->date_pay->format('d-m-Y');
 
             // Simpan ke saldo utama dengan saldo baru
             SaldoUtama::create([
-                'id_user' => $Invoice->id_user,
+                'id_user' => Auth::id(),
                 'debit' => 0,
                 'kredit' => $Invoice->nominal,
                 'saldo' => $saldoBaru,
-                'keterangan' => $keterangan,
             ]);
         } else {
             $Invoice->save();

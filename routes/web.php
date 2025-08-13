@@ -33,6 +33,7 @@ use App\Http\Controllers\KasOperasionalController;
 use App\Http\Controllers\PengaduanController;
 use App\Http\Controllers\GajiController;
 use App\Http\Controllers\DokumenController;
+use App\Http\Controllers\SaldoUtamaController;
 
 
 // Authentication routes with email verification enabled
@@ -90,9 +91,7 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
     // Dashboard route - only accessible to verified users
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
 
-    Route::get('/saldoutama', function () {
-        return view('admin.saldo.index');
-    });
+
     // Jasa management routes
     Route::resource('service', ServiceController::class);
 Route::get('/service', [ServiceController::class, 'index'])->name('admin.service.index');
@@ -281,7 +280,7 @@ Route::post('/kaslokasi/store', [KasLokasiController::class, 'store'])->name('ka
 Route::post('/kaslokasi/kredit', [KasLokasiController::class, 'kredit'])->name('kaslokasi.kredit');
 
 //kasoperasional
-Route::get('/kasoperasional', [KasOperasionalController::class, 'index']);
+Route::get('/kasoperasional', [KasOperasionalController::class, 'index'])->name('kasoperasional.index');
 Route::post('/kasoperasional/store', [KasOperasionalController::class, 'store'])->name('kasoperasional.store');
 Route::post('/kasoperasional/kredit', [KasOperasionalController::class, 'kredit'])->name('kasoperasional.kredit');
 
@@ -328,6 +327,8 @@ Route::get('/gaji/{id}/logs', [GajiController::class, 'showLogs'])->name('gaji.l
         Route::delete('/dokumenlokasi/{id}', [DokumenController::class, 'destroy'])->name('dokumenlokasi.destroy');
         Route::get('/', function () { return redirect()->route('dokumenlokasi.index');});
         Route::resource('dokumenlokasi', DokumenController::class);
+
+        Route::get('/saldoutama', [SaldoUtamaController::class, 'index'])->name('admin.saldo.index');
 
 });
    // Visitor cookie route

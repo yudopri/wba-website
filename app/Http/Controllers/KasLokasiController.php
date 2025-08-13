@@ -6,6 +6,7 @@ use App\Models\KasLokasi;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
+use App\Models\SaldoUtama;
 
 class KasLokasiController extends Controller
 {
@@ -43,10 +44,26 @@ class KasLokasiController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'keterangan' => 'required|string|max:255',
-            'debit' => 'required|numeric|min:0',
-        ]);
+    'keterangan' => 'required|string|max:255',
+    'debit' => 'required|numeric|min:1',
+]);
+$validated['id_user'] = auth()->id();
 
+// Ambil saldo terakhir per user dari SaldoUtama
+    $lastBalance = SaldoUtama::where('id_user', Auth::id())
+        ->orderBy('created_at', 'desc')
+        ->first();
+
+    $saldoTerakhir = $lastBalance ? $lastBalance->saldo : 0;
+    $saldoBaru = $saldoTerakhir - $request->debit;
+
+    // Simpan ke SaldoUtama
+    SaldoUtama::create([
+        'id_user' => Auth::id(),
+        'debit' => $request->debit,
+        'kredit' => 0,
+        'saldo' => $saldoBaru,
+    ]);
         $lastSaldo = KasLokasi::latest()->first()?->saldo ?? 0;
         $saldoBaru = $lastSaldo + $request->debit;
 
@@ -56,7 +73,7 @@ class KasLokasiController extends Controller
             'kredit' => 0,
             'saldo' => $saldoBaru,
             'lokasi_kerja' => null,
-            'id_user' => Auth::id(),
+            'id_user' => $reques->id_user,
         ]);
 
         return redirect()->back()->with('success', 'Saldo berhasil ditambahkan.');
@@ -65,10 +82,12 @@ class KasLokasiController extends Controller
     public function kredit(Request $request)
     {
         $request->validate([
-            'keterangan' => 'required|string|max:255',
-            'kredit' => 'required|numeric|min:0',
+    'keterangan' => 'required|string|max:255',
+    'debit' => 'required|numeric|min:1',
             'lokasi' => 'required|string|max:255',
         ]);
+$validated['id_user'] = auth()->id();
+
 
         $lastSaldo = KasLokasi::latest()->first()?->saldo ?? 0;
         $saldoBaru = $lastSaldo - $request->kredit;

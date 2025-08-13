@@ -1,8 +1,8 @@
 @extends('adminlte::page')
-@section('title', 'Data Kas Logistik')
+@section('title', 'Data Kas Operasional')
 
 @section('content')
-<h1>Data Kas Logistik</h1>
+<h1>Data Kas Operasional</h1>
 
 @if(session('success'))
     <div class="alert alert-success">{{ session('success') }}</div>
@@ -17,7 +17,7 @@
     <div class="col-md-6">
         <div class="card shadow-lg border-0 rounded-xl" style="background: linear-gradient(135deg, #8E44AD, #BB8FCE);">
             <div class="card-header bg-transparent border-0 text-white">
-                <h3 class="card-title"><i class="fas fa-wallet mr-2"></i> Saldo Kas Logistik</h3>
+                <h3 class="card-title"><i class="fas fa-wallet mr-2"></i> Saldo Kas Operasional</h3>
             </div>
             <div class="card-body text-center">
                 <h1 class="display-4 text-white">Rp. {{ number_format($saldo ?? 0, 0, ',', '.') }}</h1>
@@ -31,7 +31,7 @@
         <div class="card shadow-lg border-0 rounded-xl" style="background: linear-gradient(135deg, #C0392B, #E74C3C); position: relative;">
 
             <!-- Filter Tanggal -->
-            <form method="GET" action="{{ route('kaslogistik.index') }}"
+            <form method="GET" action="{{ route('kasoperasional.index') }}"
                   class="position-absolute d-flex align-items-center"
                   style="top: 10px; right: 10px; z-index: 10; padding: 5px 10px; border-radius: 8px;">
 
@@ -46,7 +46,7 @@
                 <button type="submit" class="btn btn-sm btn-primary me-1">OK</button>
 
                 <!-- Tombol Reset -->
-                <a href="{{ route('kaslogistik.index') }}" class="btn btn-sm btn-secondary">Reset</a>
+                <a href="{{ route('kasoperasional.index') }}" class="btn btn-sm btn-secondary">Reset</a>
             </form>
 
             <div class="card-header bg-transparent border-0 text-white">
@@ -70,7 +70,7 @@
 <div class="card mb-3" id="formDebit" style="display: none;">
     <div class="card-header">Tambah Saldo</div>
     <div class="card-body">
-        <form method="POST" action="{{ route('kaslogistik.store') }}">
+        <form method="POST" action="{{ route('kasoperasional.store') }}">
             @csrf
             <input type="text" name="keterangan" class="form-control mb-2" placeholder="Keterangan" required>
             <input type="number" name="debit" class="form-control mb-2" placeholder="Jumlah Saldo Masuk" required>
