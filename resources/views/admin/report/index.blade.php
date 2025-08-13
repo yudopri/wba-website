@@ -71,11 +71,12 @@
                             @endif
 
                             {{-- Tombol Lihat Bukti --}}
-                            @if ($p->bukti_penyelesaian)
-                                <a href="{{ asset('storage/' . $p->bukti_penyelesaian) }}" target="_blank" class="btn btn-dark btn-sm">
-                                    <i class="fas fa-image"></i> Lihat Bukti
-                                </a>
-                            @endif
+@if ($p->bukti_penyelesaian)
+    <a href="{{ asset($p->bukti_penyelesaian) }}" target="_blank" class="btn btn-dark btn-sm">
+        <i class="fas fa-image"></i> Lihat Bukti
+    </a>
+@endif
+
                         </td>
                     </tr>
                 @endforeach

@@ -164,13 +164,29 @@ public function uploadBukti(Request $request, $id)
     $pengaduan = Pengaduan::findOrFail($id);
 
     if ($request->hasFile('bukti')) {
-        $path = $request->file('bukti')->store('bukti_penyelesaian', 'public');
-        $pengaduan->bukti_penyelesaian = $path;
+        $file = $request->file('bukti');
+        $filename = time() . '_' . $file->getClientOriginalName();
+
+        // Tentukan path folder
+        $destinationPath = public_path('asset/bukti_laporan');
+
+        // Buat folder jika belum ada
+        if (!file_exists($destinationPath)) {
+            mkdir($destinationPath, 0777, true);
+        }
+
+        // Pindahkan file ke folder
+        $file->move($destinationPath, $filename);
+
+        // Simpan path relatif ke database
+        $pengaduan->bukti_penyelesaian = 'asset/bukti_laporan/' . $filename;
         $pengaduan->save();
     }
 
     return redirect()->route('pengaduan.index')->with('success', 'Bukti berhasil diupload.');
 }
+
+
 
 
 public function printPDF($id)
