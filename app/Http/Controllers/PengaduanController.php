@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\NotificationUser;
 
+
 class PengaduanController extends Controller
 {
     // Tampilkan semua pengaduan
@@ -30,13 +31,11 @@ class PengaduanController extends Controller
             'judul'     => 'required|max:255',
             'deskripsi' => 'required',
             'kronologi' => 'required',
-            'pelapor'   => 'required|max:255',
         ]);
 
         $pengaduan = Pengaduan::create([
             'judul'     => $request->judul,
             'deskripsi' => $request->deskripsi,
-            'pelapor'   => $request->pelapor,
             'kronologi' => $request->kronologi,
             'id_user'   => Auth::id(),
             'status'    => 'Diajukan',
@@ -191,9 +190,10 @@ public function uploadBukti(Request $request, $id)
 
 public function printPDF($id)
 {
-    $pengaduan = Pengaduan::with('logs')->findOrFail($id);
+    $pengaduan = Pengaduan::with('logs', 'user')->findOrFail($id);
 
-    $pdf = Pdf::loadView('admin.report.laporan', compact('pengaduan'));
+    $pdf = Pdf::loadView('admin.report.pdf', compact('pengaduan'))
+              ->setPaper('A4', 'portrait'); // optional: atur ukuran kertas
 
     return $pdf->stream('laporan_pengaduan_'.$pengaduan->id.'.pdf');
 }

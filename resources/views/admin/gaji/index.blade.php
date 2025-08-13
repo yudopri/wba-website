@@ -8,7 +8,7 @@
 @if(session('success'))
     <div class="alert alert-success">{{ session('success') }}</div>
 @endif
-
+@if(auth()->user()->role === 'Keuangan' || auth()->user()->role === 'Manager')
 <div class="card mb-4">
     <div class="card-body">
         <form action="{{ route('gaji.index') }}" method="GET" class="row align-items-end">
@@ -80,4 +80,7 @@
         </table>
     </div>
 </div>
+@else
+        <h3>Anda Tidak Memiliki Akses</h3>
+    @endif
 @endsection
