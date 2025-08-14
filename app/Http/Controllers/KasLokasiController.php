@@ -19,7 +19,7 @@ class KasLokasiController extends Controller
             return redirect()->back()->with('error', 'User tidak ditemukan.');
         }
 
-        // Ambil lokasi kerja user  
+        // Ambil lokasi kerja user
     $userLokasi = $employee->lokasikerja;
         // Ambil filter tanggal jika ada
         if ($request->filled(['tanggal_awal', 'tanggal_akhir'])) {
@@ -47,7 +47,7 @@ class KasLokasiController extends Controller
         $lokasiKerja = Work::where('status', 'aktif')->pluck('name');
 
         return view('admin.kaslokasi.index', compact(
-            'transaksi', 'saldo', 'totalPengeluaran', 'lokasiKerja'
+            'transaksi', 'saldo', 'totalPengeluaran', 'lokasiKerja','userLokasi'
         ))->with([
             'tanggal_awal' => $request->tanggal_awal,
             'tanggal_akhir' => $request->tanggal_akhir,
