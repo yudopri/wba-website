@@ -35,13 +35,13 @@ class InvoiceController extends Controller
         'bulan' => 'required|string',
         'date_send' => 'nullable|date',
         'date_pay' => 'nullable|date',
-        'status' => 'required|string',
     ]);
 
     $validated['id_user'] = auth()->id();
 
     // Override date_send dengan tanggal sekarang
     $validated['date_send'] = now();
+    $validated['status'] = 'pending'; // Set status default
 
     Invoice::create($validated);
 
@@ -70,7 +70,6 @@ class InvoiceController extends Controller
     'bulan' => 'required|string',
     'date_send' => 'nullable|date',
     'date_pay' => 'nullable|date',
-    'status' => 'required|string',
 ]);
 // Override date_send dengan tanggal sekarang
     $validated['date_send'] = now();

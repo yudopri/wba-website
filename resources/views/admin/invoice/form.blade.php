@@ -91,17 +91,6 @@
     @enderror
 </div>
 
-                <div class="form-group">
-                    <label for="status">Status</label>
-                    <select name="status" class="form-control @error('status') is-invalid @enderror" required>
-                        <option value="">-- Pilih Status --</option>
-                        <option value="pending" {{ old('status', $invoice->status ?? '') == 'pending' ? 'selected' : '' }}>Pending</option>
-                        <option value="paid" {{ old('status', $invoice->status ?? '') == 'paid' ? 'selected' : '' }}>Paid</option>
-                    </select>
-                    @error('status')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
-                </div>
 
                 <button type="submit" class="btn btn-primary">
                     {{ isset($invoice) ? 'Update' : 'Simpan' }}
