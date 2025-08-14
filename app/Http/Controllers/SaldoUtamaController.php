@@ -8,6 +8,10 @@ use App\Models\KasLokasi;
 use App\Models\KasOperasional;
 use App\Models\LogisticsCash;
 use App\Models\Invoice;
+use App\Models\Pajak;
+use App\Models\Bpjs;
+use App\Models\Pinjaman;
+use App\Models\Gaji;
 
 class SaldoUtamaController extends Controller
 {
@@ -28,6 +32,16 @@ class SaldoUtamaController extends Controller
     // Ambil semua kas logistik
     $logisticsCash = LogisticsCash::latest()->first();
 
+    // Ambil semua pajak
+    $pajak = Pajak::latest()->first();
+    // Ambil semua BPJS
+    $bpjs = Bpjs::latest()->first();
+    // Ambil semua pinjaman
+    $pinjaman = Pinjaman::latest()->first();
+
+    // Ambil semua gaji
+    $gaji = Gaji::latest()->first();
+
     $invoicePaid = Invoice::where('status', 'paid')
         ->latest()
         ->get();
@@ -38,7 +52,11 @@ class SaldoUtamaController extends Controller
         'kasLokasi',
         'kasOperasional',
         'logisticsCash',
-        'invoice'
+        'invoice',
+        'pajak',
+        'bpjs',
+        'pinjaman',
+        'gaji'
     ));
 }
 

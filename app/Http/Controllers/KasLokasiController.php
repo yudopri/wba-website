@@ -25,7 +25,7 @@ class KasLokasiController extends Controller
 
         // Ambil data transaksi sesuai range tanggal
         $transaksi = KasLokasi::whereBetween('created_at', [$tanggalAwal, $tanggalAkhir])
-       -> where('lokasi_kerja', $userLokasi) 
+       -> where('lokasi_kerja', $userLokasi)
                         ->orderBy('created_at', 'desc')
                         ->get();
 
@@ -56,9 +56,7 @@ class KasLokasiController extends Controller
         ]);
 
         // Ambil saldo terakhir per user dari SaldoUtama
-        $lastBalance = SaldoUtama::where('id_user', Auth::id())
-            ->orderBy('created_at', 'desc')
-            ->first();
+        $lastBalance = SaldoUtama::latest()->first();
 
         $saldoTerakhir = $lastBalance ? $lastBalance->saldo : 0;
         $saldoBaruSaldoUtama = $saldoTerakhir - $request->debit;
@@ -80,13 +78,8 @@ class KasLokasiController extends Controller
             'keterangan' => $request->keterangan,
             'debit' => $request->debit,
             'kredit' => 0,
-<<<<<<< HEAD
-            'saldo' => $saldoBaru,
-            'lokasi_kerja' => null,
-=======
             'saldo' => $saldoBaruKasLokasi,
             'lokasi_kerja' => $request->lokasi,
->>>>>>> d4a42cddbcddc9e65d813d16a95fa47e54d4e32d
             'id_user' => Auth::id(),
         ]);
 

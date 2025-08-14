@@ -95,7 +95,7 @@
                     </h3>
                 </div>
                 <div class="card-body text-center">
-                    <h1 class="display-4 text-white">Rp. 500.000</h1>
+                    <h1 class="display-4 text-white">Rp. {{ number_format($gaji->saldo ?? 0, 0, ',', '.') }}</h1>
                     <p class="lead text-white mb-4">Total Kas Gaji saat ini</p>
                 </div>
                 <div class="card-footer bg-transparent text-white text-center">
@@ -111,7 +111,7 @@
                     </h3>
                 </div>
                 <div class="card-body text-center">
-                    <h1 class="display-4 text-white">Rp. 500.000</h1>
+                    <h1 class="display-4 text-white">Rp. {{ number_format($pajak->saldo ?? 0, 0, ',', '.') }}</h1>
                     <p class="lead text-white mb-4">Total Pajak saat ini</p>
                 </div>
                 <div class="card-footer bg-transparent text-white text-center">
@@ -129,7 +129,7 @@
                     </h3>
                 </div>
                 <div class="card-body text-center">
-                    <h1 class="display-4 text-white">Rp. 500.000</h1>
+                    <h1 class="display-4 text-white">Rp. {{ number_format($pinjaman->saldo ?? 0, 0, ',', '.') }}</h1>
                     <p class="lead text-white mb-4">Total Pinjaman saat ini</p>
                 </div>
                 <div class="card-footer bg-transparent text-white text-center">
@@ -165,7 +165,7 @@
                     </h3>
                 </div>
                 <div class="card-body text-center">
-                    <h1 class="display-4 text-white">Rp. 500.000</h1>
+                    <h1 class="display-4 text-white">Rp. {{ number_format($bpjs->saldo ?? 0, 0, ',', '.') }}</h1>
                     <p class="lead text-white mb-4">Total BPJS saat ini</p>
                 </div>
                 <div class="card-footer bg-transparent text-white text-center">

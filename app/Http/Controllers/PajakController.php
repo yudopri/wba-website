@@ -62,9 +62,7 @@ class PajakController extends Controller
 $validated['id_user'] = Auth::id();
 
     // Ambil saldo terakhir per user dari SaldoUtama
-    $lastBalance = SaldoUtama::where('id_user', $request->id_user)
-        ->orderBy('created_at', 'desc')
-        ->first();
+    $lastBalance = SaldoUtama::latest()->first();
 
     $saldoTerakhir = $lastBalance ? $lastBalance->saldo : 0;
     $saldoBaru = $saldoTerakhir - $request->debit;

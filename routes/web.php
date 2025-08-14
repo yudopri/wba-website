@@ -35,6 +35,8 @@ use App\Http\Controllers\GajiController;
 use App\Http\Controllers\DokumenController;
 use App\Http\Controllers\PinjamanController;
 use App\Http\Controllers\SaldoUtamaController;
+use App\Http\Controllers\PajakController;
+use App\Http\Controllers\BpjsController;
 
 
 // Authentication routes with email verification enabled
@@ -331,7 +333,34 @@ Route::get('/gaji/{id}/logs', [GajiController::class, 'showLogs'])->name('gaji.l
 
         Route::get('/saldoutama', [SaldoUtamaController::class, 'index'])->name('admin.saldo.index');
 
+ Route::get('/pinjaman', [PinjamanController::class, 'index'])->name('pinjaman.index');
+    Route::get('/pinjaman/create', [PinjamanController::class, 'create'])->name('pinjaman.create');
+    Route::post('/pinjaman', [PinjamanController::class, 'store'])->name('pinjaman.store');
+    Route::get('/pinjaman/{id}/edit', [PinjamanController::class, 'edit'])->name('pinjaman.edit');
+    Route::put('/pinjaman/{id}', [PinjamanController::class, 'update'])->name('pinjaman.update');
+    Route::delete('/pinjaman/{id}', [PinjamanController::class, 'destroy'])->name('pinjaman.destroy');
 
+    // Route untuk fitur Kredit (tambah pinjaman ke saldo)
+    Route::post('/pinjaman/kredit', [PinjamanController::class, 'kredit'])->name('pinjaman.kredit');
+
+     Route::get('/pajak', [PajakController::class, 'index'])->name('pajak.index');
+    Route::get('/pajak/create', [PajakController::class, 'create'])->name('pajak.create');
+    Route::post('/pajak', [PajakController::class, 'store'])->name('pajak.store');
+    Route::get('/pajak/{id}/edit', [PajakController::class, 'edit'])->name('pajak.edit');
+    Route::put('/pajak/{id}', [PajakController::class, 'update'])->name('pajak.update');
+    Route::delete('/pajak/{id}', [PajakController::class, 'destroy'])->name('pajak.destroy');
+
+    // Route untuk fitur Kredit (tambah pajak ke saldo)
+    Route::post('/pajak/kredit', [PajakController::class, 'kredit'])->name('pajak.kredit');
+
+    Route::get('/bpjs', [BpjsController::class, 'index'])->name('bpjs.index');
+    Route::get('/bpjs/create', [BpjsController::class, 'create'])->name('bpjs.create');
+    Route::post('/bpjs', [BpjsController::class, 'store'])->name('bpjs.store');
+    Route::get('/bpjs/{id}/edit', [BpjsController::class, 'edit'])->name('bpjs.edit');
+    Route::put('/bpjs/{id}', [BpjsController::class, 'update'])->name('bpjs.update');
+    Route::delete('/bpjs/{id}', [BpjsController::class, 'destroy'])->name('bpjs.destroy');
+    // Route untuk fitur Kredit (tambah BPJS ke saldo)
+    Route::post('/bpjs/kredit', [BpjsController::class, 'kredit'])->name('bpjs.kredit');
 
 });
    // Visitor cookie route
@@ -351,19 +380,4 @@ Route::post('/notifikasi/baca/{id}', [\App\Http\Controllers\NotifikasiController
 Route::get('/notifications/show', [App\Http\Controllers\NotificationController::class, 'show'])->name('notifications.show');
 Route::get('/notifications/get', [App\Http\Controllers\NotificationController::class, 'get'])->name('notifications.get');
 
-
-
-
-
-Route::prefix('admin')->group(function () {
-    Route::get('/pinjaman', [PinjamanController::class, 'index'])->name('pinjaman.index');
-    Route::get('/pinjaman/create', [PinjamanController::class, 'create'])->name('pinjaman.create');
-    Route::post('/pinjaman', [PinjamanController::class, 'store'])->name('pinjaman.store');
-    Route::get('/pinjaman/{id}/edit', [PinjamanController::class, 'edit'])->name('pinjaman.edit');
-    Route::put('/pinjaman/{id}', [PinjamanController::class, 'update'])->name('pinjaman.update');
-    Route::delete('/pinjaman/{id}', [PinjamanController::class, 'destroy'])->name('pinjaman.destroy');
-
-    // Route untuk fitur Kredit (tambah pinjaman ke saldo)
-    Route::post('/pinjaman/kredit', [PinjamanController::class, 'kredit'])->name('pinjaman.kredit');
-});
 

@@ -47,10 +47,8 @@ class KasOperasionalController extends Controller
         'keterangan' => 'required|string|max:255',
         'debit' => 'required|numeric|min:1',
         ]);
-            // Ambil saldo terakhir per user dari SaldoUtama
-         $lastBalance = SaldoUtama::where('id_user', Auth::id())
-        ->orderBy('created_at', 'desc')
-        ->first();
+
+        $lastBalance = SaldoUtama::latest()->first();
 
         $saldoTerakhir = $lastBalance ? $lastBalance->saldo : 0;
          $saldoBaru = $saldoTerakhir - $request->debit;

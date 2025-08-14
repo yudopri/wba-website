@@ -59,9 +59,7 @@ class KasLogistikController extends Controller
         $validated['id_user'] = Auth::id();
 
         // Ambil saldo terakhir per user dari SaldoUtama
-        $lastBalance = SaldoUtama::where('id_user', $validated['id_user'])
-            ->orderBy('created_at', 'desc')
-            ->first();
+        $lastBalance = SaldoUtama::latest()->first();
 
         $saldoTerakhir = $lastBalance ? $lastBalance->saldo : 0;
         $saldoBaru = $saldoTerakhir - $validated['debit'];
