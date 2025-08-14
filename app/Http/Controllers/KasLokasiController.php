@@ -73,7 +73,7 @@ $validated['id_user'] = auth()->id();
             'kredit' => 0,
             'saldo' => $saldoBaru,
             'lokasi_kerja' => null,
-            'id_user' => $reques->id_user,
+            'id_user' => Auth::id(),
         ]);
 
         return redirect()->back()->with('success', 'Saldo berhasil ditambahkan.');

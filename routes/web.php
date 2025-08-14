@@ -330,6 +330,8 @@ Route::get('/gaji/{id}/logs', [GajiController::class, 'showLogs'])->name('gaji.l
 
         Route::get('/saldoutama', [SaldoUtamaController::class, 'index'])->name('admin.saldo.index');
 
+
+
 });
    // Visitor cookie route
 Route::get('/set-visitor-cookie', [VisitorController::class, 'setVisitorCookie']);

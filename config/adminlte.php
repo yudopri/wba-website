@@ -413,14 +413,28 @@ return [
             'url'  => 'admin/saldoutama',
             'icon' => 'fas fa-money-bill-wave',
         ],
-// Data Jasa
+        [
+            'text' => 'Data Pajak',
+            'url'  => 'admin/pajak',
+            'icon' => 'fas fa-file-invoice-dollar',
+        ],
+        [
+            'text' => 'Data BPJS',
+            'url'  => 'admin/bpjs',
+            'icon' => 'fas fa-hospital-alt',
+        ],
+        [
+            'text' => 'Data Pinjaman',
+            'url'  => 'admin/pinjaman',
+            'icon' => 'fas fa-hand-holding-usd',
+        ],
+
 [
     'text' => 'Data Invoice',
     'url'  => 'admin/invoice',
     'icon' => 'fas fa-book',
 ],
 
-// Data Partner
 [
     'text' => 'Data Gaji',
     'url'  => 'admin/gaji',
