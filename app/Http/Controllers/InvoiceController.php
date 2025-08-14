@@ -13,11 +13,35 @@ use Illuminate\Support\Facades\Auth;
 
 class InvoiceController extends Controller
 {
-    public function index()
-    {
-        $invoices = Invoice::with('user')->latest()->paginate(10);
-        return view('admin.invoice.index', compact('invoices'));
+    public function index(Request $request)
+{
+    $query = Invoice::with('user');
+
+    // Filter pencarian nama perusahaan
+    if ($request->filled('search')) {
+        $query->whereHas('user', function ($q) use ($request) {
+            $q->where('lokasi_kerja', 'like', '%' . $request->search . '%');
+        });
     }
+
+    // Filter bulan range
+    if ($request->filled('bulan_awal') && $request->filled('bulan_akhir')) {
+        $start = date('Y-m-01', strtotime($request->bulan_awal));
+        $end = date('Y-m-t', strtotime($request->bulan_akhir));
+        $query->whereBetween('date_pay', [$start, $end]);
+    }
+    // Filter hanya satu bulan (jika bulan_akhir kosong)
+    elseif ($request->filled('bulan_awal')) {
+        $start = date('Y-m-01', strtotime($request->bulan_awal));
+        $end = date('Y-m-t', strtotime($request->bulan_awal));
+        $query->whereBetween('date_pay', [$start, $end]);
+    }
+
+    $invoices = $query->latest()->paginate(10);
+
+    return view('admin.invoice.index', compact('invoices'));
+}
+
 
     public function create()
 {
@@ -41,6 +65,7 @@ class InvoiceController extends Controller
 
     // Override date_send dengan tanggal sekarang
     $validated['date_send'] = now();
+     $validated['bulan'] = $request->bulan . '-01';
     $validated['status'] = 'pending'; // Set status default
 
     Invoice::create($validated);

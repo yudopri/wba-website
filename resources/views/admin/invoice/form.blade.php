@@ -59,37 +59,18 @@
                     @enderror
                 </div>
 
-@php
-    $bulanList = [
-        1 => 'Januari',
-        2 => 'Februari',
-        3 => 'Maret',
-        4 => 'April',
-        5 => 'Mei',
-        6 => 'Juni',
-        7 => 'Juli',
-        8 => 'Agustus',
-        9 => 'September',
-        10 => 'Oktober',
-        11 => 'November',
-        12 => 'Desember',
-    ];
-@endphp
-
 <div class="form-group">
-    <label for="bulan">Bulan</label>
-    <select name="bulan" class="form-control @error('bulan') is-invalid @enderror" required>
-        <option value="">-- Pilih Bulan --</option>
-        @foreach ($bulanList as $angka => $nama)
-            <option value="{{ $nama }}" {{ old('bulan', $invoice->bulan ?? '') == $nama ? 'selected' : '' }}>
-                {{ $nama }}
-            </option>
-        @endforeach
-    </select>
+    <label for="bulan">Bulan & Tahun</label>
+    <input type="month"
+           name="bulan"
+           class="form-control @error('bulan') is-invalid @enderror"
+           value="{{ old('bulan', isset($invoice->bulan) ? date('Y-m', strtotime($invoice->bulan)) : '') }}"
+           required>
     @error('bulan')
         <div class="invalid-feedback">{{ $message }}</div>
     @enderror
 </div>
+
 
 
                 <button type="submit" class="btn btn-primary">
