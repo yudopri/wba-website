@@ -8,7 +8,7 @@
 @if(session('success'))
     <div class="alert alert-success">{{ session('success') }}</div>
 @endif
-
+@if(auth()->user()->role === 'Keuangan' || auth()->user()->role === 'Manager')
 <div class="card mb-4">
     <div class="card-body">
         <form action="{{ route('gaji.index') }}" method="GET" class="row align-items-end">
@@ -17,7 +17,9 @@
                 <select name="gada" id="gada" class="form-control">
                     <option value="">-- Pilih Bulan --</option>
                     @foreach(['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'] as $bulan)
-                        <option value="{{ $bulan }}" {{ request('gada') == $bulan ? 'selected' : '' }}>{{ $bulan }}</option>
+                        <option value="{{ $bulan }}" {{ request('gada') == $bulan ? 'selected' : '' }}>
+                            {{ $bulan }}
+                        </option>
                     @endforeach
                 </select>
             </div>
@@ -51,52 +53,34 @@
         <table class="table table-bordered table-hover mb-0">
             <thead class="thead-dark">
                 <tr>
-<<<<<<< HEAD
-                    <th style="width: 50px">No</th>
-                    <th>ID Karyawan</th>
-                    <th>ID User</th>
-                    <th>Nominal</th>
-                    <th>Bulan</th>
-                    <th style="width: 130px" class="text-center">Aksi</th>
-=======
                     <th>No</th>
                     <th>Nama PT</th>
                     <th>User</th>
                     <th>Nominal</th>
                     <th>Bulan</th>
->>>>>>> 0dc353bdb7868fa53612faccfcb2922d594ecb60
                 </tr>
             </thead>
             <tbody>
-                @foreach ($dataGaji as $index => $gaji)
+                @forelse ($dataGaji as $index => $gaji)
                     <tr>
                         <td>{{ $index + 1 }}</td>
-<<<<<<< HEAD
-                        <td>{{ $gaji->id_karyawan }}</td>
-                        <td>{{ $gaji->id_user }}</td>
-                        <td>Rp {{ number_format($gaji->nominal, 0, ',', '.') }}</td>
-                        <td>{{ $gaji->bulan }}</td>
-                        <td class="text-center">
-                            <div class="btn-group">
-                                <a href="{{ route('gaji.detail', $gaji->id) }}" class="btn btn-sm btn-info" title="Lihat Detail">
-                                    <i class="fas fa-eye"></i>
-                                </a>
-                            </div>
-                        </td>
-=======
                         <td>{{ $gaji->partner->name_partner ?? '-' }}</td>
                         <td>{{ $gaji->user->name ?? '-' }}</td>
                         <td>Rp {{ number_format($gaji->nominal, 0, ',', '.') }}</td>
                         <td>{{ \Carbon\Carbon::parse($gaji->bulan)->translatedFormat('F Y') }}</td>
->>>>>>> 0dc353bdb7868fa53612faccfcb2922d594ecb60
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="5" class="text-center text-muted">Tidak ada data gaji ditemukan.</td>
+                        <td colspan="5" class="text-center text-muted">
+                            Tidak ada data gaji ditemukan.
+                        </td>
                     </tr>
                 @endforelse
             </tbody>
         </table>
     </div>
 </div>
+@else
+        <h3>Anda Tidak Memiliki Akses</h3>
+    @endif
 @endsection

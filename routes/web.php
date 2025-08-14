@@ -33,6 +33,8 @@ use App\Http\Controllers\KasOperasionalController;
 use App\Http\Controllers\PengaduanController;
 use App\Http\Controllers\GajiController;
 use App\Http\Controllers\DokumenController;
+use App\Http\Controllers\PinjamanController;
+use App\Http\Controllers\SaldoUtamaController;
 
 
 // Authentication routes with email verification enabled
@@ -90,9 +92,7 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
     // Dashboard route - only accessible to verified users
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
 
-    Route::get('/saldoutama', function () {
-        return view('admin.saldo.index');
-    });
+
     // Jasa management routes
     Route::resource('service', ServiceController::class);
 Route::get('/service', [ServiceController::class, 'index'])->name('admin.service.index');
@@ -237,6 +237,7 @@ Route::get('/invoice', [InvoiceController::class, 'index'])->name('admin.invoice
     Route::get('/invoice/{invoice}', [InvoiceController::class, 'show'])->name('admin.invoice.show');
     Route::get('/invoice/{invoice}/edit', [InvoiceController::class, 'edit'])->name('admin.invoice.edit');
     Route::put('/invoice/{invoice}', [InvoiceController::class, 'update'])->name('admin.invoice.update');
+    Route::post('/invoice/{id}/upload', [InvoiceController::class, 'upload'])->name('admin.invoice.upload');
     Route::delete('/invoice/{invoice}', [InvoiceController::class, 'destroy'])->name('admin.invoice.destroy');
 
 Route::get('/baranggudang', [InventoryItemController::class, 'index'])->name('admin.inventory.index');
@@ -280,7 +281,7 @@ Route::post('/kaslokasi/store', [KasLokasiController::class, 'store'])->name('ka
 Route::post('/kaslokasi/kredit', [KasLokasiController::class, 'kredit'])->name('kaslokasi.kredit');
 
 //kasoperasional
-Route::get('/kasoperasional', [KasOperasionalController::class, 'index']);
+Route::get('/kasoperasional', [KasOperasionalController::class, 'index'])->name('kasoperasional.index');
 Route::post('/kasoperasional/store', [KasOperasionalController::class, 'store'])->name('kasoperasional.store');
 Route::post('/kasoperasional/kredit', [KasOperasionalController::class, 'kredit'])->name('kasoperasional.kredit');
 
@@ -288,10 +289,10 @@ Route::post('/kasoperasional/kredit', [KasOperasionalController::class, 'kredit'
 
 //pengaduan
 
-    Route::get('/laporanmasalah', [PengaduanController::class, 'index'])->name('pengaduan.index');
-    Route::get('/laporanmasalah/create', [PengaduanController::class, 'create'])->name('pengaduan.create');
-    Route::post('/laporanmasalah', [PengaduanController::class, 'store'])->name('pengaduan.store');
-    Route::get('/laporanmasalah/{id}', [PengaduanController::class, 'show'])->name('laporanmasalah.detail');
+Route::get('/laporanmasalah', [PengaduanController::class, 'index'])->name('pengaduan.index');
+Route::get('/laporanmasalah/create', [PengaduanController::class, 'create'])->name('pengaduan.create');
+Route::post('/laporanmasalah', [PengaduanController::class, 'store'])->name('pengaduan.store');
+Route::get('/laporanmasalah/{id}', [PengaduanController::class, 'show'])->name('laporanmasalah.detail');
 Route::get('/laporanmasalah/{id}/validasi', [PengaduanController::class, 'validasi'])->name('pengaduan.validasi');
 Route::get('/laporanmasalah/{id}/approve', [PengaduanController::class, 'approve'])->name('pengaduan.approve');
 Route::get('/laporanmasalah/{id}/logs', [PengaduanController::class, 'showLogs'])->name('pengaduan.logs');
@@ -317,7 +318,7 @@ Route::get('/gaji/{id}/logs', [GajiController::class, 'showLogs'])->name('gaji.l
 
 
 
-    //dokumenlokasi
+        //dokumenlokasi
         Route::get('/dokumenlokasi', [DokumenController::class, 'index'])->name('dokumenlokasi.index');
         Route::get('dokumenlokasi/create', [DokumenController::class, 'create'])->name('dokumenlokasi.create');
         Route::post('dokumenlokasi', [DokumenController::class, 'store'])->name('dokumenlokasi.store');
@@ -327,6 +328,8 @@ Route::get('/gaji/{id}/logs', [GajiController::class, 'showLogs'])->name('gaji.l
         Route::delete('/dokumenlokasi/{id}', [DokumenController::class, 'destroy'])->name('dokumenlokasi.destroy');
         Route::get('/', function () { return redirect()->route('dokumenlokasi.index');});
         Route::resource('dokumenlokasi', DokumenController::class);
+
+        Route::get('/saldoutama', [SaldoUtamaController::class, 'index'])->name('admin.saldo.index');
 
 });
    // Visitor cookie route
@@ -343,6 +346,22 @@ Route::get('/notifikasi', [NotificationController::class, 'index'])->name('notif
 Route::post('/notifikasi/baca/{id}', [NotificationController::class, 'markAsRead'])->name('notif.markAsRead');
 Route::post('/notifikasi/baca/{id}', [NotificationController::class, 'markAsRead'])->name('notif.markAsRead');
 Route::post('/notifikasi/baca/{id}', [\App\Http\Controllers\NotifikasiController::class, 'markAsRead'])->name('notif.markAsRead');
-
 Route::get('/notifications/show', [App\Http\Controllers\NotificationController::class, 'show'])->name('notifications.show');
 Route::get('/notifications/get', [App\Http\Controllers\NotificationController::class, 'get'])->name('notifications.get');
+
+
+
+
+
+Route::prefix('admin')->group(function () {
+    Route::get('/pinjaman', [PinjamanController::class, 'index'])->name('pinjaman.index');
+    Route::get('/pinjaman/create', [PinjamanController::class, 'create'])->name('pinjaman.create');
+    Route::post('/pinjaman', [PinjamanController::class, 'store'])->name('pinjaman.store');
+    Route::get('/pinjaman/{id}/edit', [PinjamanController::class, 'edit'])->name('pinjaman.edit');
+    Route::put('/pinjaman/{id}', [PinjamanController::class, 'update'])->name('pinjaman.update');
+    Route::delete('/pinjaman/{id}', [PinjamanController::class, 'destroy'])->name('pinjaman.destroy');
+
+    // Route untuk fitur Kredit (tambah pinjaman ke saldo)
+    Route::post('/pinjaman/kredit', [PinjamanController::class, 'kredit'])->name('pinjaman.kredit');
+});
+

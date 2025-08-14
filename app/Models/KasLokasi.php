@@ -17,4 +17,9 @@ protected $table = 'location_petty_cash';
         'lokasi_kerja','id_user',
     ];
      // benerno sesuai iki
+     public function work()
+{
+    return $this->belongsTo(Work::class, 'lokasi_kerja', 'name');
+}
+
 }

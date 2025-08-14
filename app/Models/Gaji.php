@@ -8,33 +8,21 @@ use Illuminate\Database\Eloquent\Model;
 class Gaji extends Model
 {
     use HasFactory;
-<<<<<<< HEAD
 
-    protected $table = 'salaries'; // Nama tabel diubah
+    protected $table = 'salaries';
 
-    // Kolom yang bisa diisi
-    protected $fillable = ['id_karyawan', 'id_user', 'nominal', 'bulan', 'status'];
+    protected $fillable = [
+        'partner_id',
+        'id_user',
+        'nominal',
+        'bulan',
+        'status'
+    ];
 
-    // Relasi ke logs
     public function logs()
     {
-        return $this->hasMany(GajiLog::class, 'penggajian_id');
+        return $this->hasMany(GajiLog::class, 'gaji_id');
     }
-
-public function karyawan()
-{
-    return $this->belongsTo(Employee::class, 'id_karyawan');
-}
-
-public function user()
-{
-    return $this->belongsTo(User::class, 'id_user');
-}
-
-
-=======
-    protected $table = 'salaries';
-    protected $fillable = ['partner_id', 'id_user', 'nominal', 'bulan'];
 
     public function partner()
     {
@@ -45,11 +33,4 @@ public function user()
     {
         return $this->belongsTo(User::class, 'id_user');
     }
-
-    public function logs()
-    {
-        return $this->hasMany(GajiLog::class);
-    }
->>>>>>> 0dc353bdb7868fa53612faccfcb2922d594ecb60
 }
-

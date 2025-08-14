@@ -34,7 +34,7 @@
                         <td>{{ $p->judul }}</td>
                         <td>{{ $p->deskripsi }}</td>
                         <td>
-                            <span class="badge 
+                            <span class="badge
                                 @if ($p->status == 'Diajukan') bg-warning text-dark
                                 @elseif ($p->status == 'Diproses') bg-info text-white
                                 @elseif ($p->status == 'Disetujui') bg-success text-white
@@ -42,24 +42,17 @@
                                 {{ $p->status }}
                             </span>
                         </td>
-                        <td>{{ $p->pelapor ?? 'Tidak diketahui' }}</td>
+                        <td>{{ $p->user->name ?? 'Tidak diketahui' }}</td>
                         <td class="text-center">
                             {{-- Tombol Detail --}}
                             <a href="{{ route('laporanmasalah.detail', $p->id) }}" class="btn btn-info btn-sm me-1">
                                 <i class="fas fa-eye"></i> Detail
                             </a>
-
+                            @if(auth()->user()->role === 'Lapangan')
                             {{-- Tombol Validasi --}}
                             @if ($p->status == 'Diajukan')
                                 <a href="{{ route('pengaduan.validasi', $p->id) }}" class="btn btn-warning btn-sm me-1">
                                     <i class="fas fa-check"></i> Validasi
-                                </a>
-                            @endif
-
-                            {{-- Tombol Approve --}}
-                            @if ($p->status == 'Diproses')
-                                <a href="{{ route('pengaduan.approve', $p->id) }}" class="btn btn-success btn-sm me-1">
-                                    <i class="fas fa-check-double"></i> Approve
                                 </a>
                             @endif
 
@@ -69,12 +62,22 @@
                                     <i class="fas fa-upload"></i> Upload Bukti
                                 </a>
                             @endif
+                            @elseif(auth()->user()->role === 'Manager')
+
+                            {{-- Tombol Approve --}}
+                            @if ($p->status == 'Diproses')
+                                <a href="{{ route('pengaduan.approve', $p->id) }}" class="btn btn-success btn-sm me-1">
+                                    <i class="fas fa-check-double"></i> Approve
+                                </a>
+                            @endif
+
 
                             {{-- Tombol Lihat Bukti --}}
                             @if ($p->bukti_penyelesaian)
                                 <a href="{{ asset('storage/' . $p->bukti_penyelesaian) }}" target="_blank" class="btn btn-dark btn-sm">
                                     <i class="fas fa-image"></i> Lihat Bukti
                                 </a>
+                            @endif
                             @endif
                         </td>
                     </tr>

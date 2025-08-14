@@ -17,7 +17,7 @@
     <p><strong>Deskripsi:</strong> {{ $pengaduan->deskripsi }}</p>
     <p><strong>Kronologi:</strong> {{ $pengaduan->kronologi }}</p>
     <p><strong>Status:</strong> {{ $pengaduan->status }}</p>
-    <p><strong>Pelapor:</strong> {{ $pengaduan->pelapor }}</p>
+    <p><strong>Pelapor:</strong> {{ $pengaduan->user->name }}</p>
 
     <h3>Riwayat Tindakan</h3>
     <table>
@@ -33,7 +33,7 @@
             @foreach ($pengaduan->logs as $log)
             <tr>
                 <td>{{ $log->created_at->format('d M Y H:i') }}</td>
-                <td>{{ $log->person }}</td>
+                <td>{{ $log->user->name }}</td>
                 <td>{{ $log->keterangan }}</td>
                 <td>{{ $log->deskripsi }}</td>
             </tr>

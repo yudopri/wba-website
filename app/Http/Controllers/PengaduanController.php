@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\NotificationUser;
 
+
 class PengaduanController extends Controller
 {
     // Tampilkan semua pengaduan
@@ -29,21 +30,13 @@ class PengaduanController extends Controller
         $request->validate([
             'judul'     => 'required|max:255',
             'deskripsi' => 'required',
-<<<<<<< HEAD
-=======
             'kronologi' => 'required',
->>>>>>> 0dc353bdb7868fa53612faccfcb2922d594ecb60
-            'pelapor'   => 'required|max:255',
         ]);
 
         $pengaduan = Pengaduan::create([
             'judul'     => $request->judul,
             'deskripsi' => $request->deskripsi,
-            'pelapor'   => $request->pelapor,
-<<<<<<< HEAD
-=======
             'kronologi' => $request->kronologi,
->>>>>>> 0dc353bdb7868fa53612faccfcb2922d594ecb60
             'id_user'   => Auth::id(),
             'status'    => 'Diajukan',
         ]);
@@ -129,10 +122,7 @@ NotificationUser::create([
         $request->validate([
             'keterangan' => 'required|string',
             'deskripsi'  => 'required|string',
-<<<<<<< HEAD
-=======
             'kronologi'  => 'required|string',
->>>>>>> 0dc353bdb7868fa53612faccfcb2922d594ecb60
         ]);
 
         $pengaduan = Pengaduan::findOrFail($id);
@@ -173,8 +163,22 @@ public function uploadBukti(Request $request, $id)
     $pengaduan = Pengaduan::findOrFail($id);
 
     if ($request->hasFile('bukti')) {
-        $path = $request->file('bukti')->store('bukti_penyelesaian', 'public');
-        $pengaduan->bukti_penyelesaian = $path;
+        $file = $request->file('bukti');
+        $filename = time() . '_' . $file->getClientOriginalName();
+
+        // Tentukan path folder
+        $destinationPath = public_path('asset/bukti_laporan');
+
+        // Buat folder jika belum ada
+        if (!file_exists($destinationPath)) {
+            mkdir($destinationPath, 0777, true);
+        }
+
+        // Pindahkan file ke folder
+        $file->move($destinationPath, $filename);
+
+        // Simpan path relatif ke database
+        $pengaduan->bukti_penyelesaian = 'asset/bukti_laporan/' . $filename;
         $pengaduan->save();
     }
 
@@ -182,11 +186,14 @@ public function uploadBukti(Request $request, $id)
 }
 
 
+
+
 public function printPDF($id)
 {
-    $pengaduan = Pengaduan::with('logs')->findOrFail($id);
+    $pengaduan = Pengaduan::with('logs', 'user')->findOrFail($id);
 
-    $pdf = Pdf::loadView('admin.report.laporan', compact('pengaduan'));
+    $pdf = Pdf::loadView('admin.report.pdf', compact('pengaduan'))
+              ->setPaper('A4', 'portrait'); // optional: atur ukuran kertas
 
     return $pdf->stream('laporan_pengaduan_'.$pengaduan->id.'.pdf');
 }
