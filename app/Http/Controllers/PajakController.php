@@ -62,9 +62,14 @@ class PajakController extends Controller
 $validated['id_user'] = Auth::id();
 
     // Ambil saldo terakhir per user dari SaldoUtama
-    $lastBalance = SaldoUtama::latest()->first();
+     $saldoTerakhir = $lastBalance ? $lastBalance->saldo : 0;
 
-    $saldoTerakhir = $lastBalance ? $lastBalance->saldo : 0;
+    // Cek jika saldo tidak cukup
+    if ($saldoTerakhir <= 0 || $saldoTerakhir < $request->debit) {
+        return redirect()->back()->with('error', 'Saldo tidak cukup untuk melakukan transaksi ini.');
+    }
+
+    // Hitung saldo baru
     $saldoBaru = $saldoTerakhir - $request->debit;
 
     // Simpan ke SaldoUtama

@@ -65,6 +65,13 @@ $validated['id_user'] = Auth::id();
    $lastBalance = SaldoUtama::latest()->first();
 
     $saldoTerakhir = $lastBalance ? $lastBalance->saldo : 0;
+
+    // Cek jika saldo tidak cukup
+    if ($saldoTerakhir <= 0 || $saldoTerakhir < $request->debit) {
+        return redirect()->back()->with('error', 'Saldo tidak cukup untuk melakukan transaksi ini.');
+    }
+
+    // Hitung saldo baru
     $saldoBaru = $saldoTerakhir - $request->debit;
 
     // Simpan ke SaldoUtama
@@ -74,6 +81,7 @@ $validated['id_user'] = Auth::id();
         'kredit' => 0,
         'saldo' => $saldoBaru,
     ]);
+
 
     // Ambil saldo terakhir global Bpjs
     $lastSaldoLogistik = Bpjs::orderBy('created_at', 'desc')->value('saldo') ?? 0;

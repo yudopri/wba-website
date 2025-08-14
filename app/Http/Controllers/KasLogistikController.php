@@ -59,18 +59,24 @@ class KasLogistikController extends Controller
         $validated['id_user'] = Auth::id();
 
         // Ambil saldo terakhir per user dari SaldoUtama
-        $lastBalance = SaldoUtama::latest()->first();
+         $saldoTerakhir = $lastBalance ? $lastBalance->saldo : 0;
 
-        $saldoTerakhir = $lastBalance ? $lastBalance->saldo : 0;
-        $saldoBaru = $saldoTerakhir - $validated['debit'];
+    // Cek jika saldo tidak cukup
+    if ($saldoTerakhir <= 0 || $saldoTerakhir < $request->debit) {
+        return redirect()->back()->with('error', 'Saldo tidak cukup untuk melakukan transaksi ini.');
+    }
 
-        // Simpan ke SaldoUtama
-        SaldoUtama::create([
-            'id_user' => $validated['id_user'],
-            'debit' => $validated['debit'],
-            'kredit' => 0,
-            'saldo' => $saldoBaru,
-        ]);
+    // Hitung saldo baru
+    $saldoBaru = $saldoTerakhir - $request->debit;
+
+    // Simpan ke SaldoUtama
+    SaldoUtama::create([
+        'id_user' => Auth::id(),
+        'debit' => $request->debit,
+        'kredit' => 0,
+        'saldo' => $saldoBaru,
+    ]);
+
 
         // Ambil saldo terakhir global LogisticsCash
         $lastSaldoLogistik = LogisticsCash::orderBy('created_at', 'desc')->value('saldo') ?? 0;

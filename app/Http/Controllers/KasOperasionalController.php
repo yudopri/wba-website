@@ -51,15 +51,23 @@ class KasOperasionalController extends Controller
         $lastBalance = SaldoUtama::latest()->first();
 
         $saldoTerakhir = $lastBalance ? $lastBalance->saldo : 0;
-         $saldoBaru = $saldoTerakhir - $request->debit;
 
-        // Simpan ke SaldoUtama
-        SaldoUtama::create([
+    // Cek jika saldo tidak cukup
+    if ($saldoTerakhir <= 0 || $saldoTerakhir < $request->debit) {
+        return redirect()->back()->with('error', 'Saldo tidak cukup untuk melakukan transaksi ini.');
+    }
+
+    // Hitung saldo baru
+    $saldoBaru = $saldoTerakhir - $request->debit;
+
+    // Simpan ke SaldoUtama
+    SaldoUtama::create([
         'id_user' => Auth::id(),
         'debit' => $request->debit,
         'kredit' => 0,
         'saldo' => $saldoBaru,
-             ]);
+    ]);
+
         $lastSaldo = KasOperasional::orderBy('created_at', 'desc')->value('saldo') ?? 0;
 
         KasOperasional::create([
