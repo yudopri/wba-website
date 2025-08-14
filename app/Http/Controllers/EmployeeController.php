@@ -29,7 +29,7 @@ use App\Imports\EmployeeImport;
 class EmployeeController extends Controller
 {
     // Menampilkan daftar employee dengan pencarian dan filter
-    public function index(Request $request) 
+    public function index(Request $request)
 {
     $query = Employee::query();
 
@@ -49,7 +49,7 @@ class EmployeeController extends Controller
         $subQuery->where('name', 'like', '%' . $search . '%')
                  ->orWhere(function ($innerQuery) use ($search) {
                      $employees = Employee::all(); // Ambil semua data dari tabel
-                     
+
                      $filteredIds = $employees->filter(function ($employee) use ($search) {
                          try {
                              $nik = Crypt::decryptString($employee->nik);
@@ -183,6 +183,7 @@ class EmployeeController extends Controller
         'pict_bpjskes' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
         'status_kerja' => 'nullable|string',
         'pict_jobapp' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
+        'pict_pkwt' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
         'gada_id1' => 'nullable|string',
         'gada_id2' => 'nullable|string',
         'gada_id3' => 'nullable|string',
@@ -190,8 +191,10 @@ class EmployeeController extends Controller
         'gada_id2_other_text' => 'nullable|string',
         'gada_id3_other_text' => 'nullable|string',
         'lokasikerja' => 'nullable|string',
+        'uk_sepatu' => 'nullable|string',
+        'uk_seragam' => 'nullable|string',
     ]);
-    
+
   // Pemeriksaan duplikasi NIK KTP, email, dan nama
    // Pertama, cek apakah NIK KTP, Email, atau Nama sudah terdaftar
 $existingEmployee = Employee::query()
@@ -237,8 +240,8 @@ if ($existingEmployee) {
     }
 
     // Penanganan file
-    
-    $fileFields =  ['pict_diri','pict_sertifikat','pict_sertifikat1','pict_sertifikat2','pict_sertifikat3', 'pict_ktp','pict_kk', 'pict_kta', 'pict_npwp', 'pict_bpjsket', 'pict_bpjskes', 'pict_ijasah','pict_jobapp'];
+
+    $fileFields =  ['pict_diri','pict_sertifikat','pict_sertifikat1','pict_sertifikat2','pict_sertifikat3', 'pict_ktp','pict_kk', 'pict_kta', 'pict_npwp', 'pict_bpjsket', 'pict_bpjskes', 'pict_ijasah','pict_jobapp','pict_pkwt'];
     foreach ($fileFields as $fileField) {
         if ($request->hasFile($fileField)) {
              // Tentukan path penyimpanan file
@@ -294,7 +297,7 @@ foreach ($gadaIds as $gadaId) {
 DB::beginTransaction();
 
 try {
-    
+
     $employee = Employee::create($validatedData);
 
     // Simpan detail Gada hanya jika gada_id tidak null
@@ -406,6 +409,7 @@ try {
         'pict_bpjskes' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
         'status_kerja' => 'nullable|string',
         'pict_jobapp' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
+        'pict_pkwt' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
         'gada_id1' => 'nullable|string',
         'gada_id2' => 'nullable|string',
         'gada_id3' => 'nullable|string',
@@ -413,6 +417,8 @@ try {
         'gada_id2_other_text' => 'nullable|string',
         'gada_id3_other_text' => 'nullable|string',
         'lokasikerja' => 'nullable|string',
+        'uk_sepatu' => 'nullable|string',
+        'uk_seragam' => 'nullable|string',
     ]);
 
    // Logika pencarian data duplikat dengan pengecualian ID karyawan saat ini
@@ -455,7 +461,7 @@ try {
     }
 
     // Penanganan file
-    $fileFields = ['pict_diri','pict_sertifikat','pict_sertifikat1','pict_sertifikat2','pict_sertifikat3', 'pict_ktp', 'pict_kk', 'pict_kta', 'pict_npwp', 'pict_bpjsket', 'pict_bpjskes', 'pict_ijasah','pict_jobapp'];
+    $fileFields = ['pict_diri','pict_sertifikat','pict_sertifikat1','pict_sertifikat2','pict_sertifikat3', 'pict_ktp', 'pict_kk', 'pict_kta', 'pict_npwp', 'pict_bpjsket', 'pict_bpjskes', 'pict_ijasah','pict_jobapp','pict_pkwt'];
     foreach ($fileFields as $fileField) {
         if ($request->hasFile($fileField)) {
              // Tentukan path penyimpanan file
@@ -806,7 +812,7 @@ public function export()
             }
         }
     }
-    
+
 public function exportFotodiri($id)
 {
     $employee = Employee::findOrFail($id);
@@ -1032,6 +1038,33 @@ public function exportFotoNpwp($id)
     // Download the file with the new name
     return response()->download($pathToKTPFile, $downloadFileName);
 }
+
+public function exportFotoPkwt($id)
+{
+    // Retrieve the employee record by ID
+    $employee = Employee::findOrFail($id);
+
+    // Get the KTP file name from the database
+    $ktpFile = $employee->pict_pkwt;
+
+    // Path to the KTP photo folder in public/assets/berkas
+    $pathToKTPFile = public_path($ktpFile);
+
+    // Check if the file exists
+    if (!$ktpFile || !file_exists($pathToKTPFile)) {
+        return redirect()->back()->with('error', 'File foto NPWP tidak ditemukan.');
+    }
+
+    // Get file extension to preserve it (for example, .png, .jpg, etc.)
+    $fileExtension = pathinfo($ktpFile, PATHINFO_EXTENSION);
+
+    // Clean the employee name and create a new filename
+    $cleanName = preg_replace('/[^A-Za-z0-9_-]/', '', str_replace(' ', '_', $employee->name));
+    $downloadFileName = "foto_PKWT_{$cleanName}.{$fileExtension}";
+
+    // Download the file with the new name
+    return response()->download($pathToKTPFile, $downloadFileName);
+}
 public function exportLamaran($id)
 {
     // Retrieve the employee record by ID
@@ -1133,7 +1166,7 @@ public function deleteDocument($employeeId, $documentKey)
 {
     // Find the employee by ID
     $employee = Employee::findOrFail($employeeId);
-    
+
     // Update the document field to null
     $employee->{'pict_' . $documentKey} = null;
 

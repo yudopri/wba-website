@@ -75,13 +75,13 @@
                 <strong>Nama Ibu:</strong>
                 <p>{{ $employee->nama_ibu ? Crypt::decryptString($employee->nama_ibu) : '-' }}</p>
             </div>
-            
+
             <!-- Nama Pasangan -->
             <div class="mb-3" id="nama_pasangan_group">
                 <strong>Nama Pasangan:</strong>
                 <p>{{ $employee->nama_pasangan ? Crypt::decryptString($employee->nama_pasangan) : '-' }}</p>
             </div>
-            
+
             <!-- Tempat Tanggal Lahir Pasangan -->
             <div class="mb-3" id="tempat_pasangan_group">
                 <strong>Tempat Tanggal Lahir Pasangan:</strong>
@@ -90,8 +90,8 @@
                     {{ $employee->ttl_pasangan ? \Carbon\Carbon::parse($employee->ttl_pasangan)->format('d M Y') : '-' }}
                 </p>
             </div>
-            
-            @php 
+
+            @php
                 $children = [
                     [
                         'nama' => $employee->nama_anak1 ? Crypt::decryptString($employee->nama_anak1) : '-',
@@ -110,14 +110,14 @@
                     ]
                 ];
             @endphp
-            
+
             @foreach ($children as $index => $child)
                 <!-- Nama Anak -->
                 <div class="mb-3" id="nama_anak{{ $index + 1 }}_group">
                     <strong>Nama Anak {{ $index + 1 }}:</strong>
                     <p>{{ $child['nama'] }}</p>
                 </div>
-            
+
                 <!-- Tempat Tanggal Lahir Anak -->
                 <div class="mb-3" id="tempat_anak{{ $index + 1 }}_group">
                     <strong>Tempat Tanggal Lahir Anak {{ $index + 1 }}:</strong>
@@ -128,7 +128,15 @@
                 </div>
             @endforeach
 
+<div class="mb-3">
+                <strong>Ukuran Sepatu:</strong>
+                <p>{{ $employee->uk_sepatu ?: '-' }}</p>
+            </div>
 
+<div class="mb-3">
+                <strong>Ukuran Seragam:</strong>
+                <p>{{ $employee->uk_seragam ?: '-' }}</p>
+            </div>
 
             <!-- Pekerjaan -->
             <h5>Pekerjaan</h5>
@@ -140,12 +148,12 @@
                 <strong>Jabatan:</strong>
                 <p>{{ optional($employee->jabatan)->name ?: '-' }}</p>
             </div>
-            
+
             <div class="mb-3">
                 <strong>Pendidikan:</strong>
                 <p>{{ $employee->pendidikan ?: '-' }}</p>
             </div>
-            
+
             <div class="mb-3">
                 <strong>Sertifikasi:</strong>
                 <p>
@@ -209,9 +217,9 @@
 
 <div class="row">
     @foreach ([
-        'sertifikat' => 'Sertifikat', 
-        'sertifikat1' => 'Sertifikat Tambahan 1', 
-        'sertifikat2' => 'Sertifikat Tambahan 2', 
+        'sertifikat' => 'Sertifikat',
+        'sertifikat1' => 'Sertifikat Tambahan 1',
+        'sertifikat2' => 'Sertifikat Tambahan 2',
         'sertifikat3' => 'Sertifikat Tambahan 3'
     ] as $certificateKey => $certificateLabel)
         <div class="col-md-4 mb-4">
@@ -242,7 +250,7 @@
     @endforeach
 </div>
 
-           
+
 
             @if(auth()->user()->role === 'Admin' || auth()->user()->role === 'Manager')
                 <h5>Informasi Tambahan</h5>
@@ -262,6 +270,31 @@
                     <strong>Masa Berlaku PKWT:</strong>
                     <p>{{ $employee->berlaku === '0000-00-00' || !$employee->berlaku ? '-' : \Carbon\Carbon::parse($employee->berlaku)->translatedFormat('d F Y') }}</p>
                 </div>
+                <div class="mb-3">
+            <strong>Foto Dokumen PKWT:</strong>
+            <div class="d-flex align-items-center">
+                @if($employee->pict_pkwt)
+                    <a href="{{ asset($employee->pict_pkwt) }}" target="_blank" class="btn btn-info btn-sm mr-2">
+                        <i class="fas fa-eye"></i> View Dokumen PKWT
+                    </a>
+                    <!-- Delete Button -->
+                    <form action="{{ route('admin.employee.deleteDocument', [$employee->id, $employee->pict_pkwt]) }}" method="POST" style="display:inline;">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-danger btn-sm mr-2">
+                            <i class="fas fa-trash"></i> Hapus
+                        </button>
+                    </form>
+                    @if(auth()->user()->role === 'Admin' || auth()->user()->role === 'Manager')
+                        <a href="{{ route('admin.employee.pict_pkwt', $employee->id) }}" class="btn btn-success btn-sm">
+                            <i class="fas fa-download"></i> Download
+                        </a>
+                    @endif
+                @else
+                    <p class="text-muted">No Dokumen PKWT uploaded</p>
+                @endif
+            </div>
+        </div>
                 <div class="mb-3" id="tmt_group">
                     <strong>TMT:</strong>
                     <p>{{ $employee->tmt ? \Carbon\Carbon::parse($employee->tmt)->format('d M Y') : '-' }}</p>

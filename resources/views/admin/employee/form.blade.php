@@ -262,7 +262,24 @@
             {{ isReadonly('ttl_anak' . $i, $employee) }} >
     </div>
 @endforeach
+<div class="form-group">
+        <label for="uk_sepatu">Ukuran Sepatu</label>
+        <input type="number" name="uk_sepatu" id="uk_sepatu" class="form-control"
+            value="{{ old('uk_sepatu', isset($employee) && $employee->uk_sepatu ? $employee->uk_sepatu : '') }}"
+            {{ auth()->user()->role === 'Karyawan' && isset($employee) && $employee->uk_sepatu ? 'readonly' : '' }}>
+    </div>
 
+<div class="form-group">
+            <label for="uk_seragam">Ukuran Seragam</label>
+            <select name="uk_seragam" id="uk_seragam" class="form-control" onchange="updateFields()">
+                <option value="">-- Daftar Ukuran Seragam --</option>
+                <option value="S" {{ old('uk_seragam', isset($employee) ? $employee->uk_seragam : '') === 'S' ? 'selected' : '' }}>S</option>
+                <option value="M" {{ old('uk_seragam', isset($employee) ? $employee->uk_seragam : '') === 'M' ? 'selected' : '' }}>M</option>
+                <option value="L" {{ old('uk_seragam', isset($employee) ? $employee->uk_seragam : '') === 'L' ? 'selected' : '' }}>L</option>
+                <option value="XL" {{ old('uk_seragam', isset($employee) ? $employee->uk_seragam : '') === 'XL' ? 'selected' : '' }}>XL</option>
+                <option value="XXL" {{ old('uk_seragam', isset($employee) ? $employee->uk_seragam : '') === 'XXL' ? 'selected' : '' }}>XXL</option>
+            </select>
+        </div>
 
     </div>
 

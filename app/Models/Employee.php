@@ -58,6 +58,8 @@ class Employee extends Model
         'pict_bpjskes',
         'pict_npwp',
         'pict_pkwt',
+        'uk_sepatu',
+        'uk_seragam',
         'status_kerja',
         'pict_jobapp',
         'lokasikerja',

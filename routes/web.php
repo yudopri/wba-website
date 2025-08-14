@@ -180,6 +180,7 @@ Route::get('/employee/{id}/pictbpjsket', [EmployeeController::class, 'exportFoto
 Route::get('/employee/{id}/pictbpjskes', [EmployeeController::class, 'exportFotoBpjskes'])->name('admin.employee.bpjskes');
 Route::get('/employee/{id}/pictnpwp', [EmployeeController::class, 'exportFotoNpwp'])->name('admin.employee.npwp');
 Route::get('/employee/{id}/jobapp', [EmployeeController::class, 'exportLamaran'])->name('admin.employee.jobapp');
+Route::get('/employee/{id}/pictpkwt', [EmployeeController::class, 'exportFotoPkwt'])->name('admin.employee.pict_pkwt');
 Route::delete('admin/employee/{employeeId}/delete-document/{documentKey}', [EmployeeController::class, 'deleteDocument'])->name('admin.employee.deleteDocument');
 
 Route::resource('employee', EmployeeController::class);
