@@ -9,8 +9,12 @@
 @section('content')
     <!-- Tombol Kembali -->
     <div class="mb-3">
-        <a href="{{ route('admin.employee.index') }}" class="btn btn-secondary">Back to Employees</a>
-    </div>
+    <a href="{{ route('admin.employee.index', request()->query()) }}" class="btn btn-secondary">
+    Back to Employees
+</a>
+
+</div>
+
 
     <div class="card">
         <div class="card-body">

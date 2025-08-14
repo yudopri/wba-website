@@ -261,18 +261,18 @@
     <div class="inline-flex items-center space-x-2">
         <!-- Previous Page Link -->
         @if ($employees->onFirstPage())
-            <span 
-                class="px-4 py-2 text-black bg-gray-100 border border-gray-300 rounded cursor-not-allowed" 
-                aria-disabled="true" 
+            <span
+                class="px-4 py-2 text-black bg-gray-100 border border-gray-300 rounded cursor-not-allowed"
+                aria-disabled="true"
                 aria-label="@lang('pagination.previous')">
                 <span class="sr-only">@lang('pagination.previous')</span>
                 ←
             </span>
         @else
-            <a 
-                href="{{ $employees->previousPageUrl() . '&' . http_build_query(request()->except('page')) }}" 
-                class="px-4 py-2 text-black bg-white border border-gray-300 rounded hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500" 
-                rel="prev" 
+            <a
+                href="{{ $employees->previousPageUrl() . '&' . http_build_query(request()->except('page')) }}"
+                class="px-4 py-2 text-black bg-white border border-gray-300 rounded hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                rel="prev"
                 aria-label="@lang('pagination.previous')">
                 ←
             </a>
@@ -281,14 +281,14 @@
         <!-- Pagination Links -->
         @foreach ($employees->getUrlRange(1, $employees->lastPage()) as $page => $url)
             @if ($page == $employees->currentPage())
-                <span 
-                    class="px-4 py-2 text-black bg-blue-500 border border-blue-500 rounded cursor-default" 
+                <span
+                    class="px-4 py-2 text-black bg-blue-500 border border-blue-500 rounded cursor-default"
                     aria-current="page">
                     {{ $page }}
                 </span>
             @else
-                <a 
-                    href="{{ $url . '&' . http_build_query(request()->except('page')) }}" 
+                <a
+                    href="{{ $url . '&' . http_build_query(request()->except('page')) }}"
                     class="px-4 py-2 text-black bg-white border border-gray-300 rounded hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500">
                     {{ $page }}
                 </a>
@@ -297,17 +297,17 @@
 
         <!-- Next Page Link -->
         @if ($employees->hasMorePages())
-            <a 
-                href="{{ $employees->nextPageUrl() . '&' . http_build_query(request()->except('page')) }}" 
-                class="px-4 py-2 text-black bg-white border border-gray-300 rounded hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500" 
-                rel="next" 
+            <a
+                href="{{ $employees->nextPageUrl() . '&' . http_build_query(request()->except('page')) }}"
+                class="px-4 py-2 text-black bg-white border border-gray-300 rounded hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                rel="next"
                 aria-label="@lang('pagination.next')">
                 →
             </a>
         @else
-            <span 
-                class="px-4 py-2 text-black bg-gray-100 border border-gray-300 rounded cursor-not-allowed" 
-                aria-disabled="true" 
+            <span
+                class="px-4 py-2 text-black bg-gray-100 border border-gray-300 rounded cursor-not-allowed"
+                aria-disabled="true"
                 aria-label="@lang('pagination.next')">
                 →
             </span>
