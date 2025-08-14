@@ -17,7 +17,7 @@
     <div class="card-body">
     <!-- Tabel Departemen -->
     <table class="table table-bordered table-responsive">
-    <thead class="thead-dark">
+    <thead class="thead-dark">  
         <tr class="text-center">
                 <th class="text-nowrap">No</th>
                 <th class="text-nowrap">Nama Lokasi Kerja</th>
@@ -35,19 +35,32 @@
                     <td class="align-middle text-center text-nowrap"
                                 style="
                                     @if(is_null($work->berlaku) || $work->berlaku == '0000-00-00')
-                                        background-color: white; /* Warna default untuk tanggal tidak valid */
+                                        background-color: white;
                                     @elseif(\Carbon\Carbon::parse($work->berlaku)->isPast())
-                                        background-color: #f8d7da; /* Merah untuk tanggal kadaluarsa */
+                                        background-color: #f8d7da;
                                     @elseif(\Carbon\Carbon::parse($work->berlaku)->greaterThan(now()) && \Carbon\Carbon::now()->diffInDays(\Carbon\Carbon::parse($work->berlaku)) <= 30)
-                                        background-color: #fff3cd; /* Kuning untuk kurang dari atau sama dengan 30 hari */
+                                        background-color: #fff3cd;
                                     @else
-                                        background-color: white; /* Putih untuk lebih dari 30 hari */
+                                        background-color: white;
                                     @endif
                                 ">
                                 {{ $work->berlaku === '0000-00-00' || !$work->berlaku ? '-' : \Carbon\Carbon::parse($work->berlaku)->translatedFormat('d F Y') }}
+                    </td>
 
-                            </td>
-                    <td></td>
+                    <!-- Kolom Dokumen Kontrak -->
+                    <td class="text-center">
+                        @if($work->pict_dokumen)
+                            <a href="{{ asset($work->pict_dokumen) }}" 
+                               target="_blank" 
+                               class="btn btn-info btn-sm">
+                                Lihat Gambar
+                            </a>
+                        @else
+                            <span class="text-muted">Tidak ada dokumen</span>
+                        @endif
+                    </td>
+
+                    <!-- Kolom Aksi -->
                     <td>
                         <a href="{{ route('admin.work.edit', $work->id) }}" class="btn btn-warning btn-sm">Edit</a>
                         <form action="{{ route('admin.work.destroy', $work->id) }}" method="POST" style="display:inline;">
@@ -122,6 +135,7 @@
                 →
             </span>
         @endif
+        
     </div>
 </div>
 @stop

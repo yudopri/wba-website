@@ -44,24 +44,24 @@ class KasOperasionalController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-    'keterangan' => 'required|string|max:255',
-    'debit' => 'required|numeric|min:1',
-]);
-// Ambil saldo terakhir per user dari SaldoUtama
-    $lastBalance = SaldoUtama::where('id_user', Auth::id())
+        'keterangan' => 'required|string|max:255',
+        'debit' => 'required|numeric|min:1',
+        ]);
+            // Ambil saldo terakhir per user dari SaldoUtama
+         $lastBalance = SaldoUtama::where('id_user', Auth::id())
         ->orderBy('created_at', 'desc')
         ->first();
 
-    $saldoTerakhir = $lastBalance ? $lastBalance->saldo : 0;
-    $saldoBaru = $saldoTerakhir - $request->debit;
+        $saldoTerakhir = $lastBalance ? $lastBalance->saldo : 0;
+         $saldoBaru = $saldoTerakhir - $request->debit;
 
-    // Simpan ke SaldoUtama
-    SaldoUtama::create([
+        // Simpan ke SaldoUtama
+        SaldoUtama::create([
         'id_user' => Auth::id(),
         'debit' => $request->debit,
         'kredit' => 0,
         'saldo' => $saldoBaru,
-    ]);
+             ]);
         $lastSaldo = KasOperasional::orderBy('created_at', 'desc')->value('saldo') ?? 0;
 
         KasOperasional::create([

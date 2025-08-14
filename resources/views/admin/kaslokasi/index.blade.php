@@ -2,7 +2,13 @@
 @section('title', 'Data Kas Kecil Lokasi')
 
 @section('content')
-<h1>Data Kas Kecil Lokasi</h1>
+<h1>
+    Data Kas Kecil Lokasi
+    @if(isset($userLokasi))
+        - <span class="text-primary">{{ $userLokasi }}</span>
+    @endif
+</h1>
+
 
 @if(session('success'))
     <div class="alert alert-success">{{ session('success') }}</div>
@@ -91,7 +97,13 @@
             @csrf
             <input type="text" name="keterangan" class="form-control mb-2" placeholder="Keterangan" required>
             <input type="number" name="kredit" class="form-control mb-2" placeholder="Jumlah Pengeluaran" required>
-            <input type="text" name="lokasi" class="form-control mb-2" placeholder="Lokasi" required>
+            <select name="lokasi" class="form-control">
+    <option value="">-- Pilih Lokasi --</option>
+    @foreach($lokasiKerja as $lok)
+        <option value="{{ $lok }}">{{ $lok }}</option>
+    @endforeach
+</select>
+
             <button class="btn btn-danger">Simpan</button>
         </form>
     </div>
@@ -119,7 +131,8 @@
                 <td>Rp. {{ number_format($item->debit, 0, ',', '.') }}</td>
                 <td>Rp. {{ number_format($item->kredit, 0, ',', '.') }}</td>
                 <td>Rp. {{ number_format($item->saldo_setelah, 0, ',', '.') }}</td>
-                <td>{{ $item->lokasi }}</td>
+                <td>{{ $item->work?->name ?? $item->lokasi_kerja }}</td>
+
                 <td>{{ \Carbon\Carbon::parse($item->created_at)->format('d-m-Y H:i') }}</td>
             </tr>
             @endforeach

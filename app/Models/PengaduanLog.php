@@ -12,6 +12,7 @@ protected $table = 'complaint_approvals';
         'id_complaint',
         'id_user',
         'status',
+        'deskripsi',
         'approved_at',
         'keterangan',
     ];
@@ -28,6 +29,10 @@ protected $table = 'complaint_approvals';
 public function user()
     {
         return $this->belongsTo(User::class, 'id_user');
+    }
+public function deskripsi()
+    {
+        return $this->belongsTo(pengaduan::class, 'deskripsi');
     }
 
 }

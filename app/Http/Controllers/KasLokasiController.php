@@ -3,27 +3,29 @@
 namespace App\Http\Controllers;
 
 use App\Models\KasLokasi;
+use App\Models\SaldoUtama;
+use App\Models\Work;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
-use App\Models\SaldoUtama;
 
 class KasLokasiController extends Controller
 {
     public function index(Request $request)
     {
+          $userLokasi = Auth::user()->lokasi_kerja; // pastikan kolom di users ada
         // Ambil filter tanggal jika ada
         if ($request->filled(['tanggal_awal', 'tanggal_akhir'])) {
             $tanggalAwal = Carbon::parse($request->tanggal_awal)->startOfDay();
             $tanggalAkhir = Carbon::parse($request->tanggal_akhir)->endOfDay();
         } else {
-            // Default: 7 hari terakhir
             $tanggalAwal = now()->subDays(7)->startOfDay();
             $tanggalAkhir = now()->endOfDay();
         }
 
-        // Ambil data sesuai range tanggal
+        // Ambil data transaksi sesuai range tanggal
         $transaksi = KasLokasi::whereBetween('created_at', [$tanggalAwal, $tanggalAkhir])
+       -> where('lokasi_kerja', $userLokasi) 
                         ->orderBy('created_at', 'desc')
                         ->get();
 
@@ -34,45 +36,57 @@ class KasLokasiController extends Controller
         $totalPengeluaran = KasLokasi::whereBetween('created_at', [$tanggalAwal, $tanggalAkhir])
                             ->sum('kredit');
 
-        return view('admin.kaslokasi.index', compact('transaksi', 'saldo', 'totalPengeluaran'))
-            ->with([
-                'tanggal_awal' => $request->tanggal_awal,
-                'tanggal_akhir' => $request->tanggal_akhir,
-            ]);
+        // Ambil daftar lokasi aktif dari model Work
+        $lokasiKerja = Work::where('status', 'aktif')->pluck('name');
+
+        return view('admin.kaslokasi.index', compact(
+            'transaksi', 'saldo', 'totalPengeluaran', 'lokasiKerja'
+        ))->with([
+            'tanggal_awal' => $request->tanggal_awal,
+            'tanggal_akhir' => $request->tanggal_akhir,
+        ]);
     }
 
     public function store(Request $request)
     {
         $request->validate([
-    'keterangan' => 'required|string|max:255',
-    'debit' => 'required|numeric|min:1',
-]);
-$validated['id_user'] = auth()->id();
+            'keterangan' => 'required|string|max:255',
+            'debit' => 'required|numeric|min:1',
+            'lokasi' => 'nullable|string|max:255',
+        ]);
 
-// Ambil saldo terakhir per user dari SaldoUtama
-    $lastBalance = SaldoUtama::where('id_user', Auth::id())
-        ->orderBy('created_at', 'desc')
-        ->first();
+        // Ambil saldo terakhir per user dari SaldoUtama
+        $lastBalance = SaldoUtama::where('id_user', Auth::id())
+            ->orderBy('created_at', 'desc')
+            ->first();
 
-    $saldoTerakhir = $lastBalance ? $lastBalance->saldo : 0;
-    $saldoBaru = $saldoTerakhir - $request->debit;
+        $saldoTerakhir = $lastBalance ? $lastBalance->saldo : 0;
+        $saldoBaruSaldoUtama = $saldoTerakhir - $request->debit;
 
-    // Simpan ke SaldoUtama
-    SaldoUtama::create([
-        'id_user' => Auth::id(),
-        'debit' => $request->debit,
-        'kredit' => 0,
-        'saldo' => $saldoBaru,
-    ]);
+        // Simpan ke SaldoUtama
+        SaldoUtama::create([
+            'id_user' => Auth::id(),
+            'debit' => $request->debit,
+            'kredit' => 0,
+            'saldo' => $saldoBaruSaldoUtama,
+        ]);
+
+        // Hitung saldo terbaru untuk KasLokasi
         $lastSaldo = KasLokasi::latest()->first()?->saldo ?? 0;
-        $saldoBaru = $lastSaldo + $request->debit;
+        $saldoBaruKasLokasi = $lastSaldo + $request->debit;
 
+        // Simpan ke KasLokasi
         KasLokasi::create([
             'keterangan' => $request->keterangan,
             'debit' => $request->debit,
             'kredit' => 0,
+<<<<<<< HEAD
             'saldo' => $saldoBaru,
             'lokasi_kerja' => null,
+=======
+            'saldo' => $saldoBaruKasLokasi,
+            'lokasi_kerja' => $request->lokasi,
+>>>>>>> d4a42cddbcddc9e65d813d16a95fa47e54d4e32d
             'id_user' => Auth::id(),
         ]);
 
@@ -82,12 +96,10 @@ $validated['id_user'] = auth()->id();
     public function kredit(Request $request)
     {
         $request->validate([
-    'keterangan' => 'required|string|max:255',
-    'debit' => 'required|numeric|min:1',
+            'keterangan' => 'required|string|max:255',
+            'kredit' => 'required|numeric|min:1',
             'lokasi' => 'required|string|max:255',
         ]);
-$validated['id_user'] = auth()->id();
-
 
         $lastSaldo = KasLokasi::latest()->first()?->saldo ?? 0;
         $saldoBaru = $lastSaldo - $request->kredit;
