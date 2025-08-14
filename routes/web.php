@@ -322,15 +322,6 @@ Route::get('/gaji/{id}/logs', [GajiController::class, 'showLogs'])->name('gaji.l
 
 
         //dokumenlokasi
-        Route::get('/dokumenlokasi', [DokumenController::class, 'index'])->name('dokumenlokasi.index');
-        Route::get('dokumenlokasi/create', [DokumenController::class, 'create'])->name('dokumenlokasi.create');
-        Route::post('dokumenlokasi', [DokumenController::class, 'store'])->name('dokumenlokasi.store');
-        Route::delete('dokumenlokasi/{id}', [DokumenController::class, 'destroy'])->name('dokumenlokasi.destroy');
-        Route::get('/dokumenlokasi/{id}/edit', [DokumenController::class, 'edit'])->name('dokumenlokasi.edit');
-        Route::put('/dokumenlokasi/{id}', [DokumenController::class, 'update'])->name('dokumenlokasi.update');
-        Route::delete('/dokumenlokasi/{id}', [DokumenController::class, 'destroy'])->name('dokumenlokasi.destroy');
-        Route::get('/', function () { return redirect()->route('dokumenlokasi.index');});
-        Route::resource('dokumenlokasi', DokumenController::class);
 
         Route::get('/saldoutama', [SaldoUtamaController::class, 'index'])->name('admin.saldo.index');
 
