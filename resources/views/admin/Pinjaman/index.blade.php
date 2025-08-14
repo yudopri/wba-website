@@ -11,7 +11,6 @@
     <div class="alert alert-danger">{{ session('error') }}</div>
 @endif
 
-@if(auth()->user()->role === 'Keuangan' || auth()->user()->role === 'Manager' || auth()->user()->role === 'Admin')
 <div class="row mb-4">
     <!-- Saldo Pinjaman -->
     <div class="col-md-6">
@@ -133,7 +132,4 @@
         form.style.display = (form.style.display === 'none') ? 'block' : 'none';
     });
 </script>
-@else
-    <h3>Anda Tidak Memiliki Akses</h3>
-@endif
 @endsection
