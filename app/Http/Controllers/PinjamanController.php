@@ -6,7 +6,7 @@ use App\Models\Pinjaman;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
-
+use App\Models\SaldoUtama;
 class PinjamanController extends Controller
 {
     public function index(Request $request)
@@ -62,7 +62,7 @@ class PinjamanController extends Controller
         'kredit' => 0,
         'saldo' => $saldoBaru,
              ]);
-        $lastSaldo = KasOperasional::orderBy('created_at', 'desc')->value('saldo') ?? 0;
+        $lastSaldo = Pinjaman::orderBy('created_at', 'desc')->value('saldo') ?? 0;
 
         Pinjaman::create([
             'keterangan' => $request->keterangan,
