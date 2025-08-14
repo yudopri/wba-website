@@ -90,6 +90,7 @@
 
 
 <!-- Form Pengeluaran -->
+<!-- Form Pengeluaran -->
 <div class="card mb-3" id="formKredit" style="display: none;">
     <div class="card-header">Pengeluaran</div>
     <div class="card-body">
@@ -97,12 +98,9 @@
             @csrf
             <input type="text" name="keterangan" class="form-control mb-2" placeholder="Keterangan" required>
             <input type="number" name="kredit" class="form-control mb-2" placeholder="Jumlah Pengeluaran" required>
-            <select name="lokasi" class="form-control">
-    <option value="">-- Pilih Lokasi --</option>
-    @foreach($lokasiKerja as $lok)
-        <option value="{{ $lok }}">{{ $lok }}</option>
-    @endforeach
-</select>
+
+            <input type="hidden" name="lokasi" value="{{ $userLokasi }}">
+            <p class="mb-2"><strong>Lokasi:</strong> {{ $userLokasi }}</p>
 
             <button class="btn btn-danger">Simpan</button>
         </form>
