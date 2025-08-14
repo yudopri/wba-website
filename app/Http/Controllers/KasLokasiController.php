@@ -8,12 +8,19 @@ use App\Models\Work;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
+use App\Models\Employee;
 
 class KasLokasiController extends Controller
 {
     public function index(Request $request)
-    {
-          $userLokasi = Auth::user()->lokasi_kerja; // pastikan kolom di users ada
+    { $userName = Auth::user()->name; // atau bisa pak
+    $employee = Employee::where('name', $userName)->first();
+        if (!$employee) {
+            return redirect()->back()->with('error', 'User tidak ditemukan.');
+        }
+
+        // Ambil lokasi kerja user  
+    $userLokasi = $employee->lokasikerja;
         // Ambil filter tanggal jika ada
         if ($request->filled(['tanggal_awal', 'tanggal_akhir'])) {
             $tanggalAwal = Carbon::parse($request->tanggal_awal)->startOfDay();
