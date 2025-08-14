@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\LogisticsCash;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
+use App\Models\SaldoUtama;
 
 class KasLogistikController extends Controller
 {
@@ -50,31 +51,53 @@ class KasLogistikController extends Controller
     }
 
     public function store(Request $request)
-    {
-        $request->validate([
-            'keterangan' => 'required|string|max:255',
-            'debit' => 'required|numeric|min:1',
-        ]);
+{
+    $request->validate([
+    'keterangan' => 'required|string|max:255',
+    'debit' => 'required|numeric|min:1',
+]);
+$validated['id_user'] = Auth::id();
 
-        $lastSaldo = LogisticsCash::orderBy('created_at', 'desc')->value('saldo') ?? 0;
+    // Ambil saldo terakhir per user dari SaldoUtama
+    $lastBalance = SaldoUtama::where('id_user', $request->id_user)
+        ->orderBy('created_at', 'desc')
+        ->first();
 
-        LogisticsCash::create([
-            'id_user' => Auth::id(),
-            'keterangan' => $request->keterangan,
-            'debit' => $request->debit,
-            'kredit' => 0,
-            'saldo' => $lastSaldo + $request->debit,
-        ]);
+    $saldoTerakhir = $lastBalance ? $lastBalance->saldo : 0;
+    $saldoBaru = $saldoTerakhir - $request->debit;
 
-        return redirect()->back()->with('success', 'Saldo berhasil ditambahkan.');
-    }
+    // Simpan ke SaldoUtama
+    SaldoUtama::create([
+        'id_user' => Auth::id(),
+        'debit' => $request->debit,
+        'kredit' => 0,
+        'saldo' => $saldoBaru,
+    ]);
+
+    // Ambil saldo terakhir global LogisticsCash
+    $lastSaldoLogistik = LogisticsCash::orderBy('created_at', 'desc')->value('saldo') ?? 0;
+
+    // Simpan ke LogisticsCash (pengeluaran)
+    LogisticsCash::create([
+        'id_user' => Auth::id(),
+        'keterangan' => $request->keterangan,
+        'debit' => $request->debit,
+        'kredit' => 0,
+        'saldo' => $lastSaldoLogistik - $request->debit, // saldo logistik berkurang
+    ]);
+
+    return redirect()->back()->with('success', 'Saldo berhasil diperbarui.');
+}
+
 
     public function kredit(Request $request)
     {
         $request->validate([
-            'keterangan' => 'required|string|max:255',
-            'kredit' => 'required|numeric|min:1',
-        ]);
+    'keterangan' => 'required|string|max:255',
+    'debit' => 'required|numeric|min:1',
+]);
+$validated['id_user'] = auth()->id();
+
 
         $lastSaldo = LogisticsCash::orderBy('created_at', 'desc')->value('saldo') ?? 0;
 

@@ -18,7 +18,7 @@
                     </h3>
                 </div>
                 <div class="card-body text-center">
-                    <h1 class="display-3 text-white">Rp. 5.000.000</h1>
+                    <h1 class="display-3 text-white">Rp. {{ number_format($saldoUtama->saldo ?? 0, 0, ',', '.') }}</h1>
                     <p class="lead text-white mb-4">Total Saldo Utama saat ini</p>
                 </div>
                 <div class="card-footer bg-transparent text-white text-center">
@@ -31,7 +31,7 @@
     <!-- Baris saldo lain: 4 kolom per baris -->
     <div class="row">
         <!-- Contoh 1 saldo -->
-        <div class="col-lg-3 col-md-6 col-sm-12 mb-4">
+        <div class="col-lg-6 col-md-6 col-sm-12 mb-4">
             <div class="card shadow-lg border-0 rounded-xl" style="background: linear-gradient(135deg, #8E44AD, #D2B4DE);">
                 <div class="card-header bg-transparent border-0 text-white">
                     <h3 class="card-title d-flex align-items-center">
@@ -39,7 +39,7 @@
                     </h3>
                 </div>
                 <div class="card-body text-center">
-                    <h1 class="display-4 text-white">Rp. 500.000</h1>
+                    <h1 class="display-4 text-white">Rp. {{ number_format($logisticsCash->saldo ?? 0, 0, ',', '.') }}</h1>
                     <p class="lead text-white mb-4">Total Kas Logistik saat ini</p>
                 </div>
                 <div class="card-footer bg-transparent text-white text-center">
@@ -49,9 +49,9 @@
         </div>
 
         <!-- lain-lain... -->
-        <!-- Ganti semua col-lg-4 menjadi col-lg-3 seperti di atas -->
+        <!-- Ganti semua col-lg-4 menjadi col-lg-6 seperti di atas -->
         <!-- Kas Kecil Operasional -->
-        <div class="col-lg-3 col-md-6 col-sm-12 mb-4">
+        <div class="col-lg-6 col-md-6 col-sm-12 mb-4">
             <div class="card shadow-lg border-0 rounded-xl" style="background: linear-gradient(135deg, #2F6B2C, #7ED957);">
                 <div class="card-header bg-transparent border-0 text-white">
                     <h3 class="card-title d-flex align-items-center">
@@ -59,7 +59,7 @@
                     </h3>
                 </div>
                 <div class="card-body text-center">
-                    <h1 class="display-4 text-white">Rp. 500.000</h1>
+                    <h1 class="display-4 text-white">Rp. {{ number_format($kasOperasional->saldo ?? 0, 0, ',', '.') }}</h1>
                     <p class="lead text-white mb-4">Total Kas Kecil Operasional saat ini</p>
                 </div>
                 <div class="card-footer bg-transparent text-white text-center">
@@ -69,7 +69,7 @@
         </div>
 
         <!-- Kas Kecil Lokasi -->
-        <div class="col-lg-3 col-md-6 col-sm-12 mb-4">
+        <div class="col-lg-6 col-md-6 col-sm-12 mb-4">
             <div class="card shadow-lg border-0 rounded-xl" style="background: linear-gradient(135deg, #16A085, #48C9B0);">
                 <div class="card-header bg-transparent border-0 text-white">
                     <h3 class="card-title d-flex align-items-center">
@@ -77,7 +77,7 @@
                     </h3>
                 </div>
                 <div class="card-body text-center">
-                    <h1 class="display-4 text-white">Rp. 500.000</h1>
+                    <h1 class="display-4 text-white">Rp. {{ number_format($kasLokasi->saldo ?? 0, 0, ',', '.') }}</h1>
                     <p class="lead text-white mb-4">Total Kas Kecil Lokasi saat ini</p>
                 </div>
                 <div class="card-footer bg-transparent text-white text-center">
@@ -87,7 +87,7 @@
         </div>
 
         <!-- Kas Gaji -->
-        <div class="col-lg-3 col-md-6 col-sm-12 mb-4">
+        <div class="col-lg-6 col-md-6 col-sm-12 mb-4">
             <div class="card shadow-lg border-0 rounded-xl" style="background: linear-gradient(135deg, #E67E22, #F5B041);">
                 <div class="card-header bg-transparent border-0 text-white">
                     <h3 class="card-title d-flex align-items-center">
@@ -103,7 +103,7 @@
                 </div>
             </div>
         </div>
-<div class="col-lg-3 col-md-6 col-sm-12 mb-4">
+<div class="col-lg-6 col-md-6 col-sm-12 mb-4">
             <div class="card shadow-lg border-0 rounded-xl" style="background: linear-gradient(135deg, #f05f05ff, #d92d16ff);">
                <div class="card-header bg-transparent border-0 text-white">
                     <h3 class="card-title d-flex align-items-center">
@@ -121,7 +121,7 @@
         </div>
 
         <!-- Pinjaman -->
-         <div class="col-lg-3 col-md-6 col-sm-12 mb-4">
+         <div class="col-lg-6 col-md-6 col-sm-12 mb-4">
             <div class="card shadow-lg border-0 rounded-xl" style="background: linear-gradient(135deg, #1f0063ff, #2f09a2ff);">
                 <div class="card-header bg-transparent border-0 text-white">
                     <h3 class="card-title d-flex align-items-center">
@@ -139,7 +139,7 @@
         </div>
 
         <!-- Tagihan -->
-         <div class="col-lg-3 col-md-6 col-sm-12 mb-4">
+         <div class="col-lg-6 col-md-6 col-sm-12 mb-4">
             <div class="card shadow-lg border-0 rounded-xl" style="background: linear-gradient(135deg, #0b833bff, #0d7c66ff);">
                 <div class="card-header bg-transparent border-0 text-white">
                     <h3 class="card-title d-flex align-items-center">
@@ -147,7 +147,7 @@
                     </h3>
                 </div>
                 <div class="card-body text-center">
-                    <h1 class="display-4 text-white">Rp. 500.000</h1>
+                    <h1 class="display-4 text-white">Rp. {{ number_format($invoice ?? 0, 0, ',', '.') }}</h1>
                     <p class="lead text-white mb-4">Total Invoice saat ini</p>
                 </div>
                 <div class="card-footer bg-transparent text-white text-center">
@@ -157,7 +157,7 @@
         </div>
 
         <!-- BPJS -->
-         <div class="col-lg-3 col-md-6 col-sm-12 mb-4">
+         <div class="col-lg-6 col-md-6 col-sm-12 mb-4">
             <div class="card shadow-lg border-0 rounded-xl" style="background: linear-gradient(135deg, #0d7627ff, #F5B041);">
                 <div class="card-header bg-transparent border-0 text-white">
                     <h3 class="card-title d-flex align-items-center">
@@ -174,7 +174,7 @@
             </div>
         </div>
 
-        <!-- dan seterusnya... semua col-lg-4 jadi col-lg-3 -->
+        <!-- dan seterusnya... semua col-lg-4 jadi col-lg-6 -->
     </div>
 </div>
 

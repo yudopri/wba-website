@@ -10,7 +10,7 @@ class SaldoUtama extends Model
     //
     use HasFactory;
 protected $table = 'main_balances';
-    protected $fillable = ['id_user', 'debit', 'kredit', 'keterangan'];
+    protected $fillable = ['id_user', 'debit', 'kredit','saldo'];
     public function user()
     {
         return $this->belongsTo(User::class, 'id_user');

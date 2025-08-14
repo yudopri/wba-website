@@ -4,16 +4,44 @@ namespace App\Http\Controllers;
 
 use App\Models\SaldoUtama;
 use Illuminate\Http\Request;
+use App\Models\KasLokasi;
+use App\Models\KasOperasional;
+use App\Models\LogisticsCash;
+use App\Models\Invoice;
 
 class SaldoUtamaController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
-    {
-        //
-    }
+   public function index()
+{
+    // Ambil semua data SaldoUtama
+    $saldoUtama = SaldoUtama::latest()->first();
+
+    // Ambil semua kas lokasi
+    $kasLokasi = KasLokasi::latest()->first();
+
+    // Ambil semua kas operasional
+    $kasOperasional = KasOperasional::latest()->first();
+
+    // Ambil semua kas logistik
+    $logisticsCash = LogisticsCash::latest()->first();
+
+    $invoicePaid = Invoice::where('status', 'paid')
+        ->latest()
+        ->get();
+
+    $invoice = $invoicePaid->sum('nominal');
+    return view('admin.saldo.index', compact(
+        'saldoUtama',
+        'kasLokasi',
+        'kasOperasional',
+        'logisticsCash',
+        'invoice'
+    ));
+}
+
 
     /**
      * Show the form for creating a new resource.
