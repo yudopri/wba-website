@@ -60,7 +60,6 @@ class BpjsController extends Controller
     'debit' => 'required|numeric|min:1',
 ]);
 $validated['id_user'] = Auth::id();
-
     // Ambil saldo terakhir per user dari SaldoUtama
    $lastBalance = SaldoUtama::latest()->first();
 

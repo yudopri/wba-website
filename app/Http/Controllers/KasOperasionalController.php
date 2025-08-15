@@ -81,28 +81,29 @@ class KasOperasionalController extends Controller
         return redirect()->back()->with('success', 'Saldo berhasil ditambahkan.');
     }
 
-    public function kredit(Request $request)
-    {
-       $request->validate([
-    'keterangan' => 'required|string|max:255',
-    'debit' => 'required|numeric|min:1',
-]);
+   public function kredit(Request $request)
+{
+    $request->validate([
+        'keterangan' => 'required|string|max:255',
+        'kredit' => 'required|numeric|min:1', // ubah debit -> kredit
+    ]);
 
+    $lastSaldo = KasOperasional::latest()->first()?->saldo ?? 0;
+        $saldoBaru = $lastSaldo - $request->kredit;
 
-        $lastSaldo = KasOperasional::orderBy('created_at', 'desc')->value('saldo') ?? 0;
-
-        if ($request->kredit > $lastSaldo) {
-            return redirect()->back()->with('error', 'Saldo tidak mencukupi untuk pengeluaran.');
+        if ($saldoBaru < 0) {
+            return redirect()->back()->with('error', 'Saldo tidak mencukupi untuk transaksi ini.');
         }
 
-        KasOperasional::create([
-            'keterangan' => $request->keterangan,
-            'debit' => 0,
-            'kredit' => $request->kredit,
-            'saldo' => $lastSaldo - $request->kredit,
-            'id_user' => Auth::id(),
-        ]);
+    KasOperasional::create([
+        'keterangan' => $request->keterangan,
+        'debit' => 0,
+        'kredit' => $request->kredit,
+        'saldo' => $saldoBaru,
+        'id_user' => Auth::id(),
+    ]);
 
-        return redirect()->back()->with('success', 'Pengeluaran berhasil disimpan.');
-    }
+    return redirect()->back()->with('success', 'Pengeluaran berhasil disimpan.');
+}
+
 }

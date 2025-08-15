@@ -47,6 +47,7 @@ class PinjamanController extends Controller
             'debit' => 'required|numeric|min:0',
         ]);
 
+        $lastSaldo = Pinjaman::orderBy('created_at', 'desc')->value('saldo') ?? 0;
            // Ambil saldo terakhir per user dari SaldoUtama
           $saldoTerakhir = $lastBalance ? $lastBalance->saldo : 0;
 
@@ -54,7 +55,7 @@ class PinjamanController extends Controller
     if ($saldoTerakhir <= 0 || $saldoTerakhir < $request->debit) {
         return redirect()->back()->with('error', 'Saldo tidak cukup untuk melakukan transaksi ini.');
     }
-
+$lastBalance = SaldoUtama::latest()->first();
     // Hitung saldo baru
     $saldoBaru = $saldoTerakhir - $request->debit;
 
@@ -66,7 +67,6 @@ class PinjamanController extends Controller
         'saldo' => $saldoBaru,
     ]);
 
-        $lastSaldo = Pinjaman::orderBy('created_at', 'desc')->value('saldo') ?? 0;
 
         Pinjaman::create([
             'keterangan' => $request->keterangan,

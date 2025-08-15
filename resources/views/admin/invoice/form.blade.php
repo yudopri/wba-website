@@ -72,6 +72,28 @@
 </div>
 
 
+<div class="form-group">
+    <label for="date_send">Tanggal Pengiriman</label>
+    <input type="date"
+           name="date_send"
+           class="form-control @error('date_send') is-invalid @enderror"
+           value="{{ old('date_send', isset($invoice->date_send) ? date('Y-m-d', strtotime($invoice->date_send)) : '') }}"
+           required>
+    @error('date_send')
+        <div class="invalid-feedback">{{ $message }}</div>
+    @enderror
+</div>
+
+<div class="form-group">
+    <label for="date_pay">Tanggal Pembayaran</label>
+    <input type="date"
+           name="date_pay"
+           class="form-control @error('date_pay') is-invalid @enderror"
+           value="{{ old('date_paid', isset($invoice->date_paid) ? date('Y-m-d', strtotime($invoice->date_pay)) : '') }}">
+    @error('date_paid')
+        <div class="invalid-feedback">{{ $message }}</div>
+    @enderror
+</div>
 
                 <button type="submit" class="btn btn-primary">
                     {{ isset($invoice) ? 'Update' : 'Simpan' }}

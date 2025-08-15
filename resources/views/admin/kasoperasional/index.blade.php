@@ -83,7 +83,7 @@
 <div class="card mb-3" id="formKredit" style="display: none;">
     <div class="card-header">Pengeluaran</div>
     <div class="card-body">
-        <form method="POST" action="{{ route('kaslogistik.kredit') }}">
+        <form method="POST" action="{{ route('kasoperasional.kredit') }}">
             @csrf
             <input type="text" name="keterangan" class="form-control mb-2" placeholder="Keterangan" required>
             <input type="number" name="kredit" class="form-control mb-2" placeholder="Jumlah Pengeluaran" required>

@@ -10,6 +10,7 @@
 @if(session('error'))
     <div class="alert alert-danger">{{ session('error') }}</div>
 @endif
+
  @if(auth()->user()->role === 'Keuangan' || auth()->user()->role === 'Manager')
 <div class="row mb-4">
     <!-- Saldo Pinjaman -->
@@ -61,7 +62,7 @@
 
 <!-- Tombol Form -->
 <div class="mb-3">
-    <button class="btn btn-success" id="toggleFormDebit">+ Tambah Pinjaman</button>
+    <button class="btn btn-success" id="toggleFormDebit">+ Tambah Saldo</button>
     <button class="btn btn-danger" id="toggleFormKredit">- Bayar Pinjaman</button>
 </div>
 

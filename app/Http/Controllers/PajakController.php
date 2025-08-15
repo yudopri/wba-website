@@ -60,7 +60,7 @@ class PajakController extends Controller
     'debit' => 'required|numeric|min:1',
 ]);
 $validated['id_user'] = Auth::id();
-
+$lastBalance = SaldoUtama::latest()->first();
     // Ambil saldo terakhir per user dari SaldoUtama
      $saldoTerakhir = $lastBalance ? $lastBalance->saldo : 0;
 
