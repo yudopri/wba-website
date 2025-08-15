@@ -60,7 +60,7 @@
                      <td>
     @php
         // Tentukan level prioritas peran
-        $roleHierarchy = ['Manager' => 3, 'Admin' => 2, 'Karyawan' => 1];
+        $roleHierarchy = ['Manager' => 3, 'Admin' => 2, 'Karyawan' => 1, 'Logistik' => 1, 'Lapangan' => 1, 'Keuangan' => 1];
 
         // Dapatkan level pengguna yang sedang login dan target
         $currentUserRoleLevel = $roleHierarchy[auth()->user()->role];
