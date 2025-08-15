@@ -98,6 +98,9 @@ class InvoiceController extends Controller
 ]);
 // Override date_send dengan tanggal sekarang
     $validated['date_send'] = now();
+
+     $validated['bulan'] = $request->bulan . '-01';
+
 $invoice->update($validated);
 
 
