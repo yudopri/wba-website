@@ -26,13 +26,16 @@ class WorkController extends Controller
     $validated = $request->validate([
         'name' => 'required|string|max:255',
         'berlaku' => 'nullable|date',
-        'pict_dokumen' => 'required|file|mimes:pdf,jpg,jpeg,png|max:2048',
+        'pict_dokumen' => 'required|file|mimes:pdf,jpg,jpeg,png|max:5120',
+        'pict_dokumen1' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:5120',
+        'pict_dokumen2' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:5120',
         'status' => 'nullable|in:aktif,nonaktif',
     ]);
 
     if (!isset($validated['status'])) {
         $validated['status'] = 'aktif';
     }
+
 
     if ($request->hasFile('pict_dokumen')) {
         $directory = public_path('assets/berkasdokumen');
@@ -43,6 +46,25 @@ class WorkController extends Controller
         $request->file('pict_dokumen')->move($directory, $fileName);
 
         $validated['pict_dokumen'] = 'assets/berkasdokumen/' . $fileName;
+    }
+    if ($request->hasFile('pict_dokumen1')) {
+        $directory = public_path('assets/berkasdokumen');
+        if (!File::exists($directory)) {
+            File::makeDirectory($directory, 0755, true);
+        }
+        $fileName1 = time() . '_' . $request->file('pict_dokumen1')->getClientOriginalName();
+        $request->file('pict_dokumen1')->move($directory, $fileName1);
+
+        $validated['pict_dokumen1'] = 'assets/berkasdokumen/' . $fileName1;
+    }
+    if ($request->hasFile('pict_dokumen2')) {
+        $directory = public_path('assets/berkasdokumen');
+        if (!File::exists($directory)) {
+            File::makeDirectory($directory, 0755, true);
+        }
+        $fileName2 = time() . '_' . $request->file('pict_dokumen2')->getClientOriginalName();
+        $request->file('pict_dokumen2')->move($directory, $fileName2);
+        $validated['pict_dokumen2'] = 'assets/berkasdokumen/' . $fileName2;
     }
 
     Work::create($validated);
@@ -67,13 +89,16 @@ class WorkController extends Controller
     $validated = $request->validate([
         'name' => 'required|string|max:255',
         'berlaku' => 'nullable|date',
-        'pict_dokumen' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:2048',
+        'pict_dokumen' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:5120',
+        'pict_dokumen1' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:5120',
+        'pict_dokumen2' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:5120',
         'status' => 'nullable|in:aktif,nonaktif',
     ]);
 
     if (!isset($validated['status'])) {
         $validated['status'] = 'aktif';
     }
+
 
     if ($request->hasFile('pict_dokumen')) {
         $directory = public_path('assets/berkasdokumen');
@@ -84,6 +109,25 @@ class WorkController extends Controller
         $request->file('pict_dokumen')->move($directory, $fileName);
 
         $validated['pict_dokumen'] = 'assets/berkasdokumen/' . $fileName;
+    }
+    if ($request->hasFile('pict_dokumen1')) {
+        $directory = public_path('assets/berkasdokumen');
+        if (!File::exists($directory)) {
+            File::makeDirectory($directory, 0755, true);
+        }
+        $fileName1 = time() . '_' . $request->file('pict_dokumen1')->getClientOriginalName();
+        $request->file('pict_dokumen1')->move($directory, $fileName1);
+
+        $validated['pict_dokumen1'] = 'assets/berkasdokumen/' . $fileName1;
+    }
+    if ($request->hasFile('pict_dokumen2')) {
+        $directory = public_path('assets/berkasdokumen');
+        if (!File::exists($directory)) {
+            File::makeDirectory($directory, 0755, true);
+        }
+        $fileName2 = time() . '_' . $request->file('pict_dokumen2')->getClientOriginalName();
+        $request->file('pict_dokumen2')->move($directory, $fileName2);
+        $validated['pict_dokumen2'] = 'assets/berkasdokumen/' . $fileName2;
     }
 
     $work->update($validated);

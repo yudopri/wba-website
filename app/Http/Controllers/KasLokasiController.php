@@ -99,6 +99,7 @@ class KasLokasiController extends Controller
             'keterangan' => 'required|string|max:255',
             'kredit' => 'required|numeric|min:1',
             'lokasi' => 'required|string|max:255',
+            'created_at' => 'required|date',
         ]);
 
         $lastSaldo = KasLokasi::latest()->first()?->saldo ?? 0;
@@ -114,9 +115,42 @@ class KasLokasiController extends Controller
             'kredit' => $request->kredit,
             'saldo' => $saldoBaru,
             'lokasi_kerja' => $request->lokasi,
+            'created_at' => $request->created_at,
             'id_user' => Auth::id(),
         ]);
 
         return redirect()->back()->with('success', 'Transaksi berhasil disimpan.');
+    }
+    public function destroy($id)
+    {
+        $kasLokasi = KasLokasi::findOrFail($id);
+// --- Update saldo utama kalau debit ---
+    $saldoUtama = SaldoUtama::latest('id')->first();
+    if ($saldoUtama && $kasLokasi->debit > 0) {
+        $saldoBaru = $saldoUtama->saldo - $kasLokasi->debit;
+
+        SaldoUtama::create([
+            'id_user' => Auth::id(),
+            'debit' => 0,
+            'kredit' => 0,
+            'saldo' => $saldoBaru,
+        ]);
+    }
+
+    // --- Update saldo BPJS kalau kredit ---
+    $saldoKasLokasiTerakhir = KasLokasi::latest('id')->first();
+    if ($saldoKasLokasiTerakhir && $kasLokasi->kredit > 0) {
+        $saldoBaruKasLokasi = $saldoKasLokasiTerakhir->saldo + $kasLokasi->kredit;
+
+        KasLokasi::create([
+            'id_user' => Auth::id(),
+            'debit' => 0,
+            'kredit' => 0,
+            'saldo' => $saldoBaruKasLokasi,
+        ]);
+    }
+        $kasLokasi->delete();
+
+        return redirect()->back()->with('success', 'Transaksi kas lokasi berhasil dihapus.');
     }
 }

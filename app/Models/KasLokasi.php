@@ -14,6 +14,7 @@ protected $table = 'location_petty_cash';
         'debit',
         'kredit',
         'saldo',
+        'created_at',
         'lokasi_kerja','id_user',
     ];
      // benerno sesuai iki

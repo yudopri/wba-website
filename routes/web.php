@@ -180,7 +180,7 @@ Route::get('/employee/{id}/pictbpjsket', [EmployeeController::class, 'exportFoto
 Route::get('/employee/{id}/pictbpjskes', [EmployeeController::class, 'exportFotoBpjskes'])->name('admin.employee.bpjskes');
 Route::get('/employee/{id}/pictnpwp', [EmployeeController::class, 'exportFotoNpwp'])->name('admin.employee.npwp');
 Route::get('/employee/{id}/jobapp', [EmployeeController::class, 'exportLamaran'])->name('admin.employee.jobapp');
-Route::get('/employee/{id}/pictpkwt', [EmployeeController::class, 'exportFotoPkwt'])->name('admin.employee.pict_pkwt');
+Route::get('/employee/{id}/pictpkwt', [EmployeeController::class, 'exportFotoPkwt'])->name('admin.employee.pkwt');
 Route::delete('admin/employee/{employeeId}/delete-document/{documentKey}', [EmployeeController::class, 'deleteDocument'])->name('admin.employee.deleteDocument');
 
 Route::resource('employee', EmployeeController::class);
@@ -277,16 +277,19 @@ Route::get('/set-visitor-cookie', [VisitorController::class, 'setVisitorCookie']
 Route::post('/kas-logistik/tambah', [KasLogistikController::class, 'store'])->name('kaslogistik.store');
 Route::post('/kas-logistik/kredit', [KasLogistikController::class, 'kredit'])->name('kaslogistik.kredit');
 Route::get('/kaslogistik', [KasLogistikController::class, 'index'])->name('kaslogistik.index');
+Route::delete('/kaslogistik/{id}', [KasLogistikController::class, 'destroy'])->name('kaslogistik.destroy');
 
 //kaslokasi
 Route::get('/kaslokasi', [KasLokasiController::class, 'index']);
 Route::post('/kaslokasi/store', [KasLokasiController::class, 'store'])->name('kaslokasi.store');
 Route::post('/kaslokasi/kredit', [KasLokasiController::class, 'kredit'])->name('kaslokasi.kredit');
+Route::delete('/kaslokasi/{id}', [KasLokasiController::class, 'destroy'])->name('kaslokasi.destroy');
 
 //kasoperasional
 Route::get('/kasoperasional', [KasOperasionalController::class, 'index'])->name('kasoperasional.index');
 Route::post('/kasoperasional/store', [KasOperasionalController::class, 'store'])->name('kasoperasional.store');
 Route::post('/kasoperasional/kredit', [KasOperasionalController::class, 'kredit'])->name('kasoperasional.kredit');
+Route::delete('/kasoperasional/{id}', [KasOperasionalController::class, 'destroy'])->name('kasoperasional.destroy');
 
 
 

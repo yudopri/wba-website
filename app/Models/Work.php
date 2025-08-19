@@ -17,6 +17,8 @@ class Work extends Model
         'name',
         'berlaku',
         'pict_dokumen',
+        'pict_dokumen1',
+        'pict_dokumen2',
         'status',
     ];
 

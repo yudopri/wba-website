@@ -14,11 +14,35 @@ use Illuminate\Support\Facades\Storage;
 class InventoriesController extends Controller
 {
     // Menampilkan daftar barang yang dipinjamkan
-    public function index()
-    {
-        $inventories = Inventories::with(['inventoryItem', 'employee', 'user'])->get();
-        return view('admin.inventaris.index', compact('inventories'));
+    public function index(Request $request)
+{
+    $query = Inventories::with(['inventoryItem', 'employee', 'user']);
+
+    // Filter berdasarkan pencarian nama karyawan atau barang
+    if ($request->filled('search')) {
+        $search = $request->search;
+        $query->whereHas('employee', function ($q) use ($search) {
+            $q->where('nama', 'like', "%{$search}%")
+              ->orWhere('nik', 'like', "%{$search}%");
+        })
+        ->orWhereHas('inventoryItem', function ($q) use ($search) {
+            $q->where('nama_barang', 'like', "%{$search}%");
+        });
     }
+
+    // Filter berdasarkan jenis barang
+    if ($request->filled('jenis_barang')) {
+        $jenis = $request->jenis_barang;
+        $query->whereHas('inventoryItem', function ($q) use ($jenis) {
+            $q->where('jenis_barang', $jenis);
+        });
+    }
+
+    $inventories = $query->get();
+
+    return view('admin.inventaris.index', compact('inventories'));
+}
+
 
     // Menampilkan form untuk meminjam barang (create)
     public function create()

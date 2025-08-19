@@ -19,9 +19,19 @@
             <input type="date" name="berlaku" id="berlaku" class="form-control">
         </div>
         <div class="form-group">
-        <label for="pict_dokumen">Foto Dokumen Kerja Sama</label>
+    <label>Foto Dokumen Kontrak</label>
+    <div class="row align-items-center">
+         <div class="col-md-3">
         <input type="file" name="pict_dokumen" id="pict_dokumen" class="form-control">
+            </div>
+             <div class="col-md-3">
+        <input type="file" name="pict_dokumen1" id="pict_dokumen1" class="form-control">
+            </div>
+             <div class="col-md-3">
+        <input type="file" name="pict_dokumen2" id="pict_dokumen2" class="form-control">
+            </div>
     </div>
+        </div>
         <button type="submit" class="btn btn-primary">Simpan</button>
     </form>
 

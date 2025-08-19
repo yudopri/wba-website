@@ -89,7 +89,7 @@ $lastBalance = SaldoUtama::latest()->first();
         'keterangan' => $request->keterangan,
         'debit' => $request->debit,
         'kredit' => 0,
-        'saldo' => $lastSaldoLogistik - $request->debit, // saldo logistik berkurang
+        'saldo' => $lastSaldoLogistik + $request->debit, // saldo logistik berkurang
     ]);
 
     return redirect()->back()->with('success', 'Saldo berhasil diperbarui.');
@@ -100,7 +100,8 @@ $lastBalance = SaldoUtama::latest()->first();
     {
         $request->validate([
     'keterangan' => 'required|string|max:255',
-    'debit' => 'required|numeric|min:1',
+    'kredit' => 'required|numeric|min:1',
+    'created_at' => 'required|date',
 ]);
 $validated['id_user'] = auth()->id();
 
@@ -117,8 +118,41 @@ $validated['id_user'] = auth()->id();
             'debit' => 0,
             'kredit' => $request->kredit,
             'saldo' => $lastSaldo - $request->kredit,
+            'created_at' => $request->created_at,
         ]);
 
         return redirect()->back()->with('success', 'Pengeluaran berhasil disimpan.');
+    }
+    public function destroy($id)
+    {
+        $pajak = Pajak::findOrFail($id);
+        // --- Update saldo utama kalau debit ---
+    $saldoUtama = SaldoUtama::latest('id')->first();
+    if ($saldoUtama && $pajak->debit > 0) {
+        $saldoBaru = $saldoUtama->saldo - $pajak->debit;
+
+        SaldoUtama::create([
+            'id_user' => Auth::id(),
+            'debit' => 0,
+            'kredit' => 0,
+            'saldo' => $saldoBaru,
+        ]);
+    }
+
+    // --- Update saldo pajak kalau kredit ---
+    $saldopajakTerakhir = Pajak::latest('id')->first();
+    if ($saldopajakTerakhir && $pajak->kredit > 0) {
+        $saldoBarupajak = $saldopajakTerakhir->saldo + $pajak->kredit;
+
+        Pajak::create([
+            'id_user' => Auth::id(),
+            'debit' => 0,
+            'kredit' => 0,
+            'saldo' => $saldoBarupajak,
+        ]);
+    }
+        $pajak->delete();
+
+        return redirect()->back()->with('success', 'Transaksi pajak berhasil dihapus.');
     }
 }

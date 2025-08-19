@@ -87,6 +87,7 @@
             @csrf
             <input type="text" name="keterangan" class="form-control mb-2" placeholder="Keterangan" required>
             <input type="number" name="kredit" class="form-control mb-2" placeholder="Jumlah Pembayaran" required>
+            <input type="date" name="created_at" class="form-control mb-2" placeholder="Tanggal Pengeluaran" required>
             <button class="btn btn-danger">Simpan</button>
         </form>
     </div>
@@ -101,9 +102,12 @@
                 <th>Keterangan</th>
                 <th>Debit</th>
                 <th>Kredit</th>
-                <th>Saldo Setelah</th>
+                <th>Saldo Tersedia</th>
                 <th>User</th>
                 <th>Tanggal</th>
+                @if(auth()->user()->role === 'Manager')
+                <th>Aksi</th>
+                @endif
             </tr>
         </thead>
         <tbody>
@@ -116,6 +120,15 @@
                 <td>Rp. {{ number_format($item->saldo, 0, ',', '.') }}</td>
                 <td>{{ $item->user->name ?? '-' }}</td>
                 <td>{{ \Carbon\Carbon::parse($item->created_at)->format('d-m-Y H:i') }}</td>
+                @if(auth()->user()->role === 'Manager')
+                <td>
+                    <form action="{{ route('pinjaman.destroy', $item->id) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus transaksi ini?')">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-danger btn-sm">Hapus</button>
+                    </form>
+                </td>
+                @endif
             </tr>
             @endforeach
         </tbody>

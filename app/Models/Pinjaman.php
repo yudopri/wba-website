@@ -15,6 +15,11 @@ class Pinjaman extends Model
         'kredit',
         'saldo',
         'keterangan',
+        'created_at',
         'id_user'
     ];
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'id_user');
+    }
 }

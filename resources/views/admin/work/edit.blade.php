@@ -31,17 +31,41 @@
             <input type="date" name="berlaku" id="berlaku" class="form-control" value="{{ old('berlaku', isset($work) ? $work->berlaku : '') }}" {{ auth()->user()->role === 'Karyawan' && isset($work) && $work->berlaku ? 'readonly' : '' }} >
         </div>
 
-        <div class="form-group">
-        <label for="pict_dokumen">Foto Dokumen Kerja Sama</label>
+         <div class="form-group">
+    <label>Foto Dokumen Kontrak</label>
+    <div class="row align-items-center">
+         <div class="col-md-3">
         <input type="file" name="pict_dokumen" id="pict_dokumen" class="form-control">
         @if(isset($work) && $work->pict_dokumen)
-            <p><a href="{{ asset($work->pict_dokumen) }}" target="_blank">Lihat Foto Dokumen Kerja Sama</a></p>
+            <p><a href="{{ asset($work->pict_dokumen) }}" target="_blank">Lihat Foto Dokumen Kontrak</a></p>
         @elseif(!isset($work))
-            <p>Upload Foto Dokumen Kerja Sama jika ada.</p>
+            <p>Upload Foto Dokumen Kontrak jika ada.</p>
         @else
-            <p>Tidak ada foto Dokumen Kerja Sama.</p>
+            <p>Tidak ada foto Dokumen Kontrak.</p>
         @endif
+            </div>
+             <div class="col-md-3">
+        <input type="file" name="pict_dokumen1" id="pict_dokumen1" class="form-control">
+        @if(isset($work) && $work->pict_dokumen1)
+            <p><a href="{{ asset($work->pict_dokumen1) }}" target="_blank">Lihat Foto Dokumen Kontrak</a></p>
+        @elseif(!isset($work))
+            <p>Upload Foto Dokumen Kontrak jika ada.</p>
+        @else
+            <p>Tidak ada foto Dokumen Kontrak.</p>
+        @endif
+            </div>
+             <div class="col-md-3">
+        <input type="file" name="pict_dokumen2" id="pict_dokumen2" class="form-control">
+        @if(isset($work) && $work->pict_dokumen2)
+            <p><a href="{{ asset($work->pict_dokumen2) }}" target="_blank">Lihat Foto Dokumen Kontrak</a></p>
+        @elseif(!isset($work))
+            <p>Upload Foto Dokumen Kontrak jika ada.</p>
+        @else
+            <p>Tidak ada foto Dokumen Kontrak.</p>
+        @endif
+            </div>
     </div>
+        </div>
                 <button type="submit" class="btn btn-primary">Update</button>
                 <a href="{{ route('admin.work.index') }}" class="btn btn-secondary ml-2">Kembali</a>
             </form>

@@ -91,7 +91,7 @@ $validated['id_user'] = Auth::id();
         'keterangan' => $request->keterangan,
         'debit' => $request->debit,
         'kredit' => 0,
-        'saldo' => $lastSaldoLogistik - $request->debit, // saldo logistik berkurang
+        'saldo' => $lastSaldoLogistik + $request->debit, // saldo logistik berkurang
     ]);
 
     return redirect()->back()->with('success', 'Saldo berhasil diperbarui.');
@@ -102,7 +102,8 @@ $validated['id_user'] = Auth::id();
     {
         $request->validate([
     'keterangan' => 'required|string|max:255',
-    'debit' => 'required|numeric|min:1',
+    'kredit' => 'required|numeric|min:1',
+    'created_at' => 'required|date',
 ]);
 $validated['id_user'] = auth()->id();
 
@@ -119,8 +120,45 @@ $validated['id_user'] = auth()->id();
             'debit' => 0,
             'kredit' => $request->kredit,
             'saldo' => $lastSaldo - $request->kredit,
+            'created_at' => $request->created_at,
         ]);
 
         return redirect()->back()->with('success', 'Pengeluaran berhasil disimpan.');
     }
+    public function destroy($id)
+{
+    $bpjs = Bpjs::findOrFail($id);
+
+    // --- Update saldo utama kalau debit ---
+    $saldoUtama = SaldoUtama::latest('id')->first();
+    if ($saldoUtama && $bpjs->debit > 0) {
+        $saldoBaru = $saldoUtama->saldo - $bpjs->debit;
+
+        SaldoUtama::create([
+            'id_user' => Auth::id(),
+            'debit' => 0,
+            'kredit' => 0,
+            'saldo' => $saldoBaru,
+        ]);
+    }
+
+    // --- Update saldo BPJS kalau kredit ---
+    $saldoBpjsTerakhir = Bpjs::latest('id')->first();
+    if ($saldoBpjsTerakhir && $bpjs->kredit > 0) {
+        $saldoBaruBpjs = $saldoBpjsTerakhir->saldo + $bpjs->kredit;
+
+        Bpjs::create([
+            'id_user' => Auth::id(),
+            'debit' => 0,
+            'kredit' => 0,
+            'saldo' => $saldoBaruBpjs,
+        ]);
+    }
+
+    // --- Hapus transaksi BPJS ---
+    $bpjs->delete();
+
+    return redirect()->back()->with('success', 'Transaksi BPJS berhasil dihapus dan saldo diperbarui.');
+}
+
 }

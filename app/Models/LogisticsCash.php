@@ -17,6 +17,7 @@ class LogisticsCash extends Model
         'keterangan',
         'debit',
         'kredit',
+        'created_at',
         'saldo',
     ];
     public function user(): BelongsTo

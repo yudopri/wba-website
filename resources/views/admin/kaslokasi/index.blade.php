@@ -101,6 +101,7 @@
 
             <input type="hidden" name="lokasi" value="{{ $userLokasi }}">
             <p class="mb-2"><strong>Lokasi:</strong> {{ $userLokasi }}</p>
+            <input type="date" name="created_at" class="form-control mb-2" placeholder="Tanggal Pengeluaran" required>
 
             <button class="btn btn-danger">Simpan</button>
         </form>
@@ -116,9 +117,12 @@
                 <th>Keterangan</th>
                 <th>Debit</th>
                 <th>Kredit</th>
-                <th>Saldo Setelah</th>
+                <th>Saldo Tersedia</th>
                 <th>Lokasi</th>
                 <th>Tanggal</th>
+                @if(auth()->user()->role === 'Manager')
+                <th>Aksi</th>
+                @endif
             </tr>
         </thead>
         <tbody>
@@ -132,6 +136,15 @@
                 <td>{{ $item->work?->name ?? $item->lokasi_kerja }}</td>
 
                 <td>{{ \Carbon\Carbon::parse($item->created_at)->format('d-m-Y H:i') }}</td>
+                @if(auth()->user()->role === 'Manager')
+                <td>
+                    <form action="{{ route('kaslokasi.destroy', $item->id) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus transaksi ini?')">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-danger btn-sm">Hapus</button>
+                    </form>
+                </td>
+                @endif
             </tr>
             @endforeach
         </tbody>

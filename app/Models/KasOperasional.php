@@ -14,6 +14,7 @@ protected $table = 'operational_petty_cash'; // ⬅️ tambahkan ini
         'debit',
         'kredit',
         'saldo',
+        'created_at',
         'id_user',
     ];
     // benerno sesuai iki

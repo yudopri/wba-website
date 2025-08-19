@@ -12,11 +12,31 @@ use Illuminate\Support\Facades\Storage;
 
 class DistributionController extends Controller
 {
-    public function index()
-    {
-        $distributions = Distribution::with(['user', 'employee', 'inventoryItem'])->get();
-        return view('admin.distributions.index', compact('distributions'));
-    }
+    public function index(Request $request)
+{
+    $search = $request->search;
+    $jenis  = $request->jenis; // ganti dari 'gada' ke 'jenis'
+
+    $distributions = Distribution::with(['user', 'employee', 'inventoryItem'])
+        ->when($search, function ($query, $search) {
+            return $query->whereHas('employee', function ($q) use ($search) {
+                    $q->where('nama', 'like', "%{$search}%")
+                      ->orWhere('nik', 'like', "%{$search}%");
+                })
+                ->orWhereHas('inventoryItem', function ($q) use ($search) {
+                    $q->where('nama', 'like', "%{$search}%");
+                });
+        })
+        ->when($jenis, function ($query, $jenis) {
+            return $query->whereHas('inventoryItem', function ($q) use ($jenis) {
+                $q->where('jenis', $jenis);
+            });
+        })
+        ->get();
+
+    return view('admin.distributions.index', compact('distributions'));
+}
+
 
     public function create()
     {

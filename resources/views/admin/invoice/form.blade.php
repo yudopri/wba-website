@@ -89,8 +89,8 @@
     <input type="date"
            name="date_pay"
            class="form-control @error('date_pay') is-invalid @enderror"
-           value="{{ old('date_paid', isset($invoice->date_paid) ? date('Y-m-d', strtotime($invoice->date_pay)) : '') }}">
-    @error('date_paid')
+           value="{{ old('date_pay', isset($invoice->date_pay) ? date('Y-m-d', strtotime($invoice->date_pay)) : '') }}">
+    @error('date_pay')
         <div class="invalid-feedback">{{ $message }}</div>
     @enderror
 </div>

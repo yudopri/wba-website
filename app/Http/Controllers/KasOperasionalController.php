@@ -86,6 +86,7 @@ class KasOperasionalController extends Controller
     $request->validate([
         'keterangan' => 'required|string|max:255',
         'kredit' => 'required|numeric|min:1', // ubah debit -> kredit
+        'created_at' => 'required|date',
     ]);
 
     $lastSaldo = KasOperasional::latest()->first()?->saldo ?? 0;
@@ -100,10 +101,43 @@ class KasOperasionalController extends Controller
         'debit' => 0,
         'kredit' => $request->kredit,
         'saldo' => $saldoBaru,
+        'created_at' => $request->created_at,
         'id_user' => Auth::id(),
     ]);
 
     return redirect()->back()->with('success', 'Pengeluaran berhasil disimpan.');
 }
+    public function destroy($id)
+    {
+        $kasOperasional = KasOperasional::findOrFail($id);
+        // --- Update saldo utama kalau debit ---
+    $saldoUtama = SaldoUtama::latest('id')->first();
+    if ($saldoUtama && $kasOperasional->debit > 0) {
+        $saldoBaru = $saldoUtama->saldo - $kasOperasional->debit;
+
+        SaldoUtama::create([
+            'id_user' => Auth::id(),
+            'debit' => 0,
+            'kredit' => 0,
+            'saldo' => $saldoBaru,
+        ]);
+    }
+
+    // --- Update saldo BPJS kalau kredit ---
+    $saldokasOperasionalTerakhir = KasOperasional::latest('id')->first();
+    if ($saldokasOperasionalTerakhir && $kasOperasional->kredit > 0) {
+        $saldoBarukasOperasional = $saldokasOperasionalTerakhir->saldo + $kasOperasional->kredit;
+
+        KasOperasional::create([
+            'id_user' => Auth::id(),
+            'debit' => 0,
+            'kredit' => 0,
+            'saldo' => $saldoBarukasOperasional,
+        ]);
+    }
+        $kasOperasional->delete();
+
+        return redirect()->back()->with('success', 'Transaksi kas operasional berhasil dihapus.');
+    }
 
 }

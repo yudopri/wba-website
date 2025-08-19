@@ -4,29 +4,30 @@
 @if(auth()->user()->role === 'Logistik' || auth()->user()->role === 'Manager')
 <div class="mb-4">
     <form action="{{ route('admin.inventaris.index') }}" method="GET" class="form-inline">
-        <!-- Pencarian Nama atau NIK -->
-        <div class="form-group mb-2 mr-2">
-            <input
-                type="text"
-                name="search"
-                class="form-control"
-                placeholder="Cari nama karyawan atau barang"
-                value="{{ request('search') }}">
-        </div>
+    <!-- Pencarian Nama atau NIK -->
+    <div class="form-group mb-2 mr-2">
+        <input
+            type="text"
+            name="search"
+            class="form-control"
+            placeholder="Cari nama karyawan atau barang"
+            value="{{ request('search') }}">
+    </div>
 
-        <!-- Filter Jenis -->
-        <div class="form-group mb-2 mr-2">
-            <select name="gada" class="form-control">
-                <option value="">-- Jenis Barang --</option>
-                <option value="Alat" {{ request('gada') == 'Alat' ? 'selected' : '' }}>Alat</option>
-                <option value="Baju" {{ request('gada') == 'Baju' ? 'selected' : '' }}>Baju</option>
-            </select>
-        </div>
+    <!-- Filter Jenis -->
+    <div class="form-group mb-2 mr-2">
+        <select name="jenis_barang" class="form-control">
+            <option value="">-- Jenis Barang --</option>
+            <option value="Alat" {{ request('jenis_barang') == 'Alat' ? 'selected' : '' }}>Alat</option>
+            <option value="Seragam" {{ request('jenis_barang') == 'Seragam' ? 'selected' : '' }}>Seragam</option>
+        </select>
+    </div>
 
-        <!-- Tombol Filter -->
-        <button type="submit" class="btn btn-primary mb-2">Filter</button>
-        <a href="{{ route('admin.inventaris.index') }}" class="btn btn-secondary mb-2 ml-2">Reset</a>
-    </form>
+    <!-- Tombol Filter -->
+    <button type="submit" class="btn btn-primary mb-2">Filter</button>
+    <a href="{{ route('admin.inventaris.index') }}" class="btn btn-secondary mb-2 ml-2">Reset</a>
+</form>
+
 </div>
 
 <a href="{{ route('admin.inventaris.create') }}" class="btn btn-primary mt-3">Tambah Data</a>

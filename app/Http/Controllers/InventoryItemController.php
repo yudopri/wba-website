@@ -12,12 +12,11 @@ class InventoryItemController extends Controller
      * Display a listing of the resource.
      */
     public function index(Request $request)
-    {
-        $search = $request->search;
-        $type = $request->gada;
+{
+    $search = $request->search;
+    $type = $request->gada; // dari form <select>
 
-        // Filter data berdasarkan search dan jenis barang
-        $inventoryItems = InventoryItem::when($search, function ($query, $search) {
+    $inventoryItems = InventoryItem::when($search, function ($query, $search) {
             return $query->where('nama', 'like', '%' . $search . '%');
         })
         ->when($type, function ($query, $type) {
@@ -25,8 +24,9 @@ class InventoryItemController extends Controller
         })
         ->get();
 
-        return view('admin.inventory.index', compact('inventoryItems'));
-    }
+    return view('admin.inventory.index', compact('inventoryItems'));
+}
+
 
     /**
      * Show the form for creating a new resource.

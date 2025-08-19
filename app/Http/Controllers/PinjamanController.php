@@ -47,7 +47,7 @@ class PinjamanController extends Controller
             'debit' => 'required|numeric|min:0',
         ]);
 
-        $lastSaldo = Pinjaman::orderBy('created_at', 'desc')->value('saldo') ?? 0;
+
            // Ambil saldo terakhir per user dari SaldoUtama
           $saldoTerakhir = $lastBalance ? $lastBalance->saldo : 0;
 
@@ -66,13 +66,13 @@ $lastBalance = SaldoUtama::latest()->first();
         'kredit' => 0,
         'saldo' => $saldoBaru,
     ]);
-
+$lastSaldo = Pinjaman::orderBy('created_at', 'desc')->value('saldo') ?? 0;
 
         Pinjaman::create([
             'keterangan' => $request->keterangan,
             'debit' => $request->debit,
             'kredit' => 0,
-            'saldo' => $saldoBaru,
+            'saldo' => $lastSaldo + $request->debit, // saldo bertambah
             'id_user' => Auth::id(),
         ]);
 
@@ -84,6 +84,7 @@ $lastBalance = SaldoUtama::latest()->first();
         $request->validate([
             'keterangan' => 'required|string|max:255',
             'kredit' => 'required|numeric|min:0',
+            'created_at' => 'required|date',
         ]);
 
         $lastSaldo = Pinjaman::latest()->first()?->saldo ?? 0;
@@ -98,6 +99,7 @@ $lastBalance = SaldoUtama::latest()->first();
             'debit' => 0,
             'kredit' => $request->kredit,
             'saldo' => $saldoBaru,
+            'created_at' => $request->created_at,
             'id_user' => Auth::id(),
         ]);
 
@@ -107,6 +109,31 @@ $lastBalance = SaldoUtama::latest()->first();
     public function destroy($id)
     {
         $pinjaman = Pinjaman::findOrFail($id);
+        // --- Update saldo utama kalau debit ---
+    $saldoUtama = SaldoUtama::latest('id')->first();
+    if ($saldoUtama && $pinjaman->debit > 0) {
+        $saldoBaru = $saldoUtama->saldo - $pinjaman->debit;
+
+        SaldoUtama::create([
+            'id_user' => Auth::id(),
+            'debit' => 0,
+            'kredit' => 0,
+            'saldo' => $saldoBaru,
+        ]);
+    }
+
+    // --- Update saldo pinjaman kalau kredit ---
+    $saldopinjamanTerakhir = Pinjaman::latest('id')->first();
+    if ($saldopinjamanTerakhir && $pinjaman->kredit > 0) {
+        $saldoBarupinjaman = $saldopinjamanTerakhir->saldo + $pinjaman->kredit;
+
+        Pinjaman::create([
+            'id_user' => Auth::id(),
+            'debit' => 0,
+            'kredit' => 0,
+            'saldo' => $saldoBarupinjaman,
+        ]);
+    }
         $pinjaman->delete();
 
         return redirect()->back()->with('success', 'Data pinjaman berhasil dihapus.');

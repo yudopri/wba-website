@@ -87,7 +87,7 @@ class KasLogistikController extends Controller
             'keterangan' => $validated['keterangan'],
             'debit' => $validated['debit'],
             'kredit' => 0,
-            'saldo' => $lastSaldoLogistik - $validated['debit'], // saldo logistik berkurang
+            'saldo' => $lastSaldoLogistik + $request->debit, // saldo logistik berkurang
         ]);
 
         return redirect()->back()->with('success', 'Saldo berhasil diperbarui.');
@@ -98,6 +98,7 @@ class KasLogistikController extends Controller
         $validated = $request->validate([
             'keterangan' => 'required|string|max:255',
             'kredit' => 'required|numeric|min:1',
+            'created_at' => 'required|date',
         ]);
 
         $validated['id_user'] = Auth::id();
@@ -115,8 +116,41 @@ class KasLogistikController extends Controller
             'debit' => 0,
             'kredit' => $validated['kredit'],
             'saldo' => $lastSaldo - $validated['kredit'],
+            'created_at' => $validated['created_at'],
         ]);
 
         return redirect()->back()->with('success', 'Pengeluaran berhasil disimpan.');
+    }
+    public function destroy($id)
+    {
+        $kasLogistik = LogisticsCash::findOrFail($id);
+        // --- Update saldo utama kalau debit ---
+    $saldoUtama = SaldoUtama::latest('id')->first();
+    if ($saldoUtama && $kasLogistik->debit > 0) {
+        $saldoBaru = $saldoUtama->saldo - $kasLogistik->debit;
+
+        SaldoUtama::create([
+            'id_user' => Auth::id(),
+            'debit' => 0,
+            'kredit' => 0,
+            'saldo' => $saldoBaru,
+        ]);
+    }
+
+    // --- Update saldo BPJS kalau kredit ---
+    $saldoLogisticsCashTerakhir = LogisticsCash::latest('id')->first();
+    if ($saldoLogisticsCashTerakhir && $kasLogistik->kredit > 0) {
+        $saldoBaruLogisticsCash = $saldoLogisticsCashTerakhir->saldo + $kasLogistik->kredit;
+
+        LogisticsCash::create([
+            'id_user' => Auth::id(),
+            'debit' => 0,
+            'kredit' => 0,
+            'saldo' => $saldoBaruLogisticsCash,
+        ]);
+    }
+        $kasLogistik->delete();
+
+        return redirect()->back()->with('success', 'Transaksi kas logistik berhasil dihapus.');
     }
 }

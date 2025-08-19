@@ -17,7 +17,7 @@
     <div class="card-body">
     <!-- Tabel Departemen -->
     <table class="table table-bordered table-responsive">
-    <thead class="thead-dark">  
+    <thead class="thead-dark">
         <tr class="text-center">
                 <th class="text-nowrap">No</th>
                 <th class="text-nowrap">Nama Lokasi Kerja</th>
@@ -48,18 +48,36 @@
                     </td>
 
                     <!-- Kolom Dokumen Kontrak -->
-                    <td class="text-center">
-                        @if($work->pict_dokumen)
-                            <a href="{{ asset($work->pict_dokumen) }}" 
-                               target="_blank" 
-                               class="btn btn-info btn-sm">
-                                Lihat Gambar
-                            </a>
-                        @else
-                            <span class="text-muted">Tidak ada dokumen</span>
-                        @endif
-                    </td>
+                        <td class="text-center">
+    @php
+        $dokumenList = [
+            $work->pict_dokumen,
+            $work->pict_dokumen1,
+            $work->pict_dokumen2,
+        ];
+        $dokumenList = array_filter($dokumenList); // Buang yang null
+    @endphp
 
+    @if(count($dokumenList))
+        <div class="dropdown">
+            <button class="btn btn-info btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                Lihat Dokumen
+            </button>
+            <ul class="dropdown-menu">
+                @foreach($dokumenList as $index => $file)
+                    <li>
+                        <a class="dropdown-item" href="{{ asset($file) }}" target="_blank">
+                            Dokumen {{ $loop->iteration }}
+                        </a>
+                    </li>
+                @endforeach
+            </ul>
+        </div>
+    @else
+        <span class="tex
+t-muted">Tidak ada dokumen</span>
+    @endif
+                    </td>
                     <!-- Kolom Aksi -->
                     <td>
                         <a href="{{ route('admin.work.edit', $work->id) }}" class="btn btn-warning btn-sm">Edit</a>
@@ -135,7 +153,10 @@
                 →
             </span>
         @endif
-        
+
     </div>
 </div>
+<!-- Bootstrap 5 JS Bundle (wajib agar dropdown berfungsi) -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
 @stop

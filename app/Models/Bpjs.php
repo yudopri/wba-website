@@ -16,6 +16,7 @@ protected $table = 'bpjs_cash'; // ⬅️ tambahkan ini
         'debit',
         'kredit',
         'saldo',
+        'created_at',
         'id_user',
     ];
     public function user(): BelongsTo

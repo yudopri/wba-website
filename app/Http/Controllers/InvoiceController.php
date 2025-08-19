@@ -15,32 +15,31 @@ class InvoiceController extends Controller
 {
     public function index(Request $request)
 {
-    $query = Invoice::with('user');
+    $query = Invoice::query();
 
     // Filter pencarian nama perusahaan
     if ($request->filled('search')) {
-        $query->whereHas('user', function ($q) use ($request) {
-            $q->where('lokasi_kerja', 'like', '%' . $request->search . '%');
-        });
+        $query->where('nama_perusahaan', 'like', '%' . $request->search . '%');
     }
 
-    // Filter bulan range
-    if ($request->filled('bulan_awal') && $request->filled('bulan_akhir')) {
-        $start = date('Y-m-01', strtotime($request->bulan_awal));
-        $end = date('Y-m-t', strtotime($request->bulan_akhir));
-        $query->whereBetween('date_pay', [$start, $end]);
+    // Filter bulan awal & akhir
+    if ($request->filled('bulan_awal')) {
+        $query->whereDate('bulan', '>=', $request->bulan_awal . '-01');
     }
-    // Filter hanya satu bulan (jika bulan_akhir kosong)
-    elseif ($request->filled('bulan_awal')) {
-        $start = date('Y-m-01', strtotime($request->bulan_awal));
-        $end = date('Y-m-t', strtotime($request->bulan_awal));
-        $query->whereBetween('date_pay', [$start, $end]);
+    if ($request->filled('bulan_akhir')) {
+        $query->whereDate('bulan', '<=', $request->bulan_akhir . '-31');
     }
 
-    $invoices = $query->latest()->paginate(10);
+    // Filter status
+    if ($request->filled('status')) {
+        $query->where('status', $request->status);
+    }
+
+    $invoices = $query->paginate(10);
 
     return view('admin.invoice.index', compact('invoices'));
 }
+
 
 
     public function create()
@@ -107,12 +106,31 @@ $invoice->update($validated);
         return redirect()->route('admin.invoice.index')->with('success', 'Invoice berhasil diperbarui.');
     }
 
-    public function destroy(Invoice $invoice)
-    {
-        $invoice->delete();
+   public function destroy(Invoice $invoice)
+{
+    // Ambil saldo terakhir
+    $saldo = SaldoUtama::latest('id')->first();
 
-        return redirect()->route('admin.invoice.index')->with('success', 'Invoice berhasil dihapus.');
+    if ($saldo) {
+        // Rollback nominal invoice (misal hanya kalau status sudah paid)
+        if ($invoice->status === 'paid') {
+            $saldoBaru = $saldo->saldo - $invoice->nominal;
+
+            // Simpan saldo baru
+            SaldoUtama::create([
+                'id_user' => Auth::id(),
+                'debit' => 0,
+                'kredit' => 0,
+                'saldo' => $saldoBaru,
+            ]);
+        }
     }
+
+    // Hapus invoice
+    $invoice->delete();
+
+    return redirect()->route('admin.invoice.index')->with('success', 'Invoice dan saldo utama berhasil dihapus.');
+}
     public function upload(Request $request, $id)
 {
     $Invoice = Invoice::findOrFail($id);

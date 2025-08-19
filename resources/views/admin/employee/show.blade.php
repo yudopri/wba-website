@@ -290,7 +290,7 @@
                         </button>
                     </form>
                     @if(auth()->user()->role === 'Admin' || auth()->user()->role === 'Manager')
-                        <a href="{{ route('admin.employee.pict_pkwt', $employee->id) }}" class="btn btn-success btn-sm">
+                        <a href="{{ route('admin.employee.pkwt', $employee->id) }}" class="btn btn-success btn-sm">
                             <i class="fas fa-download"></i> Download
                         </a>
                     @endif

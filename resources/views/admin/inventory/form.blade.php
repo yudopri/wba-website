@@ -29,8 +29,8 @@
                 <label>Jenis inventoryItem</label>
                 <select name="jenis" class="form-control" required>
                     <option value="">-- Pilih Jenis --</option>
-                    <option value="Alat" {{ (old('jenis', $inventoryItem->jenis_barang ?? '') == 'Alat') ? 'selected' : '' }}>Alat</option>
-                    <option value="Baju" {{ (old('jenis', $inventoryItem->jenis_barang ?? '') == 'Baju') ? 'selected' : '' }}>Baju</option>
+                    <option value="Alat" {{ (old('jenis_barang', $inventoryItem->jenis_barang ?? '') == 'Alat') ? 'selected' : '' }}>Alat</option>
+                    <option value="Seragam" {{ (old('jenis_barang', $inventoryItem->jenis_barang ?? '') == 'Seragam') ? 'selected' : '' }}>Seragam</option>
                 </select>
             </div>
 

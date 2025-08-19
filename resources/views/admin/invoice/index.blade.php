@@ -4,7 +4,7 @@
 <h1>Data Seluruh Invoice</h1>
  @if(auth()->user()->role === 'Keuangan' || auth()->user()->role === 'Manager')
 <div class="mb-4">
-   <form action="{{ route('admin.invoice.index') }}" method="GET" class="form-inline">
+  <form action="{{ route('admin.invoice.index') }}" method="GET" class="form-inline">
     <!-- Pencarian Nama Perusahaan -->
     <div class="form-group mb-2 mr-2">
         <input
@@ -29,10 +29,21 @@
                value="{{ request('bulan_akhir') }}">
     </div>
 
+    <!-- Status Invoice -->
+    <div class="form-group mb-2 mr-2">
+        <label class="mr-2">Status</label>
+        <select name="status" class="form-control">
+            <option value="">-- Semua --</option>
+            <option value="pending" {{ request('status') == 'pending' ? 'selected' : '' }}>Menunggu</option>
+            <option value="paid" {{ request('status') == 'paid' ? 'selected' : '' }}>Lunas</option>
+        </select>
+    </div>
+
     <!-- Tombol Filter -->
     <button type="submit" class="btn btn-primary mb-2">Filter</button>
     <a href="{{ route('admin.invoice.index') }}" class="btn btn-secondary mb-2 ml-2">Reset</a>
 </form>
+
 
 </div>
 
