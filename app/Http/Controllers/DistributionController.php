@@ -139,11 +139,16 @@ public function upload(Request $request, $id)
 
         // Simpan path relatif ke database (biar bisa diakses pakai asset())
         $distribution->foto_bukti = 'assets/bukti_distribusi/' . $filename;
+
+        // Update status jadi 'Selesai'
+        $distribution->status = 'Selesai';
+
         $distribution->save();
     }
 
-    return back()->with('success', 'Bukti berhasil diupload.');
+    return back()->with('success', 'Bukti berhasil diupload dan status diperbarui ke Selesai.');
 }
+
 
 
 

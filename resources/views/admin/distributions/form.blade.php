@@ -62,7 +62,7 @@
         <select name="status" id="status" class="form-control" required>
             <option value="">-- Pilih Status --</option>
             <option value="Dalam Proses" {{ (old('status') ?? $distribution->status ?? '') == 'Dalam Proses' ? 'selected' : '' }}>Dalam Proses</option>
-            <option value="Selesai" {{ (old('status') ?? $distribution->status ?? '') == 'Selesai' ? 'selected' : '' }}>Selesai</option>
+            <option value="Diterima" {{ (old('status') ?? $distribution->status ?? '') == 'Diterima' ? 'selected' : '' }}>Diterima</option>
         </select>
     </div>
 

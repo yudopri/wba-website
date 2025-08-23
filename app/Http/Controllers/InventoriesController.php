@@ -157,6 +157,8 @@ public function upload(Request $request, $id)
 
         // Simpan path relatif untuk akses dengan asset()
         $inventory->foto_bukti = 'assets/bukti_inventori/' . $filename;
+        // Update status jadi 'Selesai'
+        $inventory->status = 'Sudah Kembali';
         $inventory->save();
 
         return back()->with('success', 'Bukti berhasil diupload.');
