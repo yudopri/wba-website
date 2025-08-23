@@ -42,4 +42,20 @@ public function get()
         'dropdown' => view('components.notifikasi-dropdown', compact('notifikasis'))->render(),
     ]);
 }
+
+public function downloadRekap($filename)
+{
+    // Pastikan filename bersih dan tidak mengandung karakter aneh
+    $safeFilename = basename($filename);
+
+    $path = public_path('assets/rekapseragam/' . $safeFilename);
+
+    if (!file_exists($path)) {
+        abort(404, 'File tidak ditemukan.');
+    }
+
+    // Kirim file dengan header download
+    return response()->download($path, $safeFilename);
+}   
+
 }

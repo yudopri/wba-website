@@ -1,9 +1,8 @@
-@forelse ($notifikasis as $notif)
-    <a href="#" class="dropdown-item">
-        <i class="fas fa-info-circle mr-2 text-{{ $notif->tipe }}"></i>
-        {{ Str::limit($notif->pesan, 50) }}
+@forelse($notifikasis as $notif)
+    <a href="{{ route('rekap.index') }}" class="dropdown-item mark-as-read" data-id="{{ $notif->id }}">
+        <i class="fas fa-envelope mr-2"></i> {{ $notif->judul }}
         <span class="float-right text-muted text-sm">{{ $notif->created_at->diffForHumans() }}</span>
     </a>
 @empty
-    <span class="dropdown-item text-center text-muted">Tidak ada notifikasi</span>
+    <span class="dropdown-item">Tidak ada notifikasi baru</span>
 @endforelse

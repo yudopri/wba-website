@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Models\User;
 use App\Models\Distribution;
 use App\Models\InventoryItem;
 use App\Models\Employee;
@@ -9,6 +9,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
+use Barryvdh\DomPDF\Facade\Pdf;
+use App\Models\NotificationUser;
 
 class DistributionController extends Controller
 {
@@ -161,4 +163,47 @@ public function upload(Request $request, $id)
 
         return redirect()->route('admin.distributions.index')->with('success', 'Distribusi berhasil dihapus.');
     }
+
+public function rekapDistribusi()
+{
+    \Log::info('rekapDistribusi() dipanggil oleh scheduler pada: ' . now());
+
+    // Cari semua karyawan
+    $employees = Employee::all();
+
+    // Filter karyawan yang belum pernah dapat seragam
+    $belumDapat = $employees->filter(function ($emp) {
+        return !Distribution::where('id_karyawan', $emp->id)
+            ->whereHas('inventoryItem', function ($q) {
+                $q->where('jenis_barang', 'seragam');
+            })->exists();
+    });
+
+    // Buat PDF
+    $pdf = Pdf::loadView('admin.distributions.rekapseragam', [
+        'employees' => $belumDapat
+    ]);
+
+    // Simpan di public/assets/rekapseragam
+    $folder = public_path('assets/rekapseragam');
+    if (!file_exists($folder)) mkdir($folder, 0755, true);
+
+    $filename = 'rekap_seragam_' . now()->format('Y_m') . '.pdf';
+    $pdf->save($folder.'/'.$filename);
+
+    // Simpan notifikasi hanya untuk role admin dan manager
+    $users = User::whereIn('role', ['admin', 'manager'])->get();
+    foreach ($users as $user) {
+      NotificationUser::create([
+    'user_id' => $user->id,
+    'judul' => 'Rekap Distribusi',
+    'pesan' => 'Rekap distribusi seragam 6 bulan tersedia',
+    'link' => route('rekap.download', ['filename' => $filename]),
+    'sudah_dibaca' => false,
+]);
+
+    }
+
+    \Log::info("Notifikasi rekap dibuat untuk admin & manager, file: {$filename}");
+}
 }

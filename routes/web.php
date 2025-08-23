@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\RekapController;
 use App\Http\Controllers\VisitorController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ServiceController;
@@ -371,11 +372,14 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 
 //notif
 
+
 Route::get('/notifikasi', [NotificationController::class, 'index'])->name('notif.index');
 Route::post('/notifikasi/baca/{id}', [NotificationController::class, 'markAsRead'])->name('notif.markAsRead');
 Route::post('/notifikasi/baca/{id}', [NotificationController::class, 'markAsRead'])->name('notif.markAsRead');
 Route::post('/notifikasi/baca/{id}', [\App\Http\Controllers\NotifikasiController::class, 'markAsRead'])->name('notif.markAsRead');
 Route::get('/notifications/show', [App\Http\Controllers\NotificationController::class, 'show'])->name('notifications.show');
 Route::get('/notifications/get', [App\Http\Controllers\NotificationController::class, 'get'])->name('notifications.get');
+Route::get('/rekapseragam', [RekapController::class, 'index'])->name('rekap.index');
+
 
 

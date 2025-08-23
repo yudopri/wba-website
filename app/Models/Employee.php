@@ -64,7 +64,7 @@ class Employee extends Model
         'pict_jobapp',
         'lokasikerja',
         'date_start',
-        'date_end',// Fixed the typo here
+        'date_end',// Fixed the typo her
     ];
 
     // Relasi Employee dengan Departemen

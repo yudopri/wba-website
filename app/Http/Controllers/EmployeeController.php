@@ -19,7 +19,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Auth;
-use PhpOffice\PhpSpreadsheet\Cell\DataType; // Namespace untuk DataType
+use PhpOffice\PhpSpreadsheet\Cell\DataType; // Namespace untuk DataTyp
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use App\Exports\EmployeeExport;
