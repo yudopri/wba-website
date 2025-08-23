@@ -9,11 +9,27 @@ use Illuminate\Support\Facades\Storage;
 
 class WorkController extends Controller
 {
-    public function index()
-    {
-        $works = Work::paginate(10);
-        return view('admin.work.index', compact('works'));
+    public function index(Request $request)
+{
+    $query = Work::query();
+
+    // 🔍 Filter Nama Perusahaan
+    if ($request->filled('nama_perusahaan')) {
+        $query->where('name', 'like', '%' . $request->nama_perusahaan . '%');
     }
+
+    // ✅ Filter langsung ke kolom status
+    if ($request->filled('status')) {
+        $query->where('status', $request->status);
+    }
+
+    // Pagination dengan query tetap terbawa
+    $works = $query->paginate(10)->appends($request->query());
+
+    return view('admin.work.index', compact('works'));
+}
+
+
 
     public function create()
     {
@@ -134,7 +150,47 @@ class WorkController extends Controller
 
     return redirect()->route('admin.work.index')->with('success', 'Lokasi Kerja updated successfully.');
 }
+public function aktif($id)
+    {
+        try {
+            $Work = Work::findOrFail($id);
+            Log::info("Attempting to update status to 'aktif' for Work ID: $id");
 
+            // Pastikan status hanya diubah menjadi 'aktif'
+            if ($Work->status !== 'aktif') {
+                $Work->update(['status' => 'aktif']);
+                Log::info("Status kerja successfully updated to 'aktif' for Work ID: $id");
+            }
+
+            return redirect()->route('admin.work.index')->with('success', 'Status kerja karyawan berhasil diperbarui menjadi aktif.');
+        } catch (\Exception $e) {
+            Log::error("Failed to update status to 'aktif' for Work ID: $id", [
+                'error' => $e->getMessage(),
+            ]);
+            return redirect()->route('admin.work.index')->with('error', 'Gagal memperbarui status kerja karyawan.');
+        }
+    }
+
+    public function nonaktif($id)
+    {
+        try {
+            $Work = Work::findOrFail($id);
+            Log::info("Attempting to update status to 'nonaktif' for Work ID: $id");
+
+            // Pastikan status hanya diubah menjadi 'nonaktif'
+            if ($Work->status !== 'nonaktif') {
+                $Work->update(['status' => 'nonaktif']);
+                Log::info("Status kerja successfully updated to 'nonaktif' for Work ID: $id");
+            }
+
+            return redirect()->route('admin.work.index')->with('success', 'Status kerja karyawan berhasil diperbarui menjadi nonaktif.');
+        } catch (\Exception $e) {
+            Log::error("Failed to update status to 'nonaktif' for Work ID: $id", [
+                'error' => $e->getMessage(),
+            ]);
+            return redirect()->route('admin.work.index')->with('error', 'Gagal memperbarui status kerja karyawan.');
+        }
+    }
 
     public function destroy(Work $work)
     {

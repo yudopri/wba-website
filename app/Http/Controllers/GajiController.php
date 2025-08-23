@@ -14,7 +14,7 @@ class GajiController extends Controller
     {
         $query = Gaji::with(['partner', 'user']);
 
-        if ($request->filled('gada')) {
+        if ($request->filled('bulan')) {
             $bulan = date('m', strtotime("1 " . $request->gada));
             $query->whereMonth('bulan', $bulan);
         }

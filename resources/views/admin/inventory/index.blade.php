@@ -16,10 +16,10 @@
 
     <!-- Filter Jenis Barang -->
     <div class="form-group mb-2 mr-2">
-        <select name="gada" class="form-control">
+        <select name="jenis" class="form-control">
             <option value="">-- Jenis Barang --</option>
-            <option value="Alat" {{ request('gada') == 'Alat' ? 'selected' : '' }}>Alat</option>
-            <option value="Baju" {{ request('gada') == 'Baju' ? 'selected' : '' }}>Baju</option>
+            <option value="Alat" {{ request('jenis') == 'Alat' ? 'selected' : '' }}>Alat</option>
+            <option value="Seragam" {{ request('jenis') == 'Seragam' ? 'selected' : '' }}>Seragam</option>
         </select>
     </div>
 

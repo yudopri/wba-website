@@ -95,7 +95,7 @@
                     </h3>
                 </div>
                 <div class="card-body text-center">
-                    <h1 class="display-4 text-white">Rp. {{ number_format($gaji->saldo ?? 0, 0, ',', '.') }}</h1>
+                    <h1 class="display-4 text-white">Rp. {{ number_format($gaji ?? 0, 0, ',', '.') }}</h1>
                     <p class="lead text-white mb-4">Total Kas Gaji saat ini</p>
                 </div>
                 <div class="card-footer bg-transparent text-white text-center">

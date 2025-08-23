@@ -10,6 +10,41 @@
     @if(session('success'))
         <p class="alert alert-success">{{ session('success') }}</p>
     @endif
+    <!-- Form Filter -->
+<form action="{{ route('admin.work.index') }}" method="GET" class="mb-3 row g-2">
+
+    <!-- Filter Nama Perusahaan -->
+    <div class="col-md-4">
+        <input type="text" name="nama_perusahaan" class="form-control"
+               placeholder="Cari nama perusahaan"
+               value="{{ request('nama_perusahaan') }}">
+    </div>
+
+    <!-- Tombol Status -->
+    <div class="col-md-4 d-flex gap-2">
+        <a href="{{ route('admin.work.index', array_merge(request()->except('status'), ['status' => 'aktif'])) }}"
+           class="btn {{ request('status') == 'aktif' ? 'btn-success' : 'btn-outline-success' }}">
+           Aktif
+        </a>
+        <a href="{{ route('admin.work.index', array_merge(request()->except('status'), ['status' => 'nonaktif'])) }}"
+           class="btn {{ request('status') == 'nonaktif' ? 'btn-danger' : 'btn-outline-danger' }}">
+           Nonaktif
+        </a>
+        <a href="{{ route('admin.work.index', request()->except('status')) }}"
+           class="btn {{ request('status') == '' ? 'btn-secondary' : 'btn-outline-secondary' }}">
+           Semua
+        </a>
+    </div>
+
+    <!-- Tombol Cari & Reset -->
+    <div class="col-md-4 d-flex gap-2">
+        <button type="submit" class="btn btn-primary">Cari</button>
+        <a href="{{ route('admin.work.index') }}" class="btn btn-warning">Reset</a>
+    </div>
+</form>
+
+
+
     @if(auth()->user()->role === 'Admin' || auth()->user()->role === 'Manager')
     <!-- Tombol Tambah -->
     <a href="{{ route('admin.work.create') }}" class="btn btn-primary mb-3">Tambah Lokasi Kerja</a>
@@ -86,6 +121,28 @@ t-muted">Tidak ada dokumen</span>
                             @method('DELETE')
                             <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Yakin ingin menghapus?')">Hapus</button>
                         </form>
+                        @if(auth()->user()->role === 'Admin' || auth()->user()->role === 'Manager')
+                                 @if($work->status == 'aktif' && $work->status != 'blacklist')
+                <!-- Non Aktifkan Button -->
+                <form action="{{ route('admin.work.nonaktif', $work->id) }}" method="POST" style="margin: 0; display: inline;">
+                    @csrf
+                    @method('PUT')
+                    <button type="submit" class="btn btn-secondary btn-sm" style="text-align: center; font-size: 10px;" onclick="return confirm('Yakin ingin nonaktifkan karyawan?')">
+                        <i class="fas fa-ban"></i> Non Aktifkan
+                    </button>
+                </form>
+
+            @elseif($work->status = 'nonaktif')
+                <!-- Aktifkan Button -->
+                <form action="{{ route('admin.work.aktif', $work->id) }}" method="POST" style="margin: 0; display: inline;">
+                    @csrf
+                    @method('PUT')
+                    <button type="submit" class="btn btn-success btn-sm" style="text-align: center; font-size: 10px;" onclick="return confirm('Yakin ingin aktifkan karyawan?')">
+                        <i class="fas fa-check-circle"></i> Aktifkan
+                    </button>
+                </form>
+            @endif
+             @endif
                     </td>
                 </tr>
             @endforeach

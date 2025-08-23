@@ -14,7 +14,7 @@ class InventoryItemController extends Controller
     public function index(Request $request)
 {
     $search = $request->search;
-    $type = $request->gada; // dari form <select>
+    $type = $request->jenis; // dari form <select>
 
     $inventoryItems = InventoryItem::when($search, function ($query, $search) {
             return $query->where('nama', 'like', '%' . $search . '%');
@@ -45,7 +45,7 @@ class InventoryItemController extends Controller
     $request->validate([
         'nama' => 'required|string|max:255',
         'quantity' => 'required|integer|min:1',
-        'jenis' => 'required|string|in:Alat,Baju',
+        'jenis' => 'required|string|in:Alat,Seragam',
         'price' => 'required|numeric|min:0',
     ]);
 
@@ -103,7 +103,7 @@ class InventoryItemController extends Controller
     $request->validate([
         'nama' => 'required|string|max:255',
         'quantity' => 'required|integer|min:1',
-        'jenis' => 'required|string|in:Alat,Baju',
+        'jenis' => 'required|string|in:Alat,Seragam',
         'price' => 'required|numeric|min:0',
     ]);
 

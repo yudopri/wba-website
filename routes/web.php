@@ -231,6 +231,9 @@ Route::get('/work/create', [WorkController::class, 'create'])->name('admin.work.
 Route::put('/work/edit/{work}', [WorkController::class, 'update'])->name('admin.work.update');
 Route::get('/work/edit/{id}', [WorkController::class, 'edit'])->name('admin.work.edit');
 Route::post('/work/store', [WorkController::class, 'store'])->name('admin.work.store');
+Route::put('/work/{id}/aktif', [WorkController::class, 'aktif'])->name('admin.work.aktif');
+Route::put('/work/{id}/nonaktif', [WorkController::class, 'nonaktif'])->name('admin.work.nonaktif');
+Route::put('/work/{id}/blacklist', [WorkController::class, 'blacklist'])->name('admin.work.blacklist');
 Route::delete('/work/{work}', [WorkController::class, 'destroy'])->name('admin.work.destroy');
 Route::get('/work/{id}', [WorkController::class, 'show'])->name('admin.work.show');
 

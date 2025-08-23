@@ -19,7 +19,7 @@
         <select name="jenis" class="form-control">
             <option value="">-- Jenis Barang --</option>
             <option value="Alat" {{ request('jenis') == 'Alat' ? 'selected' : '' }}>Alat</option>
-            <option value="Baju" {{ request('jenis') == 'Baju' ? 'selected' : '' }}>Baju</option>
+            <option value="Seragam" {{ request('jenis') == 'Seragam' ? 'selected' : '' }}>Baju</option>
         </select>
     </div>
 

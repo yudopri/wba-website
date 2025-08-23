@@ -30,9 +30,5 @@ public function user()
     {
         return $this->belongsTo(User::class, 'id_user');
     }
-public function deskripsi()
-    {
-        return $this->belongsTo(pengaduan::class, 'deskripsi');
-    }
 
 }

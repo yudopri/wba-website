@@ -13,11 +13,11 @@
     <div class="card-body">
         <form action="{{ route('gaji.index') }}" method="GET" class="row align-items-end">
             <div class="col-md-4 mb-2">
-                <label for="gada">Bulan</label>
-                <select name="gada" id="gada" class="form-control">
+                <label for="bulan">Bulan</label>
+                <select name="bulan" id="bulan" class="form-control">
                     <option value="">-- Pilih Bulan --</option>
                     @foreach(['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'] as $bulan)
-                        <option value="{{ $bulan }}" {{ request('gada') == $bulan ? 'selected' : '' }}>
+                        <option value="{{ $bulan }}" {{ request('bulan') == $bulan ? 'selected' : '' }}>
                             {{ $bulan }}
                         </option>
                     @endforeach

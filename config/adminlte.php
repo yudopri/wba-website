@@ -434,13 +434,6 @@ return [
     'url'  => 'admin/invoice',
     'icon' => 'fas fa-book',
 ],
-//pinjaman
-[
-    'text' => 'Pinjaman',
-    'url'  => 'admin/pinjaman',
-    'icon' => 'fas fa-credit-card',
-
-],
 
 [
     'text' => 'Data Gaji',

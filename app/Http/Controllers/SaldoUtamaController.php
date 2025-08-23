@@ -40,7 +40,7 @@ class SaldoUtamaController extends Controller
     $pinjaman = Pinjaman::latest()->first();
 
     // Ambil semua gaji
-    $gaji = Gaji::latest()->first();
+    $gaji = Gaji::sum('nominal');
 
     $invoicePaid = Invoice::where('status', 'paid')
         ->latest()
