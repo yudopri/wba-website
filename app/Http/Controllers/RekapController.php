@@ -3,16 +3,25 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Employee;
+use Illuminate\Support\Facades\File;
 
 class RekapController extends Controller
 {
     public function index()
     {
-        // Ambil semua karyawan
-        $employees = Employee::all();
+        // Path folder rekap
+        $folderPath = public_path('assets/rekapseragam');
 
-        // Kirim variabel $employees ke view
-        return view('admin.distributions.rekapseragam', compact('employees'));
+        // Ambil semua file di folder tersebut
+        $files = File::files($folderPath);
+
+        // Ubah menjadi array nama file saja
+        $fileNames = [];
+        foreach ($files as $file) {
+            $fileNames[] = $file->getFilename();
+        }
+
+        // Kirim ke view
+        return view('admin.distributions.rekapseragam', compact('fileNames'));
     }
 }

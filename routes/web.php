@@ -47,9 +47,9 @@ use App\Http\Controllers\BpjsController;
 
 
 Route::get('/', [PartnerController::class, 'showUserHome'])->name('home');
-// Authentication routes
-Route::get('admin/', [AuthController::class, 'showLoginForm'])->name('login');
-Route::post('admin/', [AuthController::class, 'login']);
+//Authentication routes
+//Route::get('admin/', [AuthController::class, 'showLoginForm'])->name('login');
+//Route::post('admin/', [AuthController::class, 'login']);
 
 Route::get('/forgot-password', [AuthController::class, 'showForgotPasswordForm'])->name('forgot.password.form');
 Route::post('/forgot-password', [AuthController::class, 'sendResetLink'])->name('forgot.password');// Show reset password form (GET request)
@@ -379,7 +379,8 @@ Route::post('/notifikasi/baca/{id}', [NotificationController::class, 'markAsRead
 Route::post('/notifikasi/baca/{id}', [\App\Http\Controllers\NotifikasiController::class, 'markAsRead'])->name('notif.markAsRead');
 Route::get('/notifications/show', [App\Http\Controllers\NotificationController::class, 'show'])->name('notifications.show');
 Route::get('/notifications/get', [App\Http\Controllers\NotificationController::class, 'get'])->name('notifications.get');
-Route::get('/rekapseragam', [RekapController::class, 'index'])->name('rekap.index');
+    Route::get('/rekapseragam', [RekapController::class, 'index'])->name('rekap.index');
+    Route::get('/rekap-seragam', [DistributionController::class, 'daftarRekap']);
 
 
 

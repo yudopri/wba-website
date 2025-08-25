@@ -168,10 +168,8 @@ public function rekapDistribusi()
 {
     \Log::info('rekapDistribusi() dipanggil oleh scheduler pada: ' . now());
 
-    // Cari semua karyawan
     $employees = Employee::all();
 
-    // Filter karyawan yang belum pernah dapat seragam
     $belumDapat = $employees->filter(function ($emp) {
         return !Distribution::where('id_karyawan', $emp->id)
             ->whereHas('inventoryItem', function ($q) {
@@ -179,31 +177,43 @@ public function rekapDistribusi()
             })->exists();
     });
 
-    // Buat PDF
-    $pdf = Pdf::loadView('admin.distributions.rekapseragam', [
+    $pdf = Pdf::loadView('admin.distributions.rekap_pdf', [
         'employees' => $belumDapat
     ]);
 
-    // Simpan di public/assets/rekapseragam
     $folder = public_path('assets/rekapseragam');
     if (!file_exists($folder)) mkdir($folder, 0755, true);
 
     $filename = 'rekap_seragam_' . now()->format('Y_m') . '.pdf';
     $pdf->save($folder.'/'.$filename);
 
-    // Simpan notifikasi hanya untuk role admin dan manager
-    $users = User::whereIn('role', ['admin', 'manager'])->get();
-    foreach ($users as $user) {
-      NotificationUser::create([
-    'user_id' => $user->id,
-    'judul' => 'Rekap Distribusi',
-    'pesan' => 'Rekap distribusi seragam 6 bulan tersedia',
-    'link' => route('rekap.download', ['filename' => $filename]),
-    'sudah_dibaca' => false,
-]);
+    NotificationUser::create([
+        'user_id' => 3,
+        'judul' => 'Rekap Distribusi',
+        'pesan' => 'Rekap distribusi seragam 6 bulan tersedia',
+        'sudah_dibaca' => false,
+    ]);
 
+    \Log::info("Notifikasi rekap dibuat, file: {$filename}");
+}
+
+
+
+public function daftarRekap()
+{
+    $folder = public_path('assets/rekapseragam');
+
+    $fileNames = [];
+    if(file_exists($folder)) {
+        $files = File::files($folder);
+        foreach($files as $file){
+            $fileNames[] = $file->getFilename();
+        }
     }
 
-    \Log::info("Notifikasi rekap dibuat untuk admin & manager, file: {$filename}");
+    return view('admin.distributions.rekapseragam', compact('fileNames'));
 }
+
+
+
 }
