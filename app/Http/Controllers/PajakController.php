@@ -129,7 +129,7 @@ $validated['id_user'] = auth()->id();
         // --- Update saldo utama kalau debit ---
     $saldoUtama = SaldoUtama::latest('id')->first();
     if ($saldoUtama && $pajak->debit > 0) {
-        $saldoBaru = $saldoUtama->saldo - $pajak->debit;
+        $saldoBaru = $saldoUtama->saldo + $pajak->debit;
 
         SaldoUtama::create([
             'id_user' => Auth::id(),

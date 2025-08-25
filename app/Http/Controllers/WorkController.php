@@ -6,6 +6,7 @@ use App\Models\Work;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
 
 class WorkController extends Controller
 {
@@ -42,9 +43,9 @@ class WorkController extends Controller
     $validated = $request->validate([
         'name' => 'required|string|max:255',
         'berlaku' => 'nullable|date',
-        'pict_dokumen' => 'required|file|mimes:pdf,jpg,jpeg,png|max:5120',
-        'pict_dokumen1' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:5120',
-        'pict_dokumen2' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:5120',
+        'pict_dokumen' => 'required|file|mimes:pdf,jpg,jpeg,png|max:20480', // 20 MB
+    'pict_dokumen1' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:20480',
+    'pict_dokumen2' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:20480',
         'status' => 'nullable|in:aktif,nonaktif',
     ]);
 
@@ -105,9 +106,9 @@ class WorkController extends Controller
     $validated = $request->validate([
         'name' => 'required|string|max:255',
         'berlaku' => 'nullable|date',
-        'pict_dokumen' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:5120',
-        'pict_dokumen1' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:5120',
-        'pict_dokumen2' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:5120',
+        'pict_dokumen' => 'required|file|mimes:pdf,jpg,jpeg,png|max:20480', // 20 MB
+    'pict_dokumen1' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:20480',
+    'pict_dokumen2' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:20480',
         'status' => 'nullable|in:aktif,nonaktif',
     ]);
 

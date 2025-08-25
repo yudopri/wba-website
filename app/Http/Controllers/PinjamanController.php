@@ -112,7 +112,7 @@ $lastSaldo = Pinjaman::orderBy('created_at', 'desc')->value('saldo') ?? 0;
         // --- Update saldo utama kalau debit ---
     $saldoUtama = SaldoUtama::latest('id')->first();
     if ($saldoUtama && $pinjaman->debit > 0) {
-        $saldoBaru = $saldoUtama->saldo - $pinjaman->debit;
+        $saldoBaru = $saldoUtama->saldo + $pinjaman->debit;
 
         SaldoUtama::create([
             'id_user' => Auth::id(),

@@ -127,7 +127,7 @@ class KasLogistikController extends Controller
         // --- Update saldo utama kalau debit ---
     $saldoUtama = SaldoUtama::latest('id')->first();
     if ($saldoUtama && $kasLogistik->debit > 0) {
-        $saldoBaru = $saldoUtama->saldo - $kasLogistik->debit;
+        $saldoBaru = $saldoUtama->saldo + $kasLogistik->debit;
 
         SaldoUtama::create([
             'id_user' => Auth::id(),

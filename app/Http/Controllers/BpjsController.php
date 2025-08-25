@@ -132,7 +132,7 @@ $validated['id_user'] = auth()->id();
     // --- Update saldo utama kalau debit ---
     $saldoUtama = SaldoUtama::latest('id')->first();
     if ($saldoUtama && $bpjs->debit > 0) {
-        $saldoBaru = $saldoUtama->saldo - $bpjs->debit;
+        $saldoBaru = $saldoUtama->saldo + $bpjs->debit;
 
         SaldoUtama::create([
             'id_user' => Auth::id(),

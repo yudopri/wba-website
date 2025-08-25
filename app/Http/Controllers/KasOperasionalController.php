@@ -113,7 +113,7 @@ class KasOperasionalController extends Controller
         // --- Update saldo utama kalau debit ---
     $saldoUtama = SaldoUtama::latest('id')->first();
     if ($saldoUtama && $kasOperasional->debit > 0) {
-        $saldoBaru = $saldoUtama->saldo - $kasOperasional->debit;
+        $saldoBaru = $saldoUtama->saldo + $kasOperasional->debit;
 
         SaldoUtama::create([
             'id_user' => Auth::id(),
